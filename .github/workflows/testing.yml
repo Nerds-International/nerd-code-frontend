@@ -11,6 +11,10 @@ on:
 
 jobs:
   test:
+    permissions:
+        checks: write
+        pull-requests: write
+        contents: write
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +29,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
       - name: Check coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+            prnumber: ${{ steps.findPr.outputs.number }}

@@ -35,5 +35,19 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
+    },
+    "coverageThreshold": {
+      "global": {
+        "lines": 80
+      }
+    }
+  },
+  "devDependencies": {
+    "identity-obj-proxy": "^3.0.0"
   }
 }

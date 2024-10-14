@@ -39,7 +39,7 @@ jobs:
             prnumber: ${{ steps.findPr.outputs.number }}
 
       - name: Run React
-        run: npm start
+        run: npm start &
 
       - name: Wait React
         run: sleep 20

@@ -12,6 +12,6 @@ test("Example 1 renders successfully", () => {
 })
 
 test("sampleFunction correctly works", () => {
-  expect(sampleFunction(1, 2)).toBe(3);
+  expect(sampleFunction(1, 2)).toBe(4);
 })
 

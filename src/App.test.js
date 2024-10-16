@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App';
-import React from "react";
+import App, { sampleFunction } from './App';
 
 test("Example 1 renders successfully", () => {
   render(<App />);
@@ -11,3 +10,6 @@ test("Example 1 renders successfully", () => {
   expect(element).toBeInTheDocument();
 })
 
+test("sampleFunction correctly works", () => {
+  expect(sampleFunction(1, 2)).toBe(3);
+})

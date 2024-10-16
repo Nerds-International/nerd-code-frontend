@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App';
+import App, { sampleFunction } from './App';
 import React from "react";
 
 test("Example 1 renders successfully", () => {
@@ -9,5 +9,9 @@ test("Example 1 renders successfully", () => {
   const element = screen.getByText(/I have been clicked \d+ times/i);
 
   expect(element).toBeInTheDocument();
+})
+
+test("sampleFunction correctly works", () => {
+  expect(sampleFunction(1, 2)).toBe(3);
 })
 

@@ -1,18 +1,21 @@
 import './App.css';
-import {observer} from "mobx-react-lite";
-import {useState} from "react";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 import React from "react";
 
 const App = observer(() => {
   return (
     <div className="App">
-        <MyButton/>
+      <MyButton />
     </div>
   );
 })
 
 export default App;
 
+export function sampleFunction(a, b) {
+  return a + b
+}
 
 function MyButton() {
   const [count, setCount] = useState(0);

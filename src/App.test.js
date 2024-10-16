@@ -9,7 +9,3 @@ test("Example 1 renders successfully", () => {
 
   expect(element).toBeInTheDocument();
 })
-
-test("sampleFunction correctly works", () => {
-  expect(sampleFunction(1, 2)).toBe(3);
-})

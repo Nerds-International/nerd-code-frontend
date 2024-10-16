@@ -13,6 +13,25 @@ const App = observer(() => {
 export default App;
 
 export function sampleFunction(a, b) {
+  console.log(52)
+  console.log(52)
+  console.log(52)
+  console.log(52)
+  console.log(52)
+  console.log(52)
+  console.log(52)
+
+  console.log(52)
+  console.log(52)
+  console.log(52)
+
+  console.log(52)
+  console.log(52)
+  console.log(52)
+  console.log(52 + a)
+
+  console.log(52)
+  console.log(52 + b)
   return a + b
 }
 

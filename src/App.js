@@ -1,7 +1,6 @@
 import './App.css';
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import React from "react";
 
 const App = observer(() => {
   return (
@@ -12,7 +11,7 @@ const App = observer(() => {
 })
 
 export default App;
-
+var a = 52;
 export function sampleFunction(a, b) {
   return a + b
 }

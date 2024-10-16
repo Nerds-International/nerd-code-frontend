@@ -11,7 +11,7 @@ const App = observer(() => {
 })
 
 export default App;
-var a = 52;
+
 export function sampleFunction(a, b) {
   return a + b
 }

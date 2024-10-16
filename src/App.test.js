@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App, { sampleFunction } from './App';
+import App from './App';
 
 test("Example 1 renders successfully", () => {
   render(<App />);

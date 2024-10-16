@@ -64,5 +64,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Rune ESLint
-        run: npm run eslint src --ext .js
+      - name: Run ESLint
+        run: npx eslint src --ext .js

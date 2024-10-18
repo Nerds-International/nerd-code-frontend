@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import App from './App';
 import React from "react";
 
-test("Example 1 renders successfully", () => {
+test.only("Example 1 renders successfully", () => {
   render(<App />);
 
   const element = screen.getByText(/I have been clicked \d+ times/i);

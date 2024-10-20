@@ -12,6 +12,7 @@ const App = observer(() => {
 
 export default App;
 
+var check_lint = 1;
 
 function MyButton() {
   const [count, setCount] = useState(0);

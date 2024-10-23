@@ -5,8 +5,8 @@ import App from './App';
 test("Example 1 renders successfully", () => {
   render(<App />);
 
-  const element = screen.getByText(/I have been clicked \d+ times/i);
-
-  expect(element).toBeInTheDocument();
+  expect(screen.getByText(/Problems/i)).toBeInTheDocument();
+  expect(screen.getByText(/Discuss/i)).toBeInTheDocument();
+  expect(screen.getByText(/Battle/i)).toBeInTheDocument();
 })
 

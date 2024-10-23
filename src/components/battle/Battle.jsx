@@ -1,6 +1,7 @@
 import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { useProgrammingLanguage } from "../../context/ProgrammingLanguageContext";
 
 const Battle = observer(() => {
   return (
@@ -15,6 +16,7 @@ export default Battle;
 function MatchFinder() {
   const [match, setMatch] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { language, setLanguage } = useProgrammingLanguage();
 
   async function findMatch() {
     setLoading(true);
@@ -39,6 +41,18 @@ function MatchFinder() {
   return (
     <div>
       {loading && <p>Loading...</p>} {/*индикатор загрузки*/}
+      <div>
+        <label htmlFor="language-select">Choose a programming language:</label>
+        <select
+          id="language-select"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          <option value="">--Please choose an option--</option>
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+        </select>
+      </div>
       {match ? (
         <div>match found{/*матч нашелся ура ура*/}</div>
       ) : (

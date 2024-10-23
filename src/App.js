@@ -2,12 +2,15 @@ import "./App.css";
 import Battle from "./components/battle/Battle";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { LanguageProvider } from "./context/ProgrammingLanguageContext";
 
 const App = observer(() => {
   return (
     <div className="App">
       <MyButton />
-      <Battle />
+      <LanguageProvider>
+        <Battle />
+      </LanguageProvider>
     </div>
   );
 });

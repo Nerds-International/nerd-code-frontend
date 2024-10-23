@@ -1,0 +1,68 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  test:
+    permissions:
+        checks: write
+        pull-requests: write
+        contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
+      - name: Check coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+            prnumber: ${{ steps.findPr.outputs.number }}
+
+      - name: Run React
+        run: npm start &
+
+      - name: Wait React
+        run: sleep 20
+
+      - name: Install Cypress
+        run: npm install cypress@13.15.0
+
+      - name: Run Cypress tests
+        run: npx cypress run
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint src --ext .js

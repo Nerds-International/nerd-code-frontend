@@ -1,0 +1,82 @@
+.auth-form-container {
+    width: 360px;
+    margin: 100px auto;
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .auth-form-container:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  .auth-form-title {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    margin-bottom: 24px;
+  }
+  
+  .auth-form {
+    width: 100%;
+  }
+  
+  .auth-form-button {
+    width: 100%;
+    background-color: #1890ff;
+    color: #fff;
+    border: none;
+    height: 45px;
+    font-size: 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-form-button:hover {
+    background-color: #40a9ff;
+    color: white;
+  }
+  
+  .auth-form-button:focus {
+    background-color: #0050b3;
+    color: white;
+  }
+  
+  .auth-form input {
+    height: 45px;
+    padding: 0 15px;
+    border-radius: 8px;
+    border: 1px solid #d9d9d9;
+    transition: all 0.3s ease;
+  }
+  
+  .auth-form input:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 6px rgba(24, 144, 255, 0.2);
+  }
+  
+  .auth-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .auth-form-label {
+    text-align: left;
+    font-weight: 500;
+    color: #595959;
+  }
+  
+  .auth-form-link {
+    color: #1890ff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 16px;
+    display: block;
+  }
+  
+  .auth-form-link:hover {
+    text-decoration: underline;
+  }
+  

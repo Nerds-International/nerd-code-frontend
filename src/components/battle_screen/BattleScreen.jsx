@@ -27,20 +27,20 @@ function BattleWindows() {
     <div>
       <h1>This is the Test Page!</h1>
       <h2>Code Block 1</h2>
+      <textarea
+        value={code1}
+        onChange={(e) => setCode1(e.target.value)}
+        rows={10}
+        cols={50}
+      />
       <SyntaxHighlighter language={getCurrentLanguage()} style={solarizedlight}>
-        <textarea
-          value={code1}
-          onChange={(e) => setCode1(e.target.value)}
-          rows={100}
-          cols={50}
-        />
         {code1}
       </SyntaxHighlighter>
       <h2>Code Block 2</h2>
       <textarea
         value={code2}
         onChange={(e) => setCode2(e.target.value)}
-        rows={100}
+        rows={10}
         cols={50}
       />
       <SyntaxHighlighter language={getCurrentLanguage()} style={solarizedlight}>

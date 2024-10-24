@@ -1,7 +1,7 @@
 import "./AddTask.css";
 import { useState } from "react";
 
-const Task = () => {
+const AddTask = () => {
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [inputData, setInputData] = useState([""]);
@@ -38,7 +38,7 @@ const Task = () => {
         }
         for (let i = 0; i < maxTime.length; i++) {
             if (!isValidFloat(maxTime[i])) {
-                setError(("The maximum execution time should be float"))
+                setError("The maximum execution time should be float");
                 return false;
             }
         }
@@ -85,31 +85,36 @@ const Task = () => {
         <div className="Task">
             <h2>Create Task</h2>
             <div>
-                <label>Task Name:</label>
+                <label htmlFor="taskName">Task Name:</label>
                 <input
+                    id="taskName"
                     type="text"
                     value={taskName}
                     onChange={(e) => setTaskName(e.target.value)}
                 />
             </div>
             <div>
-                <label>Task Description:</label>
+                <label htmlFor="taskDescription">Task Description:</label>
                 <textarea
+                    id="taskDescription"
                     value={taskDescription}
                     onChange={(e) => setTaskDescription(e.target.value)}
                 />
             </div>
             <div>
-                <label>Input Data:</label>
+                <label htmlFor="inputData">Input Data:</label>
                 <textarea
+                    id="inputData"
                     onChange={(e) => handleInputChange(e.target.value)}
                 />
-                <label>Output Data:</label>
+                <label htmlFor="outputData">Output Data:</label>
                 <textarea
+                    id="outputData"
                     onChange={(e) => handleOutputChange(e.target.value)}
                 />
-                <label>Max Time (ms):</label>
+                <label htmlFor="maxTime">Max Time (ms):</label>
                 <textarea
+                    id="maxTime"
                     onChange={(e) => handleMaxTimeChange(e.target.value)}
                 />
             </div>
@@ -123,5 +128,5 @@ const Task = () => {
     );
 };
 
-export default Task;
+export default AddTask;
 

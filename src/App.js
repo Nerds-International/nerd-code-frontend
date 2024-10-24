@@ -1,6 +1,7 @@
 import "./App.css";
 import Battle from "./components/battle/Battle";
 import AddTask from "./components/add_task/AddTask";
+import BattleScreen from "./components/battle_screen/BattleScreen";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
@@ -10,6 +11,7 @@ const App = observer(() => {
       <MyButton />
       <AddTask />
       <Battle />
+      <BattleScreen />
     </div>
   );
 });

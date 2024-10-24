@@ -2,6 +2,7 @@ import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useProgrammingLanguage } from "../../context/ProgrammingLanguageContext";
+import BattleScreen from "../battle_screen/BattleScreen";
 
 const Battle = observer(() => {
   return (
@@ -54,7 +55,10 @@ function MatchFinder() {
         </select>
       </div>
       {match ? (
-        <div>match found{/*матч нашелся ура ура*/}</div>
+        <div>
+          match found
+          <BattleScreen />
+        </div>
       ) : (
         <div>
           <h2>No Match Found</h2>

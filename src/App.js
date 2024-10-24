@@ -1,6 +1,6 @@
 import "./App.css";
 import Battle from "./components/battle/Battle";
-import AddTask from "./components/addTask/AddTask";
+import AddTask from "./components/add_task/AddTask";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 

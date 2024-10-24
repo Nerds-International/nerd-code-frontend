@@ -1,0 +1,127 @@
+import "./AddTask.css";
+import { useState } from "react";
+
+const Task = () => {
+    const [taskName, setTaskName] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
+    const [inputData, setInputData] = useState([""]);
+    const [outputData, setOutputData] = useState([""]);
+    const [maxTime, setMaxTime] = useState([""]);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleInputChange = (value) => {
+        let newInputData = value.split("\n").filter(item => item.trim() !== "");
+        setInputData(newInputData);
+    };
+
+    const handleOutputChange = (value) => {
+        let newOutputData = value.split("\n").filter(item => item.trim() !== "");
+        setOutputData(newOutputData);
+    };
+
+    const handleMaxTimeChange = (value) => {
+        let newMaxTime = value.split("\n").filter(item => item.trim() !== "");
+        setMaxTime(newMaxTime);
+    };
+
+    function isValidFloat(str) {
+        const floatRegex = /^-?\d+(\.\d+)?$/;
+        return floatRegex.test(str);
+    }
+
+    const validateData = () => {
+        if (inputData.length !== outputData.length || inputData.length !== maxTime.length) {
+            setError("The size of the input data, output data and time limit do not match");
+            return false;
+        }
+        for (let i = 0; i < maxTime.length; i++) {
+            if (!isValidFloat(maxTime[i])) {
+                setError(("The maximum execution time should be float"))
+                return false;
+            }
+        }
+        setError("");
+        return true;
+    };
+
+    async function submitTask() {
+        if (!validateData()) return;
+
+        setLoading(true);
+
+        try {
+            const response = await fetch("https://example.com/submit-task", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    taskName,
+                    taskDescription,
+                    inputData,
+                    outputData,
+                    maxTime,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setSuccess(true);
+            } else {
+                setSuccess(false);
+            }
+        } catch (error) {
+            console.error("Error submitting task:", error);
+            setSuccess(false);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return (
+        <div className="Task">
+            <h2>Create Task</h2>
+            <div>
+                <label>Task Name:</label>
+                <input
+                    type="text"
+                    value={taskName}
+                    onChange={(e) => setTaskName(e.target.value)}
+                />
+            </div>
+            <div>
+                <label>Task Description:</label>
+                <textarea
+                    value={taskDescription}
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                />
+            </div>
+            <div>
+                <label>Input Data:</label>
+                <textarea
+                    onChange={(e) => handleInputChange(e.target.value)}
+                />
+                <label>Output Data:</label>
+                <textarea
+                    onChange={(e) => handleOutputChange(e.target.value)}
+                />
+                <label>Max Time (ms):</label>
+                <textarea
+                    onChange={(e) => handleMaxTimeChange(e.target.value)}
+                />
+            </div>
+            <button onClick={submitTask} disabled={loading}>
+                {loading ? "Submitting..." : "Submit Task"}
+            </button>
+            {success && <p>Task submitted successfully!</p>}
+            {!success && !loading && <p>Task submission failed.</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
+        </div>
+    );
+};
+
+export default Task;
+

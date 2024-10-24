@@ -1,7 +1,7 @@
 import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { useProgrammingLanguage } from "../../context/ProgrammingLanguageContext";
+import { languageStore } from "../../store/LanguageStore";
 import BattleScreen from "../battle_screen/BattleScreen";
 
 const Battle = observer(() => {
@@ -17,7 +17,7 @@ export default Battle;
 function MatchFinder() {
   const [match, setMatch] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { language, setLanguage } = useProgrammingLanguage();
+  const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
 
   async function findMatch() {
     setLoading(true);
@@ -46,12 +46,12 @@ function MatchFinder() {
         <label htmlFor="language-select">Choose a programming language:</label>
         <select
           id="language-select"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          value={getCurrentLanguage()}
+          onChange={(e) => setCurrentLanguage(e.target.value)}
         >
           <option value="">--Please choose an option--</option>
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
+          <option value={Languages.JAVASCRIPT}>JavaScript</option>
+          <option value={Languages.PYTHON}>Python</option>
         </select>
       </div>
       {match ? (

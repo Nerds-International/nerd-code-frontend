@@ -1,7 +1,18 @@
 import "./AddTask.css";
 import { useState } from "react";
+import { observer } from "mobx-react-lite";
 
-const AddTask = () => {
+const AddTask = observer(() => {
+    return (
+        <div className="AddTask">
+            <Task />
+        </div>
+    );
+});
+
+export default AddTask;
+
+const Task = () => {
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [inputData, setInputData] = useState([""]);
@@ -51,6 +62,7 @@ const AddTask = () => {
 
         setLoading(true);
 
+        // запрос затычка(переделать под реальный запрос)
         try {
             const response = await fetch("https://example.com/submit-task", {
                 method: "POST",
@@ -128,5 +140,4 @@ const AddTask = () => {
     );
 };
 
-export default AddTask;
 

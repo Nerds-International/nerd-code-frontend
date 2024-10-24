@@ -14,7 +14,7 @@ const Battle = observer(() => {
 
 export default Battle;
 
-function MatchFinder() {
+const MatchFinder = observer(() => {
   const [match, setMatch] = useState(false);
   const [loading, setLoading] = useState(false);
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
@@ -67,4 +67,4 @@ function MatchFinder() {
       )}
     </div>
   );
-}
+});

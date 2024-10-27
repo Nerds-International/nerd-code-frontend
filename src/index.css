@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "RopaSans";
+  src: local("RopaSans"),
+    url("./fonts/RopaSans-Regular.ttf") format("opentype");
+  font-weight: normal;
+}

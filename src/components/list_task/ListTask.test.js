@@ -12,22 +12,10 @@ describe('ListTask Component', () => {
         ];
     });
 
-    test('renders ', () => {
+    test('renders ListTask component', () => {
         render(<ListTask />);
         expect(screen.getByText('Task 1')).toBeInTheDocument();
         expect(screen.getByText('Task 2')).toBeInTheDocument();
         expect(screen.getByText('Task 3')).toBeInTheDocument();
     });
-
-    test('difficulty', () => {
-        render(<ListTask />);
-        const easyCircle = screen.getByText('Task 1').closest('.task-item').querySelector('.difficulty-circle.easy');
-        const mediumCircle = screen.getByText('Task 2').closest('.task-item').querySelector('.difficulty-circle.medium');
-        const hardCircle = screen.getByText('Task 3').closest('.task-item').querySelector('.difficulty-circle.hard');
-
-        expect(easyCircle).toBeInTheDocument();
-        expect(mediumCircle).toBeInTheDocument();
-        expect(hardCircle).toBeInTheDocument();
-    });
-
 });

@@ -1,0 +1,38 @@
+.task-list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #FFD600;
+    border-radius: 5px;
+}
+
+.task-item {
+    background-color: #F6F6F6;
+    border: 1px solid #FFD600;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-item h3 {
+    margin: 0 0 5px;
+}
+
+.task-item p {
+    margin: 0;
+}
+
+.task-link {
+    display: inline-block;
+    background-color: #FFD600;
+    color: black;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.task-link:hover {
+    background-color: #E6B800;
+}

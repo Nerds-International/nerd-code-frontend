@@ -6,6 +6,7 @@
     "mobx-react-lite": "^4.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0",
     "react-scripts": "^5.0.1",
     "react-syntax-highlighter": "^15.6.1"
   },
@@ -15,7 +16,10 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"],
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
     "rules": {
       "react/prop-types": "off",
       "no-unused-vars": "error",
@@ -24,7 +28,11 @@
     }
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -32,8 +40,13 @@
     ]
   },
   "jest": {
-    "roots": ["<rootDir>/src"],
-    "testPathIgnorePatterns": ["/node_modules/", "/cypress/"],
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/cypress/"
+    ],
     "testEnvironment": "jsdom",
     "moduleNameMapper": {
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"

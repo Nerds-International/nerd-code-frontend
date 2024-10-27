@@ -1,11 +1,12 @@
 import "./Header.css";
-import nerdImage from './img/nerd.png'
+import { observer } from "mobx-react-lite";
 
-export default function Header() {
+
+const Header = observer (() => {
     return (
         <header className="header">
              <a href="/"> {}
-                <img src={nerdImage} alt="nerd-code" className="nerd-icon" />
+                <img src="/img/nerd.png" alt="nerd-code" className="nerd-icon" />
             </a>
             <nav>
                 <ul className="tabs">
@@ -19,4 +20,6 @@ export default function Header() {
             </nav>
         </header>
     );
-}
+});
+
+export default Header;

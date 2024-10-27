@@ -15,6 +15,6 @@ code {
 @font-face {
   font-family: "RopaSans";
   src: local("RopaSans"),
-    url("./fonts/RopaSans-Regular.ttf") format("opentype");
+    url("../public/fonts/RopaSans-Regular.ttf") format("opentype");
   font-weight: normal;
 }

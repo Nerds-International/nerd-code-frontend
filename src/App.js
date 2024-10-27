@@ -13,7 +13,3 @@ const App = observer(() => {
 })
 
 export default App;
-
-export function sampleFunction(a, b) {
-  return a + b
-}

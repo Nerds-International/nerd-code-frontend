@@ -39,6 +39,14 @@ a {
     border-radius: 30px;
 }
 
+.tab:active {
+    color: black;
+    text-decoration: none;
+    background-color: #E6B800;
+    border-radius: 30px;
+}
+
+
 
 .separator {
     width: 1px; 
@@ -63,6 +71,13 @@ a {
     border-radius: 30px;
 }
 
+.login:active {
+    color: black;
+    text-decoration: none;
+    background-color: #E6B800;
+    border-radius: 30px;
+}
+
 .signup {
     cursor: pointer;
     padding: 12px;
@@ -73,5 +88,10 @@ a {
 
 .signup:hover {
     background-color: white;
+    outline: 1px solid black;
+}
+
+.signup:active {
+    background-color: #e6e6e6;
     outline: 1px solid black;
 }

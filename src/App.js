@@ -14,7 +14,6 @@ const App = observer(() => {
       <BattleScreen />
       <AddTask />
       <ListTask />
-
     </div>
   );
 })

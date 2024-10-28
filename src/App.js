@@ -1,32 +1,21 @@
-import "./App.css";
-import {observer} from "mobx-react-lite";
-import Navbar from "./components/navbar/Navbar";
-import {pageStore} from "./store/PageStore";
-import MainPage from "./pages/MainPage";
-import ProblemsListPage from "./pages/ProblemsListPage";
-import BattlePage from "./pages/BattlePage";
-import DiscussPage from "./pages/DiscussPage";
+import './App.css';
+import { observer } from "mobx-react-lite";
+import Battle from "./components/battle/Battle"
+import BattleScreen from "./components/battle_screen/BattleScreen";
+import Header from "./components/header/Header"
+import AddTask  from "./components/add_task/AddTask";
+import ListTask from "./components/list_task/ListTask";
 
 const App = observer(() => {
   return (
     <div className="App">
-      <Navbar/>
-      <PageLayout/>
+      <Header />
+      <Battle />
+      <BattleScreen />
+      <AddTask />
+      <ListTask />
     </div>
   );
-});
+})
 
 export default App;
-
-
-
-const PageLayout = observer(() => {
-  const { Pages, getCurrentPage } = pageStore;
-
-  return (<>
-    {getCurrentPage() === Pages.MAIN && <MainPage/>}
-    {getCurrentPage() === Pages.PROBLEMS_LIST && <ProblemsListPage/>}
-    {getCurrentPage() === Pages.BATTLE && <BattlePage/>}
-    {getCurrentPage() === Pages.DISCUSS && <DiscussPage/>}
-  </>);
-})

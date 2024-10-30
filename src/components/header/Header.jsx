@@ -1,21 +1,21 @@
 import "./Header.css";
 import { observer } from "mobx-react-lite";
-
+import { Link } from 'react-router-dom';
 
 const Header = observer (() => {
     return (
         <header className="header">
-             <a href="/"> {}
+            <Link to="/">
                 <img src="/img/nerd.png" alt="nerd-code" className="nerd-icon" />
-            </a>
+            </Link>
             <nav>
                 <ul className="tabs">
-                    <li className="tab"><a href="/problems">Problems</a></li>
-                    <li className="tab"><a href="/discuss">Discuss</a></li>
-                    <li className="tab"><a href="/battle">Battle</a></li>
-                    <li className="separator"></li> {}
-                    <li className="login"><a href="/login">Log In</a></li>
-                    <li className="signup"><a href="/signup">Sign Up</a></li>
+                    <li className="tab"><Link to="/problems">Problems</Link></li> {/* Используйте Link */}
+                    <li className="tab"><Link to="/discuss">Discuss</Link></li>
+                    <li className="tab"><Link to="/battle">Battle</Link></li>
+                    <li className="separator"></li>
+                    <li className="login"><Link to="/login">Log In</Link></li>
+                    <li className="signup"><Link to="/signup">Sign Up</Link></li>
                 </ul>
             </nav>
         </header>

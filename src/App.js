@@ -1,21 +1,23 @@
-import './App.css';
-import { observer } from "mobx-react-lite";
-import Battle from "./components/battle/Battle"
-import BattleScreen from "./components/battle_screen/BattleScreen";
-import Header from "./components/header/Header"
-import AddTask  from "./components/add_task/AddTask";
-import ListTask from "./components/list_task/ListTask";
+// App.jsx
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/header/Header';
+import MainPage from './pages/MainPage';
+import BattlePage from './pages/BattlePage';
+import DiscussPage from './pages/DiscussPage';
+import ProblemsPage from './pages/ProblemsListPage';
 
-const App = observer(() => {
-  return (
-    <div className="App">
-      <Header />
-      <Battle />
-      <BattleScreen />
-      <AddTask />
-      <ListTask />
-    </div>
-  );
-})
+const App = () => {
+    return (
+        <Router>
+            <Header />
+            <Routes>
+                <Route path="/problems" element={<ProblemsPage />} />
+                <Route path="/discuss" element={<DiscussPage />} />
+                <Route path="/battle" element={<BattlePage />} />
+                <Route path="/" element={<MainPage />} />
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;

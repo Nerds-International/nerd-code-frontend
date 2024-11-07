@@ -13,9 +13,10 @@ describe('ListTask Component', () => {
     });
 
     test('renders ListTask component', () => {
-        render(<ListTask />);
+        render(<ListTask tasks={TaskStore.tasks} />);
         expect(screen.getByText('Task 1')).toBeInTheDocument();
         expect(screen.getByText('Task 2')).toBeInTheDocument();
         expect(screen.getByText('Task 3')).toBeInTheDocument();
     });
 });
+

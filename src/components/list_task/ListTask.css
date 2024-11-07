@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border: 1px solid #FFD600;
     border-radius: 5px;
+    height: 600px;
+    overflow-y: auto;
 }
 
 .task-item {

@@ -1,10 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import TaskStore from '../../store/TaskStore';
 import './ListTask.css';
 
-const ListTask = observer(() => {
-    const { tasks } = TaskStore;
-
+const ListTask = observer(({ tasks }) => {
     return (
         <div className="task-list">
             {tasks.map(task => (
@@ -22,3 +19,4 @@ const ListTask = observer(() => {
 });
 
 export default ListTask;
+

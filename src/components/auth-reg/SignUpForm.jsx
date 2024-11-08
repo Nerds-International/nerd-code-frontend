@@ -1,11 +1,11 @@
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { authStore } from '../../store/AuthStore';
 import './Form.css';
 
-const { Title } = Typography;
+const { Item } = Form;
 
-const SignUpForm = observer(() => {
+const SignUpForm = observer(({ toggleForm }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
@@ -13,8 +13,8 @@ const SignUpForm = observer(() => {
   };
 
   return (
-    <div className="auth-form-container">
-      <Title level={3} className="auth-form-title">Sign Up</Title>
+    <>
+      <h2 className="auth-form-title">Sign Up</h2>
       <Form
         form={form}
         name="signup"
@@ -22,34 +22,34 @@ const SignUpForm = observer(() => {
         onFinish={onFinish}
         className="auth-form"
       >
-        <Form.Item
+        <Item
           label={<span className="auth-form-label">Username</span>}
           name="username"
           className="auth-form-item"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input placeholder="Enter your username" />
-        </Form.Item>
+          <Input placeholder="Enter your username" className="auth-form-input" />
+        </Item>
 
-        <Form.Item
+        <Item
           label={<span className="auth-form-label">Password</span>}
           name="password"
           className="auth-form-item"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password placeholder="Enter your password" />
-        </Form.Item>
+          <Input.Password placeholder="Enter your password" className="auth-form-input" />
+        </Item>
 
-        <Form.Item
+        <Item
           label={<span className="auth-form-label">Confirm Password</span>}
           name="confirmPassword"
           className="auth-form-item"
           rules={[{ required: true, message: 'Please confirm your password!' }]}
         >
-          <Input.Password placeholder="Confirm your password" />
-        </Form.Item>
+          <Input.Password placeholder="Confirm your password" className="auth-form-input" />
+        </Item>
 
-        <Form.Item>
+        <Item>
           <Button
             type="primary"
             htmlType="submit"
@@ -58,11 +58,13 @@ const SignUpForm = observer(() => {
           >
             Sign Up
           </Button>
-        </Form.Item>
+        </Item>
       </Form>
-
-      <a className="auth-form-link" href="/signin">Already have an account? Log in</a>
-    </div>
+      <div className="form-switch">
+        <span>Already have an account?</span>
+        <a onClick={toggleForm} className="auth-form-link">Log in</a>
+      </div>
+    </>
   );
 });
 

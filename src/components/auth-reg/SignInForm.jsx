@@ -1,19 +1,19 @@
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { authStore } from '../../store/AuthStore';
 import './Form.css';
 
-const { Title } = Typography;
+const { Item } = Form;
 
-const SignInForm = observer(() => {
+const SignInForm = observer(({ toggleForm }) => {
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     authStore.signIn(values.username, values.password);
   };
 
   return (
-    <div className="auth-form-container">
-      <Title level={3} className="auth-form-title">Login</Title>
+    <>
+      <h2 className="auth-form-title">Login</h2>
       <Form
         form={form}
         name="auth"
@@ -21,25 +21,25 @@ const SignInForm = observer(() => {
         onFinish={onFinish}
         className="auth-form"
       >
-        <Form.Item
+        <Item
           label={<span className="auth-form-label">Username</span>}
           name="username"
           className="auth-form-item"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input placeholder="Enter your username" />
-        </Form.Item>
+          <Input placeholder="Enter your username" className="auth-form-input" />
+        </Item>
 
-        <Form.Item
+        <Item
           label={<span className="auth-form-label">Password</span>}
           name="password"
           className="auth-form-item"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password placeholder="Enter your password" />
-        </Form.Item>
+          <Input.Password placeholder="Enter your password" className="auth-form-input" />
+        </Item>
 
-        <Form.Item>
+        <Item>
           <Button
             type="primary"
             htmlType="submit"
@@ -48,11 +48,13 @@ const SignInForm = observer(() => {
           >
             Log In
           </Button>
-        </Form.Item>
+        </Item>
       </Form>
-
-      <a className="auth-form-link" href="/signup">Don't have an account? Sign up</a>
-    </div>
+      <div className="form-switch">
+        <span>Don't have an account?</span>
+        <a onClick={toggleForm} className="auth-form-link">Sign up</a>
+      </div>
+    </>
   );
 });
 

@@ -1,8 +1,8 @@
 import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { languageStore } from "../../store/LanguageStore";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 
 const BattleScreen = observer(() => {
   return (
@@ -49,49 +49,40 @@ const ButtonCostContainer = () => {
 const BattleWindows = observer(() => {
   const { getCurrentLanguage } = languageStore;
   const [code1, setCode1] = useState("");
-  const [formattedCode1, setFormattedCode1] = useState("");
   const [code2, setCode2] = useState("");
-  const [formattedCode2, setFormattedCode2] = useState("");
-
-  useEffect(() => {
-    setFormattedCode1(code1);
-  }, [code1]);
-
-  useEffect(() => {
-    setFormattedCode2(code2);
-  }, [code2]);
 
   return (
     <div className="code-blocks">
       <div className="code-block">
-        <h2 id="my-code">Code Block 1</h2>
-        <textarea
-          aria-labelledby="my-code"
+        <CodeEditor
           value={code1}
-          onChange={(e) => setCode1(e.target.value)}
-          rows={10}
-          className="code-input"
+          language={getCurrentLanguage()}
+          onChange={(evn) => setCode1(evn.target.value)}
+          padding={15}
+          style={{
+            backgroundColor: "#f5f5f5",
+            fontFamily:
+              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+          }}
         />
-        <SyntaxHighlighter language={getCurrentLanguage()}>
-          {formattedCode1}
-        </SyntaxHighlighter>
         <div className="button-group">
           <button>Test</button>
           <button>Run</button>
         </div>
       </div>
       <div className="code-block">
-        <h2 id="enemy-code">Code Block 2</h2>
-        <textarea
-          aria-labelledby="enemy-code"
+        <CodeEditor
           value={code2}
-          onChange={(e) => setCode2(e.target.value)}
-          rows={10}
-          className="code-input"
+          language={getCurrentLanguage()}
+          onChange={(evn) => setCode2(evn.target.value)}
+          padding={15}
+          style={{
+            backgroundColor: "#f5f5f5",
+            fontFamily:
+              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+          }}
+          data-color-mode="dark"
         />
-        <SyntaxHighlighter language={getCurrentLanguage()}>
-          {formattedCode2}
-        </SyntaxHighlighter>
         <div className="button-group">
           <button>Test</button>
           <button>Run</button>

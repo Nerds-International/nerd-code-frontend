@@ -11,7 +11,7 @@ const ListTask = observer(({ tasks }) => {
                         <h3>{task.name}</h3>
                     </div>
                     <p>{task.description.slice(0, 50)}...</p>
-                    <a href={`/task?id=${task.id}`} className="task-link">View Task</a>
+                    <a href={`/problem?id=${task.id}`} className="task-link">View Task</a>
                 </div>
             ))}
         </div>

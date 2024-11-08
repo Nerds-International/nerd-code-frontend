@@ -1,0 +1,57 @@
+.problems-list-page {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+.filters {
+    width: 21%;
+    margin-right: 15px;
+    margin-top: 10px;
+    margin-left: 5%;
+    background-color: #F6F6F6;
+    border: 1px solid #FFD600;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-list-container {
+    margin-left: 5%;
+    width: 60%;
+}
+
+.filters input,
+.filters select {
+    margin-bottom: 10px;
+}
+
+.radio-buttons label {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-start;
+    margin-right: 200px;
+}
+
+.line {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.name-search {
+    width: 70%;
+    height: 20px;
+    background-color: #F6F6F6;
+    border: 2px solid #FFD600;
+    border-radius: 10px;
+    color: black;
+    padding: 3px;
+}

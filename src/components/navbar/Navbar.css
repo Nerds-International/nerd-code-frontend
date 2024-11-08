@@ -88,12 +88,14 @@
     z-index: 1000;
 }
 
-.form-container {
-    background: transparent; /* Remove background */
+/* .form-container {
+    height: 554px;
+    width: 440px;
+    background: transparent;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 8px; 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .form-switch {
     margin-top: 10px;
@@ -105,6 +107,6 @@
 }
 
 .form-switch .switch-link {
-    color: #1DA1F2;
+    color: #2c2c2c;
     margin-left: 5px;
 }

@@ -67,9 +67,7 @@ const Navbar = observer(() => {
       </div>
       {isFormVisible && (
         <div className="form-modal" onClick={(e) => e.stopPropagation()}>
-          <div className="form-container" onClick={(e) => e.stopPropagation()}>
             <FormModalWindow onClose={() => setIsFormVisible(false)} />
-          </div>
         </div>
       )}
     </div>

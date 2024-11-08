@@ -1,142 +1,107 @@
-/* Стили для контейнера формы */
-.form-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: transparent; /* Полупрозрачный черный фон */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Убедитесь, что фон находится под формой */
-}
 
-.form-container {
-  position: relative;
-  z-index: 1001; /* Убедитесь, что форма находится над фоном */
-  background-color: transparent; /* Прозрачный фон для контейнера формы */
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-
-
-.form-container {
-    position: relative;
-    z-index: 1001; /* Убедитесь, что форма находится над фоном */
-    background-color: transparent; /* Прозрачный фон для контейнера формы */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.auth-form-container {
-    width: 360px;
-    margin: 100px auto;
-    padding: 40px;
-    background-color: rgba(255, 255, 255, 0.8); /* Прозрачный белый фон */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    text-align: center;
-    position: relative; /* Добавлено для позиционирования крестика */
-}
-
-.auth-form-container:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
-
-.auth-form-title {
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-    margin-bottom: 24px;
-}
-
-.auth-form-item {
-    margin-bottom: 16px;
-    text-align: left;
-}
-
-.auth-form-label {
-    font-weight: 500;
-    color: #595959;
-}
-
-.auth-form-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #d9d9d9;
-    transition: all 0.3s ease;
-}
-
-.auth-form-input:focus {
-    border-color: #1890ff;
-    box-shadow: 0 0 6px rgba(24, 144, 255, 0.2);
-}
-
-.auth-form-button {
-    width: 100%;
-    background-color: #1890ff;
-    color: #fff;
-    border: none;
-    height: 45px;
-    font-size: 16px;
-    border-radius: 8px;
-    margin-top: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.auth-form-button:hover {
-    background-color: #40a9ff;
-    color: white;
-}
-
-.auth-form-button:focus {
-    background-color: #0050b3;
-    color: white;
-}
-
-.auth-form-link {
-    color: #1890ff;
-    font-size: 14px;
-    cursor: pointer;
-    margin-top: 16px;
-    display: block;
-    text-align: center;
-}
-
-.auth-form-link:hover {
-    text-decoration: underline;
-}
-
-/* Стили для крестика */
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-/* Стили для фона вокруг контейнера формы */
 .form-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Убедитесь, что фон находится под формой */
-}
-
-.form-container {
-    position: relative;
-    z-index: 1001; /* Убедитесь, что форма находится над фоном */
-}
+  }
+  
+  .form-container {
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auth-form-container {
+      width: 360px;
+      margin: 100px auto;
+      padding: 40px;
+      background-color: white; 
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      text-align: center;
+      position: relative; /* Добавлено для позиционирования крестика */
+  }
+  
+  .auth-form-container:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  .auth-form-title {
+      font-family: 'RopaSans';
+      color: #333;
+      margin-bottom: 24px;
+  }
+  
+  .auth-form-item {
+      margin-bottom: 16px;
+      text-align: left;
+  }
+  
+  .auth-form-label {
+      font-weight: 500;
+      color: #595959;
+  }
+  
+  .auth-form-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #d9d9d9;
+      transition: all 0.3s ease;
+  }
+  
+  .auth-form-input:focus {
+      border-color: #2C2C2C;
+      box-shadow: 0 0 6px rgba(24, 144, 255, 0.2);
+  }
+  
+  .auth-form-button {
+      width: 100%;
+      background-color: #2C2C2C;
+      color: #fff;
+      border: none;
+      height: 45px;
+      font-size: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+      transition: background-color 0.3s ease;
+  }
+  
+  .auth-form-button:hover {
+      background-color: #2C2C2C;
+      color: white;
+  }
+  
+  .auth-form-button:focus {
+      background-color: #2C2C2C;
+      color: white;
+  }
+  
+  .auth-form-link {
+      color: #2C2C2C;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 16px;
+      display: block;
+      text-align: center;
+  }
+  
+  .auth-form-link:hover {
+      text-decoration: underline;
+  }
+  
+  /* Стили для крестика */
+  .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+  }
+  

@@ -1,0 +1,43 @@
+.general {
+    display: flex;
+    flex-direction: row;
+}
+
+.problem-container {
+    width: 35%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.problem-info {
+    border: 2px solid black;
+    padding-left: 20px;
+}
+
+.tests {
+    border: 2px solid black;
+    border-top: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.test-cases{
+    border: 2px none black;
+    border-right-style: solid;
+    padding-right: 10px;
+}
+
+.test-results{
+    text-align: center;
+}
+
+.additional-info {
+    text-align: center;
+    padding-left: 20px;
+}
+
+.code-block {
+    margin-top: 20px;
+    margin-right: 20px;
+}

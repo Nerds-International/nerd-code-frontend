@@ -1,8 +1,8 @@
 import {observer} from "mobx-react-lite";
 import "./style.css";
 import {Avatar, Button, Card, Flex, List} from "antd";
-import Search from "antd/es/input/Search";
-import Meta from "antd/es/card/Meta";
+import Search from "antd/lib/input/Search";
+import Meta from "antd/lib/card/Meta";
 import {forumStore} from "../../store/forumStore/ForumStore";
 
 const DiscussPage = observer (() => {

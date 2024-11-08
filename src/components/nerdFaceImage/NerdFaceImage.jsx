@@ -4,8 +4,8 @@ const NerdFaceImage = observer(() => {
 
   return (<img
     alt="nerd-face-image"
-    src={process.env.PUBLIC_URL + "/NerdFace.png"}
-    style={{ width: 80, height: 80 }}
+    src={process.env.PUBLIC_URL + "/img/nerd.png"}
+    style={{ width: 80}}
   />);
 })
 

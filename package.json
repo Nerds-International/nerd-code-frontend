@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@uiw/react-textarea-code-editor": "^3.1.0",
     "antd": "^5.21.5",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.0.7",

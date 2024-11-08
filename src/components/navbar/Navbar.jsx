@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Menu, Button } from "antd"; // Импортируем Button для кнопок "Log In" и "Sign Up"
+import { Menu } from "antd"; // Импортируем Menu для создания меню
 import { pageStore } from "../../store/PageStore";
 import NerdFaceImage from "../nerdFaceImage/NerdFaceImage";
 import { Link } from 'react-router-dom'; // Импортируем Link
@@ -27,6 +27,21 @@ const Navbar = observer(() => {
     },
   ];
 
+  const authItems = [
+    {
+      label: <div className="separator-vertical"></div>, // Добавляем вертикальный разделитель
+      key: 'separator',
+    },
+    {
+      label: <Link className="tab" to="/login">Log In</Link>, // Добавляем Link для Log In
+      key: 'login',
+    },
+    {
+      label: <Link className="auth-tab" to="/signup">Sign Up</Link>, // Добавляем Link для Sign Up
+      key: 'signup',
+    },
+  ];
+
   const handleClick = (e) => {
     setCurrentPage(e.key);
   }
@@ -34,19 +49,21 @@ const Navbar = observer(() => {
   return (
     <div className="header">
       <Menu
+      // <div className="navbar-buttons">
+      //   </div>
         className="tabs"
         mode="horizontal"
         items={navbarItems}
         onClick={handleClick}
         selectedKeys={[]}
       />
-      <div className="separator" />
-      <div className="login">
-        <Link to="/login">Log In</Link>
+      <div className="auth-buttons">
+        {authItems.map(item => (
+          <div key={item.key} className="auth-tab-wrapper">
+            {item.label}
+          </div>
+        ))}
       </div>
-      <Button className="signup" type="primary">
-        <Link to="/signup">Sign Up</Link>
-      </Button>
     </div>
   );
 });

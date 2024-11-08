@@ -1,7 +1,7 @@
 .header {
     display: flex;
     align-items: center;
-    padding: 0px; 
+    padding: 0px;
     background-color: white;
     font-family: "RopaSans";
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.08), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -16,7 +16,7 @@
     width: 100%;
 }
 
-.tab {
+.tab, .auth-tab {
     text-align: center;
     height: 20px;
     width: 80px;
@@ -25,50 +25,52 @@
     padding: 12px 12px 12px 12px;
     margin: 20px;
     border-radius: 35px;
+    text-decoration: none;
+    color: black;
 }
 
 .tab:hover {
     background-color: #FFCC00;
     border-radius: 35px;
-    border-bottom: none;
 }
 
-.separator {
-    width: 1px; 
-    height: 32px; 
-    background-color: black; 
-    margin-left: 410px;
-    margin-right: 0px;
-    align-self: center;
+.tab:active {
+    background-color: #E6B800;
 }
 
-.login {
-    margin-left: 20px;
-    margin-right: 30px;
-    cursor: pointer;
-    padding: 12px;
-}
-
-.signup {
+.auth-tab {
     background-color: #FFCC00;
-    border-radius: 30px;
-    margin-right: 10px;
+    border-radius: 35px;
 }
 
-.signup:hover {
+.auth-tab:hover {
     background-color: white;
     outline: 1px solid black;
+    border-radius: 35px;
 }
 
-.signup:active {
-    background-color: #e6e6e6;
+.auth-tab:active {
+    background-color: #E6E6E6;
     outline: 1px solid black;
+    border-radius: 35px;
 }
 
-.ant-menu-item-selected::after, .ant-menu-item:hover::after{
-    border-bottom: none !important;
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 }
 
-.ant-menu-item:hover{
-    border-bottom: none !important;
+.separator-vertical {
+    width: 1px;
+    height: 40px;
+    background-color: black;
+    margin: 0 10px;
+}
+
+.auth-tab-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
 }

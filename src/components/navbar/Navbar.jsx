@@ -1,12 +1,17 @@
+import { useState } from 'react';
 import { observer } from "mobx-react-lite";
 import { Menu } from "antd"; // Импортируем Menu для создания меню
 import { pageStore } from "../../store/PageStore";
-import NerdFaceImage from "../nerdFaceImage/NerdFaceImage";
 import { Link } from 'react-router-dom'; // Импортируем Link
+import NerdFaceImage from "../nerdFaceImage/NerdFaceImage";
+import SignInForm from "../auth-reg/SignInForm";
+import SignUpForm from "../auth-reg/SignUpForm";
 import './Navbar.css'; // Импортируйте ваш CSS файл для Navbar
 
 const Navbar = observer(() => {
   const { Pages, setCurrentPage } = pageStore;
+  const [currentForm, setCurrentForm] = useState(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const navbarItems = [
     {
@@ -33,11 +38,11 @@ const Navbar = observer(() => {
       key: 'separator',
     },
     {
-      label: <Link className="tab" to="/login">Log In</Link>, // Добавляем Link для Log In
+      label: <Link className="tab" to="#" onClick={() => { setIsFormVisible(true); setCurrentForm('login'); }}>Log In</Link>,
       key: 'login',
     },
     {
-      label: <Link className="auth-tab" to="/signup">Sign Up</Link>, // Добавляем Link для Sign Up
+      label: <Link className="auth-tab" to="#" onClick={() => { setIsFormVisible(true); setCurrentForm('signup'); }}>Sign Up</Link>,
       key: 'signup',
     },
   ];
@@ -49,8 +54,6 @@ const Navbar = observer(() => {
   return (
     <div className="header">
       <Menu
-      // <div className="navbar-buttons">
-      //   </div>
         className="tabs"
         mode="horizontal"
         items={navbarItems}
@@ -64,6 +67,30 @@ const Navbar = observer(() => {
           </div>
         ))}
       </div>
+      {isFormVisible && (
+        <div className="form-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="form-container" onClick={(e) => e.stopPropagation()}>
+            {currentForm === 'login' && (
+              <>
+                <SignInForm />
+                <div className="form-switch">
+                  <span>Don't have an account?</span>
+                  <Link to="#" onClick={() => { setCurrentForm('signup'); }} className="switch-link">Sign up</Link>
+                </div>
+              </>
+            )}
+            {currentForm === 'signup' && (
+              <>
+                <SignUpForm />
+                <div className="form-switch">
+                  <span>Already have an account?</span>
+                  <Link to="#" onClick={() => { setCurrentForm('login'); }} className="switch-link">Log in</Link>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 });

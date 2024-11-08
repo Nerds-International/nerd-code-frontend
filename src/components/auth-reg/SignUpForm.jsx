@@ -1,7 +1,6 @@
 import { Form, Input, Button, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
-import { AuthStore } from '../../store/AuthStore';
+import { authStore } from '../../store/AuthStore';
 import './Form.css';
 
 const { Title } = Typography;
@@ -10,7 +9,7 @@ const SignUpForm = observer(() => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    AuthStore.signUp(values.username, values.password, values.confirmPassword);
+    authStore.signUp(values.username, values.password, values.confirmPassword);
   };
 
   return (

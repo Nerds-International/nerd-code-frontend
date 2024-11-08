@@ -1,16 +1,14 @@
-import { Form, Input, Button, Typography, notification } from 'antd';
+import { Form, Input, Button, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
-import { AuthStore } from '../../store/AuthStore';
+import { authStore } from '../../store/AuthStore';
 import './Form.css';
 
 const { Title } = Typography;
 
 const SignInForm = observer(() => {
   const [form] = Form.useForm();
-
   const onFinish = async (values) => {
-    AuthStore.signIn(values.username, values.password);
+    authStore.signIn(values.username, values.password);
   };
 
   return (
@@ -58,4 +56,4 @@ const SignInForm = observer(() => {
   );
 });
 
-export default AuthForm;
+export default SignInForm;

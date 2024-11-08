@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
-import { notification } from "antd";
 
+// Mocking notification
 jest.mock("antd", () => ({
   notification: {
     success: jest.fn(),

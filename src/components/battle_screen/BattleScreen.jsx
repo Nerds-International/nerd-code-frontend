@@ -18,22 +18,22 @@ const BattleScreen = observer(() => {
   );
 });
 
-const TaskDescription = () => {
+const TaskDescription = observer(() => {
   return (
     <div className="task-container">
       <h2>Описание задачи</h2>
       <p>Здесь будет описание вашей задачи...</p>
     </div>
   );
-};
+});
 
-const ButtonCostContainer = () => {
+const ButtonCostContainer = observer(() => {
   return (
     <div className="button-cost-container">
       <div className="buttons-column">
-        <button className="action-button">Кнопка 1</button>
-        <button className="action-button">Кнопка 2</button>
-        <button className="action-button">Кнопка 3</button>
+        <button className="action-button">Перевернуть</button>
+        <button className="action-button">Невидимость</button>
+        <button className="action-button">Стереть 10 символов</button>
       </div>
       <div className="cost-column">
         <div className="cost-numbers">
@@ -44,7 +44,7 @@ const ButtonCostContainer = () => {
       </div>
     </div>
   );
-};
+});
 
 const BattleWindows = observer(() => {
   const { getCurrentLanguage } = languageStore;
@@ -55,10 +55,13 @@ const BattleWindows = observer(() => {
     <div className="code-blocks">
       <div className="code-block">
         <CodeEditor
+          className="w-tc-editor-var"
+          minHeight={500}
           value={code1}
           language={getCurrentLanguage()}
           onChange={(evn) => setCode1(evn.target.value)}
           padding={15}
+          data-color-mode="dark"
           style={{
             backgroundColor: "#f5f5f5",
             fontFamily:
@@ -72,16 +75,18 @@ const BattleWindows = observer(() => {
       </div>
       <div className="code-block">
         <CodeEditor
+          className="w-tc-editor-var"
+          minHeight={500}
           value={code2}
           language={getCurrentLanguage()}
           onChange={(evn) => setCode2(evn.target.value)}
           padding={15}
+          data-color-mode="dark"
           style={{
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
           }}
-          data-color-mode="dark"
         />
         <div className="button-group">
           <button>Test</button>

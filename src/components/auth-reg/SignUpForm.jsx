@@ -1,4 +1,4 @@
-import { Form, Input, Button, Typography, notification } from 'antd';
+import { Form, Input, Button, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import { AuthStore } from '../../store/AuthStore';
@@ -6,19 +6,19 @@ import './Form.css';
 
 const { Title } = Typography;
 
-const SignInForm = observer(() => {
+const SignUpForm = observer(() => {
   const [form] = Form.useForm();
 
-  const onFinish = async (values) => {
-    AuthStore.signIn(values.username, values.password);
+  const onFinish = (values) => {
+    AuthStore.signUp(values.username, values.password, values.confirmPassword);
   };
 
   return (
     <div className="auth-form-container">
-      <Title level={3} className="auth-form-title">Login</Title>
+      <Title level={3} className="auth-form-title">Sign Up</Title>
       <Form
         form={form}
-        name="auth"
+        name="signup"
         layout="vertical"
         onFinish={onFinish}
         className="auth-form"
@@ -41,6 +41,15 @@ const SignInForm = observer(() => {
           <Input.Password placeholder="Enter your password" />
         </Form.Item>
 
+        <Form.Item
+          label={<span className="auth-form-label">Confirm Password</span>}
+          name="confirmPassword"
+          className="auth-form-item"
+          rules={[{ required: true, message: 'Please confirm your password!' }]}
+        >
+          <Input.Password placeholder="Confirm your password" />
+        </Form.Item>
+
         <Form.Item>
           <Button
             type="primary"
@@ -48,14 +57,14 @@ const SignInForm = observer(() => {
             className="auth-form-button"
             loading={authStore.isLoading}
           >
-            Log In
+            Sign Up
           </Button>
         </Form.Item>
       </Form>
 
-      <a className="auth-form-link" href="/signup">Don't have an account? Sign up</a>
+      <a className="auth-form-link" href="/signin">Already have an account? Log in</a>
     </div>
   );
 });
 
-export default AuthForm;
+export default SignUpForm;

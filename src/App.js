@@ -5,7 +5,7 @@ import Navbar from './components/navbar/Navbar';
 import BattleScreen from './components/battle_screen/BattleScreen';
 import MainPage from './pages/MainPage';
 // import BattlePage from './pages/BattlePage';
-import DiscussPage from './pages/DiscussPage';
+import DiscussPage from './pages/dicuss_page/DiscussPage';
 import ProblemsPage from './pages/ProblemsListPage';
 
 const App = () => {

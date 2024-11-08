@@ -1,13 +1,11 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
 
-// Mocking notification
-jest.mock("antd", () => ({
-  notification: {
-    success: jest.fn(),
-    error: jest.fn(),
-  },
-}));
+// Мокаем метод для логирования уведомлений
+global.console = {
+  log: jest.fn(),
+  error: jest.fn(),
+};
 
 describe("AuthStore", () => {
   beforeEach(() => {
@@ -23,7 +21,7 @@ describe("AuthStore", () => {
       refreshToken: "refresh-token",
       uuid: "user-uuid",
     };
-    
+
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
@@ -37,13 +35,10 @@ describe("AuthStore", () => {
     expect(localStorage.getItem("accessToken")).toBe("access-token");
     expect(localStorage.getItem("refreshToken")).toBe("refresh-token");
     expect(localStorage.getItem("uuid")).toBe("user-uuid");
-    expect(notification.success).toHaveBeenCalledWith({
-      message: "Login Successful",
-      description: "You have successfully logged in!",
-    });
+    expect(console.log).toHaveBeenCalledWith("Login Successful: You have successfully logged in!");
   });
 
-  test("signIn shows error notification on failed login", async () => {
+  test("signIn shows error log on failed login", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
@@ -54,10 +49,7 @@ describe("AuthStore", () => {
     await authStore.signIn("testUser", "testPassword");
 
     expect(authStore.isAuthenticated).toBe(false);
-    expect(notification.error).toHaveBeenCalledWith({
-      message: "Login Failed",
-      description: "Login failed",
-    });
+    expect(console.error).toHaveBeenCalledWith("Login Failed: Login failed");
   });
 
   test("signUp sets isAuthenticated to true on successful registration", async () => {
@@ -78,23 +70,17 @@ describe("AuthStore", () => {
     expect(authStore.isAuthenticated).toBe(true);
     expect(localStorage.getItem("accessToken")).toBe("access-token");
     expect(localStorage.getItem("uuid")).toBe("user-uuid");
-    expect(notification.success).toHaveBeenCalledWith({
-      message: "Registration Successful",
-      description: "You have successfully signed up!",
-    });
+    expect(console.log).toHaveBeenCalledWith("Registration Successful: You have successfully signed up!");
   });
 
-  test("signUp shows error notification if passwords do not match", async () => {
+  test("signUp shows error log if passwords do not match", async () => {
     await authStore.signUp("newUser", "password123", "differentPassword");
 
     expect(authStore.isAuthenticated).toBe(false);
-    expect(notification.error).toHaveBeenCalledWith({
-      message: "Registration Failed",
-      description: "Passwords do not match!",
-    });
+    expect(console.error).toHaveBeenCalledWith("Registration Failed: Passwords do not match!");
   });
 
-  test("signUp shows error notification on failed registration", async () => {
+  test("signUp shows error log on failed registration", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
@@ -105,9 +91,6 @@ describe("AuthStore", () => {
     await authStore.signUp("newUser", "password123", "password123");
 
     expect(authStore.isAuthenticated).toBe(false);
-    expect(notification.error).toHaveBeenCalledWith({
-      message: "Registration Failed",
-      description: "Registration failed",
-    });
+    expect(console.error).toHaveBeenCalledWith("Registration Failed: Registration failed");
   });
 });

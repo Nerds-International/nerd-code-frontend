@@ -1,29 +1,47 @@
+import { useState } from 'react';
 import { observer } from "mobx-react-lite";
-import { Menu, Button } from "antd"; // Импортируем Button для кнопок "Log In" и "Sign Up"
+import { Menu } from "antd";
 import { pageStore } from "../../store/PageStore";
+import { Link } from 'react-router-dom';
 import NerdFaceImage from "../nerdFaceImage/NerdFaceImage";
-import { Link } from 'react-router-dom'; // Импортируем Link
-import './Navbar.css'; // Импортируйте ваш CSS файл для Navbar
+import FormModalWindow from "../auth-reg/FormModalWindow";
+import './Navbar.css';
 
 const Navbar = observer(() => {
   const { Pages, setCurrentPage } = pageStore;
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const navbarItems = [
     {
-      label: (<Link to="/"><NerdFaceImage /></Link>), // Добавляем Link к NerdFaceImage
+      label: (<Link to="/"><NerdFaceImage /></Link>),
       key: Pages.MAIN,
     },
     {
-      label: <Link className="tab" to="/problems">Problems</Link>, // Добавляем Link для Problems
+      label: <Link className="tab" to="/problems">Problems</Link>,
       key: Pages.PROBLEMS_LIST,
     },
     {
-      label: <Link className="tab" to="/discuss">Discuss</Link>, // Добавляем Link для Discuss
+      label: <Link className="tab" to="/discuss">Discuss</Link>,
       key: Pages.DISCUSS,
     },
     {
-      label: <Link className="tab" to="/battle">Battle</Link>, // Добавляем Link для Battle
+      label: <Link className="tab" to="/battle">Battle</Link>,
       key: Pages.BATTLE,
+    },
+  ];
+
+  const authItems = [
+    {
+      label: <div className="separator-vertical"></div>,
+      key: 'separator',
+    },
+    {
+      label: <Link className="tab" to="#" onClick={() => setIsFormVisible(true)}>Log In</Link>,
+      key: 'login',
+    },
+    {
+      label: <Link className="auth-tab" to="#" onClick={() => setIsFormVisible(true)}>Sign Up</Link>,
+      key: 'signup',
     },
   ];
 
@@ -40,13 +58,18 @@ const Navbar = observer(() => {
         onClick={handleClick}
         selectedKeys={[]}
       />
-      <div className="separator" />
-      <div className="login">
-        <Link to="/login">Log In</Link>
+      <div className="auth-buttons">
+        {authItems.map(item => (
+          <div key={item.key} className="auth-tab-wrapper">
+            {item.label}
+          </div>
+        ))}
       </div>
-      <Button className="signup" type="primary">
-        <Link to="/signup">Sign Up</Link>
-      </Button>
+      {isFormVisible && (
+        <div className="form-modal" onClick={(e) => e.stopPropagation()}>
+            <FormModalWindow onClose={() => setIsFormVisible(false)} />
+        </div>
+      )}
     </div>
   );
 });

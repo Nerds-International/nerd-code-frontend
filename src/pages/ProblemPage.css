@@ -25,11 +25,12 @@
 .test-cases{
     border: 2px none black;
     border-right-style: solid;
-    padding-right: 10px;
+    padding-right: 30px;
 }
 
 .test-results{
     text-align: center;
+    padding-right: 30px;
 }
 
 .additional-info {
@@ -40,4 +41,25 @@
 .code-block {
     margin-top: 20px;
     margin-right: 20px;
+}
+
+.self-test {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.input-test {
+    width: 50%;
+}
+
+.test-result-container {
+    width: 50%;
+    margin-left: 20px;
+}
+
+.input-test textarea {
+    width: 100%;
+    resize: none;
 }

@@ -9,10 +9,24 @@ const ProblemsListPage = observer(() => {
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
+    const difficultyOrder = {
+        'Easy': 1,
+        'Medium': 2,
+        'Hard': 3
+    };
+
     const filteredTasks = tasks.filter(task => {
-        const matchesDifficulty = filter === 'all' || task.difficulty === filter;
+        const matchesDifficulty = filter === 'all' || filter === 'Easy to Hard' || filter === 'Hard to Easy' || task.difficulty === filter;
         const matchesName = task.name.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesDifficulty && matchesName;
+    }).sort((a, b) => {
+        if (filter === 'Easy to Hard') {
+            return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+        }
+        if (filter === 'Hard to Easy') {
+            return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+        }
+        return 0;
     });
 
     return (
@@ -61,6 +75,24 @@ const ProblemsListPage = observer(() => {
                             onChange={(e) => setFilter(e.target.value)}
                         />
                         Hard
+                    </label>
+                    <label className="line">
+                        <input
+                            type="radio"
+                            value="Easy to Hard"
+                            checked={filter === 'Easy to Hard'}
+                            onChange={(e) => setFilter(e.target.value)}
+                        />
+                        Easy to Hard
+                    </label>
+                    <label className="line">
+                        <input
+                            type="radio"
+                            value="Hard to Easy"
+                            checked={filter === 'Hard to Easy'}
+                            onChange={(e) => setFilter(e.target.value)}
+                        />
+                        Hard to Easy
                     </label>
                 </div>
             </div>

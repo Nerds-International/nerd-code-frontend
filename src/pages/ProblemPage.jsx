@@ -12,6 +12,11 @@ const ProblemPage = observer(() => {
     const task = TaskStore.tasks.find(task => task.id === parseInt(id));
     const [code2, setCode2] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
+    const [inputTest, setInputTest] = useState('');
+
+    const handleInputTest = (e) => {
+        setInputTest(e.target.value);
+    };
 
     if (!task) {
         return <div>Task not found</div>;
@@ -71,6 +76,19 @@ const ProblemPage = observer(() => {
                             "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                     }}
                 />
+                <div className="self-test">
+                    <div className="input-test">
+                        <p>Test input:</p>
+                        <textarea
+                            placeholder="Enter test"
+                            value={inputTest}
+                            onChange={handleInputTest}
+                        />
+                    </div>
+                    <div className="test-result-container">
+                        <p>Test output:</p>
+                    </div>
+                </div>
                 <div className="button-group">
                     <button>Test</button>
                     <button>Run</button>

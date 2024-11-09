@@ -56,7 +56,7 @@ const MatchFinder = observer(() => {
       </div>
       {match ? (
         <div>
-          match found
+          Match found
           <BattleScreen />
         </div>
       ) : (

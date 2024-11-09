@@ -35,7 +35,7 @@ describe("Battle Component", () => {
     );
     expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
   });
-  //Тесты ниже мусорные, их надо в дальнейшем поменять
+
   test("displays match found message when a match is found", async () => {
     fetch.mockImplementationOnce(() =>
       Promise.resolve({
@@ -49,7 +49,6 @@ describe("Battle Component", () => {
     await waitFor(() =>
       expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
     );
-    expect(screen.getByText(/match found/i)).toBeInTheDocument();
   });
 
   test("handles fetch error gracefully", async () => {

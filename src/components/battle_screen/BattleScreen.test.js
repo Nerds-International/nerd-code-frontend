@@ -1,46 +1,21 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import BattleScreen from "./BattleScreen";
 
 jest.mock("../../store/LanguageStore", () => ({
-  languageStore: {
-    getCurrentLanguage: jest.fn().mockReturnValue("javascript"),
-  },
+    languageStore: {
+        getCurrentLanguage: jest.fn().mockReturnValue("javascript"),
+    },
 }));
 
-describe("BattleScreen", () => {
-  it("renders BattleWindows", () => {
-    render(<BattleScreen />);
-
-    expect(screen.getByText(/Code Block 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Code Block 2/i)).toBeInTheDocument();
-  });
-});
-
-describe("BattleWindows", () => {
-  it("updates code block 1 textarea and syntax highlighter", () => {
-    render(<BattleScreen />);
-
-    const textarea1 = screen.getByRole("textbox", { name: "Code Block 1" });
-    fireEvent.change(textarea1, {
-      target: { value: 'console.log("Hello World");' },
+describe("BattleScreen Component", () => {
+    test("renders BattleScreen component", () => {
+        render(<BattleScreen />);
+        expect(screen.getByText("Описание задачи")).toBeInTheDocument();
+        expect(screen.getByText("Перевернуть")).toBeInTheDocument();
+        expect(screen.getByText("Невидимость")).toBeInTheDocument();
+        expect(screen.getByText("Стереть 10 символов")).toBeInTheDocument();
+        expect(screen.getAllByText("Test").length).toBe(2);
+        expect(screen.getAllByText("Run").length).toBe(2);
     });
-
-    expect(textarea1.value).toBe('console.log("Hello World");');
-    expect(screen.getByText('console.log("Hello World");')).toBeInTheDocument();
-  });
-
-  it("updates code block 2 textarea and syntax highlighter", () => {
-    render(<BattleScreen />);
-
-    const textarea2 = screen.getByRole("textbox", { name: "Code Block 2" });
-    fireEvent.change(textarea2, {
-      target: { value: 'function greet() { return "Hi!"; }' },
-    });
-
-    expect(textarea2.value).toBe('function greet() { return "Hi!"; }');
-    expect(
-      screen.getByText('function greet() { return "Hi!"; }'),
-    ).toBeInTheDocument();
-  });
 });

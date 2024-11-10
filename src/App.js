@@ -1,9 +1,8 @@
 // App.jsx
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Header from './components/header/Header';
 import Navbar from './components/navbar/Navbar';
 import BattleScreen from './components/battle_screen/BattleScreen';
-import MainPage from './pages/MainPage';
+import MainPage from './pages/main_page/MainPage';
 // import BattlePage from './pages/BattlePage';
 import DiscussPage from './pages/dicuss_page/DiscussPage';
 import ProblemsPage from './pages/ProblemsListPage';

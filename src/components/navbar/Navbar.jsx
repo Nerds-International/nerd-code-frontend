@@ -10,6 +10,7 @@ import './Navbar.css';
 const Navbar = observer(() => {
   const { Pages, setCurrentPage } = pageStore;
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const navbarItems = [
     {
@@ -36,11 +37,11 @@ const Navbar = observer(() => {
       key: 'separator',
     },
     {
-      label: <Link className="tab" to="#" onClick={() => setIsFormVisible(true)}>Log In</Link>,
+      label: <Link className="tab" to="#" onClick={() => { setIsFormVisible(true); setIsLogin(true); }}>Log In</Link>,
       key: 'login',
     },
     {
-      label: <Link className="auth-tab" to="#" onClick={() => setIsFormVisible(true)}>Sign Up</Link>,
+      label: <Link className="tab" to="#" onClick={() => { setIsFormVisible(true); setIsLogin(false); }}>Sign Up</Link>,
       key: 'signup',
     },
   ];
@@ -67,7 +68,7 @@ const Navbar = observer(() => {
       </div>
       {isFormVisible && (
         <div className="form-modal" onClick={(e) => e.stopPropagation()}>
-            <FormModalWindow onClose={() => setIsFormVisible(false)} />
+          <FormModalWindow onClose={() => setIsFormVisible(false)} isLogin={isLogin} />
         </div>
       )}
     </div>

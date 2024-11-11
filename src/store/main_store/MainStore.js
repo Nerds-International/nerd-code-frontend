@@ -7,7 +7,7 @@ class MainStore {
  */
   news = Array.from({length: 5}, (_, index) => ({
     id: index,
-    time: new Date().toLocaleTimeString(),
+    date: new Date().toLocaleDateString(),
     title: `News ${index}`,
     text_preview: "Мы добавили BrainF#ck как вы просили!",
     img_src: "../../public/img/news.png",

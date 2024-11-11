@@ -12,22 +12,26 @@ const MainPage = observer(() => {
   const { getTopics } = forumStore;
 
   return (
-      <Flex
-        vertical={false}
-        style={{
-          padding: 10,
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          height: '90vh'
-        }}
-      >
-        <Row gutter={16} style={{ height: '100%' }}>
+    <Flex
+      vertical={false}
+      style={{
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        height: '90vh',
+        overflow: 'auto'
+      }}
+    >
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Row gutter={16} style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
           {/* ============ NEWS ============== */}
-          <Col span={8} style={{ height: '100%', width: '45%', overflow: 'auto' }}>
-            <Title level={2}>News</Title>
+          <Col span={8} style={{ height: '100%', width: '45%', overflow: 'hidden' }}>
+            <Title level={2} style={{ textAlign: 'center' }}>News</Title>
             <List
               style={{
                 padding: 20,
+                maxHeight: '100%',
+                overflow: 'auto'
               }}
               bordered={false}
               grid={{ column: 1 }}
@@ -35,10 +39,11 @@ const MainPage = observer(() => {
               renderItem={(news) => (
                 <List.Item>
                   <Card>
-                    <img src={`public/img/${news.img_src}`} alt={news.title} style={{ width: '100%', height: 'auto' }} />
+                    <img src={news.img_src} alt={news.title} style={{ width: '100%', height: 'auto' }} />
                     <Meta
                       title={news.title}
-                      description={`Created at ${news.time}`}
+                      description={`${news.date}`}
+                      style={{ textAlign: 'center' }}
                     />
                     <p>{news.text_preview}</p>
                   </Card>
@@ -47,11 +52,13 @@ const MainPage = observer(() => {
             />
           </Col>
           {/* ============ DISCUSS ============== */}
-          <Col span={8} style={{ height: '100%', width: '35%', overflow: 'auto' }}>
-            <Title level={2}>Last Discuss</Title>
+          <Col span={8} style={{ height: '100%', width: '35%', overflow: 'hidden' }}>
+            <Title level={2} style={{ textAlign: 'center' }}>Last Discuss</Title>
             <List
               style={{
                 padding: 20,
+                maxHeight: '100%',
+                overflow: 'auto'
               }}
               bordered={false}
               grid={{ column: 1 }}
@@ -60,35 +67,40 @@ const MainPage = observer(() => {
                 <List.Item>
                   <Card>
                     <Meta
-                      title={<Link to={`/discuss/${topic.id}`}>{topic.title}</Link>} 
+                      title={<Link to={`/discuss/${topic.id}`}>{topic.title}</Link>}
                       description={`Created by @${topic.author} at ${topic.time}`}
                       avatar={<Avatar src={''} alt={'ava'} size={'large'} style={{ background: '#FFCC00' }} />}
+                      style={{ textAlign: 'center' }}
                     />
-                    <Title level={4}>Last 3 Messages:</Title>
-                    <List
-                      dataSource={topic.messages.slice(0, 3)}
-                      renderItem={(message) => (
-                        <List.Item>
-                          <Meta
-                            title={message.text}
-                            description={`Author: @${message.author} at ${message.time}`}
-                          />
-                        </List.Item>
-                      )}
-                    />
+                    {topic.messages.length > 0 ? (
+                      <List
+                        dataSource={topic.messages.slice(0, 3)}
+                        renderItem={(message) => (
+                          <List.Item>
+                            <Meta
+                              title={message.text}
+                              description={`Author: @${message.author} at ${message.time}`}
+                              style={{ textAlign: 'center' }}
+                            />
+                          </List.Item>
+                        )}
+                      />
+                    ) : (
+                      <p style={{ textAlign: 'center' }}>Start the discussion!</p>
+                    )}
                   </Card>
                 </List.Item>
               )}
             />
           </Col>
           {/* ============ TOP NERDS ============== */}
-          <Col span={8} style={{ height: '100%', width: '20%', overflow: 'auto' }}>
-            <Title level={2}>Top Nerds</Title>
-            <div style={{ display: 'flex', flexDirection: 'column', padding: 20 }}>
+          <Col span={8} style={{ height: '100%', width: '20%', overflow: 'hidden' }}>
+            <Title level={2} style={{ textAlign: 'center' }}>Top Nerds</Title>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: 20, maxHeight: '100%', overflow: 'auto' }}>
               {mainStore.nerds.map((nerd, index) => (
                 <div key={nerd.id} style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '5px', border: '1px solid #ddd' }}>
                   <span style={{ marginRight: '10px' }}>{`#${index + 1}`}</span>
-                  <Avatar src={`public/img/${nerd.img_src}`} alt={nerd.nickname} size={'small'} style={{ background: '#FFCC00', marginRight: '10px' }} />
+                  <Avatar src={`../public/img/${nerd.img_src}`} alt={nerd.nickname} size={'small'} style={{ background: '#FFCC00', marginRight: '10px' }} />
                   <span style={{ marginRight: '10px' }}>{nerd.nickname}</span>
                   <span>{nerd.rating}</span>
                 </div>
@@ -96,7 +108,8 @@ const MainPage = observer(() => {
             </div>
           </Col>
         </Row>
-      </Flex>
+      </div>
+    </Flex>
   );
 });
 

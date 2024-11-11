@@ -4,8 +4,8 @@ import SignUpForm from './SignUpForm';
 import { CloseOutlined } from '@ant-design/icons'; // Импортируем иконку CloseOutlined из Ant Design
 import './Form.css'; // Импортируем CSS файл
 
-const FormModalWindow = ({ onClose }) => {
-  const [isSignIn, setIsSignIn] = useState(true);
+const FormModalWindow = ({ onClose, isLogin }) => {
+  const [isSignIn, setIsSignIn] = useState(isLogin);
 
   const toggleForm = () => {
     setIsSignIn(!isSignIn);
@@ -13,18 +13,18 @@ const FormModalWindow = ({ onClose }) => {
 
   return (
     <div className="auth-form-container">
-        <div className="form-modal-header">
-            <button className="close-button" onClick={onClose}>
-                <CloseOutlined />
-            </button>
-        </div>
-          <div className="form-modal-content">
-            {isSignIn ? (
-              <SignInForm toggleForm={toggleForm} />
-            ) : (
-              <SignUpForm toggleForm={toggleForm} />
-            )}
-          </div>
+      <div className="form-modal-header">
+        <button className="close-button" onClick={onClose}>
+          <CloseOutlined />
+        </button>
+      </div>
+      <div className="form-modal-content">
+        {isSignIn ? (
+          <SignInForm toggleForm={toggleForm} />
+        ) : (
+          <SignUpForm toggleForm={toggleForm} />
+        )}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
+import { notification } from 'antd';
 
 global.console = {
   log: jest.fn(),
@@ -87,4 +88,56 @@ describe("AuthStore", () => {
 
     expect(authStore.isAuthenticated).toBe(false);
   });
+});
+
+jest.mock('antd', () => ({
+  notification: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+describe("AuthStore - resetPassword", () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Сбросить все моки перед каждым тестом
+  });
+
+  test("shows success message on successful password reset", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ message: "Password reset instructions have been sent to your email." }),
+      })
+    );
+
+    await authStore.resetPassword("test@example.com");
+
+    // Проверяем, что уведомление было вызвано с правильными параметрами
+    expect(notification.success).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Password Reset',
+        description: 'Password reset instructions have been sent to your email.',
+      })
+    );
+  });
+
+  test("shows error log on failed password reset", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({ message: "Password reset failed" }),
+      })
+    );
+
+    await authStore.resetPassword("test@example.com");
+
+    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
+    expect(notification.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Password Reset Failed',
+        description: 'Password reset failed',
+      })
+    );
+  });
+
 });

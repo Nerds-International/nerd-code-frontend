@@ -5,56 +5,53 @@ import './Form.css';
 
 const { Item } = Form;
 
-const SignInForm = observer(({ toggleForm }) => {
+const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
   const [form] = Form.useForm();
-  const onFinish = async (values) => {
-    authStore.signIn(values.username, values.password);
-  };
+
+  // const onFinish = async (values) => {
+  //   authStore.signIn(values.email, values.password);
+  // };
 
   return (
-    <>
-      <h2 className="auth-form-title">Login</h2>
-      <Form
-        form={form}
-        name="auth"
-        layout="vertical"
-        onFinish={onFinish}
-        className="auth-form"
-      >
+    <div className="auth-form-container">
+      <h2 className="auth-form-title">Log In</h2>
+      <Form form={form} name="login" layout="vertical" onFinish={onFinish} className="auth-form">
         <Item
-          label={<span className="auth-form-label">Username</span>}
-          name="username"
-          className="auth-form-item"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
         >
-          <Input placeholder="Enter your username" className="auth-form-input" />
+          <Input placeholder="Your email" />
         </Item>
 
         <Item
-          label={<span className="auth-form-label">Password</span>}
+          label="Password"
           name="password"
-          className="auth-form-item"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password placeholder="Enter your password" className="auth-form-input" />
+          <Input.Password placeholder="Your password" />
         </Item>
 
         <Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="auth-form-button"
-            loading={authStore.isLoading}
-          >
+          <Button type="primary" htmlType="submit" loading={authStore.isLoading} className="auth-form-button">
             Log In
           </Button>
         </Item>
       </Form>
+
       <div className="form-switch">
-        <span>Don't have an account?</span>
-        <a onClick={toggleForm} className="auth-form-link">Sign up</a>
+        <span>Don't have an account? </span>
+        <a onClick={toggleToSignUp}>Sign Up</a>
       </div>
-    </>
+      <div className="auth-alt-options">
+        <Button type="default">
+          Sign in with GitHub
+        </Button>
+      </div>
+      <div className="form-switch">
+        <a onClick={onForgotPassword}>Forgot password?</a>
+      </div>
+    </div>
   );
 });
 

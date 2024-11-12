@@ -88,3 +88,72 @@ describe("AuthStore", () => {
     expect(authStore.isAuthenticated).toBe(false);
   });
 });
+
+describe("AuthStore - Additional Tests", () => {
+  beforeEach(() => {
+    authStore.isLoading = false;
+    authStore.isAuthenticated = false;
+    localStorage.clear();
+    jest.clearAllMocks();
+  });
+
+  test("completeProfile sets user data on successful profile completion", async () => {
+    const mockResponse = {
+      username: "testUser ",
+      fullName: "Test User",
+      avatar: "avatar1",
+    };
+
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+      })
+    );
+
+    await authStore.completeProfile("testUser ", "Test User", "avatar1");
+
+    expect(authStore.userData.username).toBe("testUser ");
+    expect(authStore.userData.fullName).toBe("Test User");
+    expect(authStore.userData.avatar).toBe("avatar1");
+  });
+
+  test("completeProfile shows error log on failed profile completion", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({ message: "Profile completion failed" }),
+      })
+    );
+
+    await authStore.completeProfile("testUser ", "Test User", "avatar1");
+
+    expect(authStore.userData).toBeNull(); // или другое значение по умолчанию
+  });
+
+  test("resetPassword shows success message on successful password reset", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ message: "Password reset successful" }),
+      })
+    );
+
+    const response = await authStore.resetPassword("test@example.com");
+
+    expect(response.message).toBe("Password reset successful");
+  });
+
+  test("resetPassword shows error log on failed password reset", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({ message: "Password reset failed" }),
+      })
+    );
+
+    const response = await authStore.resetPassword("test@example.com");
+
+    expect(response.message).toBe("Password reset failed");
+  });
+});

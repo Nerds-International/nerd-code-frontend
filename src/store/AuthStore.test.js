@@ -97,13 +97,6 @@ jest.mock('antd', () => ({
   },
 }));
 
-jest.mock('antd', () => ({
-  notification: {
-    success: jest.fn(),
-    error: jest.fn(),
-  },
-}));
-
 describe("AuthStore - resetPassword", () => {
   beforeEach(() => {
     jest.clearAllMocks(); // Сбросить все моки перед каждым тестом

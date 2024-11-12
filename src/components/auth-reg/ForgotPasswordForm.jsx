@@ -7,9 +7,8 @@ const { Item } = Form;
 const ForgotPasswordForm = observer(({ onCancel }) => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    // Handle password reset
-  };
+//   const onFinish = (values) => {
+//   };
 
   return (
     <div className="auth-form-container">

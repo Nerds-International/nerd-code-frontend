@@ -15,9 +15,8 @@ const avatarOptions = [
 const CompleteProfileForm = observer(() => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    authStore.completeProfile(values.username, values.fullName, values.avatar);
-  };
+//   const onFinish = (values) => {
+//   };
 
   return (
     <div className="auth-form-container">

@@ -193,10 +193,6 @@ describe("AuthStore - resetPassword", () => {
   });
 });
 
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import FormModalWindow from './FormModalWindow';
-
 describe('FormModalWindow', () => {
   const onCloseMock = jest.fn();
 

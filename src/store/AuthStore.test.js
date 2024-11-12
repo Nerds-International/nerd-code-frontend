@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
+import { notification } from 'antd';
 
 global.console = {
   log: jest.fn(),
@@ -88,6 +89,13 @@ describe("AuthStore", () => {
     expect(authStore.isAuthenticated).toBe(false);
   });
 });
+jest.mock('antd', () => ({
+  notification: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 describe("AuthStore - Additional Tests", () => {
   beforeEach(() => {
     authStore.isLoading = false;
@@ -107,7 +115,7 @@ describe("AuthStore - Additional Tests", () => {
       })
     );
 
-    await authStore.completeProfile("testUser ", "Test User", "avatar1");
+    await authStore.completeProfile("testUser  ", "Test User", "avatar1");
 
     expect(authStore.userData).toBe(initialUser); // Проверить, что userData не изменился
   });

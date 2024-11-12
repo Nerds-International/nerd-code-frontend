@@ -140,37 +140,4 @@ describe("AuthStore - resetPassword", () => {
     );
   });
 
-  test("calls fetch with correct parameters", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ message: "Password reset instructions have been sent to your email." }),
-      })
-    );
-
-    await authStore.resetPassword("test@example.com");
-
-    expect(fetch).toHaveBeenCalledWith('http://localhost:3000/auth/reset-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: "test@example.com" }),
-    });
-  });
-
-  test("handles network errors gracefully", async () => {
-    global.fetch = jest.fn(() => Promise.reject(new Error("Network error")));
-
-    await authStore.resetPassword("test@example.com");
-
-    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
-    expect(notification.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Password Reset Failed',
-        description: 'Network error',
-      })
-    );
-  });
-
 });

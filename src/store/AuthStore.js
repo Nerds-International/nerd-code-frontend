@@ -144,7 +144,7 @@ class AuthStore {
 
   async resetPassword(email) {
     this.isLoading = true;
-
+  
     try {
       const response = await fetch('http://localhost:3000/auth/reset-password', {
         method: 'POST',
@@ -153,12 +153,12 @@ class AuthStore {
         },
         body: JSON.stringify({ email }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Error resetting password');
       }
-
+  
       const data = await response.json();
       notification.success({
         message: 'Password Reset',
@@ -166,8 +166,8 @@ class AuthStore {
       });
     } catch (error) {
       notification.error({
-        message: 'Password Reset Failed ',
-        description: error.message || 'Error resetting password',
+        message: 'Password Reset Failed',
+        description: error.message.trim(), // Убедитесь, что здесь нет лишних пробелов
       });
     } finally {
       runInAction(() => {

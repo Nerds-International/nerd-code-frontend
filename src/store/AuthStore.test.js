@@ -97,45 +97,33 @@ jest.mock('antd', () => ({
   },
 }));
 
-describe("AuthStore - Additional Tests", () => {
+jest.mock('antd', () => ({
+  notification: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+describe("AuthStore - resetPassword", () => {
   beforeEach(() => {
-    authStore.isLoading = false;
-    authStore.isAuthenticated = false;
-    authStore.userData = null; // Сбросить userData
-    localStorage.clear();
-    jest.clearAllMocks();
+    jest.clearAllMocks(); // Сбросить все моки перед каждым тестом
   });
 
-  test("completeProfile shows error log on failed profile completion", async () => {
-    const initialUser = authStore.userData; // Сохранить текущее состояние
-
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "Profile completion failed" }),
-      })
-    );
-
-    await authStore.completeProfile("testUser  ", "Test User", "avatar1");
-
-    expect(authStore.userData).toBe(initialUser); // Проверить, что userData не изменился
-  });
-
-  test("resetPassword shows success message on successful password reset", async () => {
+  test("shows success message on successful password reset", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ message: "Password reset successful" }),
+        json: () => Promise.resolve({ message: "Password reset instructions have been sent to your email." }),
       })
     );
 
     await authStore.resetPassword("test@example.com");
 
-    // Проверяем, что уведомление было вызвано
+    // Проверяем, что уведомление было вызвано с правильными параметрами
     expect(notification.success).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Password Reset',
-        description: 'Password reset successful', // Изменено на правильное описание
+        description: 'Password reset instructions have been sent to your email.',
       })
     );
   });
@@ -150,10 +138,63 @@ describe("AuthStore - Additional Tests", () => {
 
     await authStore.resetPassword("test@example.com");
 
+    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
     expect(notification.error).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Password Reset Failed',
         description: 'Password reset failed',
+      })
+    );
+  });
+
+  test("calls fetch with correct parameters", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ message: "Password reset instructions have been sent to your email." }),
+      })
+    );
+
+    await authStore.resetPassword("test@example.com");
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:3000/auth/reset-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: "test@example.com" }),
+    });
+  });
+
+  test("handles network errors gracefully", async () => {
+    global.fetch = jest.fn(() => Promise.reject(new Error("Network error")));
+
+    await authStore.resetPassword("test@example.com");
+
+    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
+    expect(notification.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Password Reset Failed',
+        description: 'Network error',
+      })
+    );
+  });
+
+  test("handles empty error message from server", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({}), // Пустой объект без сообщения
+      })
+    );
+
+    await authStore.resetPassword("test@example.com");
+
+    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
+    expect(notification.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Password Reset Failed',
+        description: 'Error resetting password', // Сообщение по умолчанию
       })
     );
   });

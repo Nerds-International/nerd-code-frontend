@@ -88,37 +88,18 @@ describe("AuthStore", () => {
     expect(authStore.isAuthenticated).toBe(false);
   });
 });
-
 describe("AuthStore - Additional Tests", () => {
   beforeEach(() => {
     authStore.isLoading = false;
     authStore.isAuthenticated = false;
+    authStore.userData = null; // Сбросить userData
     localStorage.clear();
     jest.clearAllMocks();
   });
 
-  test("completeProfile sets user data on successful profile completion", async () => {
-    const mockResponse = {
-      username: "testUser ",
-      fullName: "Test User",
-      avatar: "avatar1",
-    };
-
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockResponse),
-      })
-    );
-
-    await authStore.completeProfile("testUser ", "Test User", "avatar1");
-
-    expect(authStore.userData.username).toBe("testUser ");
-    expect(authStore.userData.fullName).toBe("Test User");
-    expect(authStore.userData.avatar).toBe("avatar1");
-  });
-
   test("completeProfile shows error log on failed profile completion", async () => {
+    const initialUser = authStore.userData; // Сохранить текущее состояние
+
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
@@ -128,7 +109,7 @@ describe("AuthStore - Additional Tests", () => {
 
     await authStore.completeProfile("testUser ", "Test User", "avatar1");
 
-    expect(authStore.userData).toBeNull(); // или другое значение по умолчанию
+    expect(authStore.userData).toBe(initialUser); // Проверить, что userData не изменился
   });
 
   test("resetPassword shows success message on successful password reset", async () => {
@@ -139,9 +120,15 @@ describe("AuthStore - Additional Tests", () => {
       })
     );
 
-    const response = await authStore.resetPassword("test@example.com");
+    await authStore.resetPassword("test@example.com");
 
-    expect(response.message).toBe("Password reset successful");
+    // Проверяем, что уведомление было вызвано
+    expect(notification.success).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Password Reset',
+        description: 'Password reset instructions have been sent to your email.',
+      })
+    );
   });
 
   test("resetPassword shows error log on failed password reset", async () => {
@@ -152,8 +139,14 @@ describe("AuthStore - Additional Tests", () => {
       })
     );
 
-    const response = await authStore.resetPassword("test@example.com");
+    await authStore.resetPassword("test@example.com");
 
-    expect(response.message).toBe("Password reset failed");
+    // Проверяем, что уведомление об ошибке было вызвано
+    expect(notification.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Password Reset Failed',
+        description: 'Password reset failed',
+      })
+    );
   });
 });

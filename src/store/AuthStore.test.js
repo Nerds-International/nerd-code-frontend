@@ -140,21 +140,20 @@ describe("AuthStore - Additional Tests", () => {
     );
   });
 
-  test("resetPassword shows error log on failed password reset", async () => {
+  test("shows error log on failed password reset", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
         json: () => Promise.resolve({ message: "Password reset failed" }),
       })
     );
-  
+
     await authStore.resetPassword("test@example.com");
-  
-    // Проверяем, что уведомление об ошибке было вызвано
+
     expect(notification.error).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Password Reset Failed',
-        description: 'Password reset failed ', // Добавлен пробел в конце, чтобы тест прошел
+        description: 'Password reset failed',
       })
     );
   });

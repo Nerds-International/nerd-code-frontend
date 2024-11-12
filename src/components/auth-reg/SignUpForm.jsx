@@ -5,66 +5,58 @@ import './Form.css';
 
 const { Item } = Form;
 
-const SignUpForm = observer(({ toggleForm }) => {
+const SignUpForm = observer(({ toggleForm, onComplete }) => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    authStore.signUp(values.username, values.password, values.confirmPassword);
+  const onFinish = async (values) => {
+    onComplete();
   };
 
   return (
-    <>
-      <h2 className="auth-form-title">Sign Up</h2>
-      <Form
-        form={form}
-        name="signup"
-        layout="vertical"
-        onFinish={onFinish}
-        className="auth-form"
-      >
+    <div className="auth-form-container">
+      <h2 className="auth-form-title">Join NerdCode</h2>
+      <Form form={form} name="signup" layout="vertical" onFinish={onFinish} className="auth-form">
         <Item
-          label={<span className="auth-form-label">Username</span>}
-          name="username"
-          className="auth-form-item"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
         >
-          <Input placeholder="Enter your username" className="auth-form-input" />
+          <Input placeholder="Your email" />
         </Item>
 
         <Item
-          label={<span className="auth-form-label">Password</span>}
+          label="Password"
           name="password"
-          className="auth-form-item"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password placeholder="Enter your password" className="auth-form-input" />
+          <Input.Password placeholder="Your password" />
         </Item>
 
         <Item
-          label={<span className="auth-form-label">Confirm Password</span>}
+          label="Confirm Password"
           name="confirmPassword"
-          className="auth-form-item"
           rules={[{ required: true, message: 'Please confirm your password!' }]}
         >
-          <Input.Password placeholder="Confirm your password" className="auth-form-input" />
+          <Input.Password placeholder="Confirm your password" />
         </Item>
 
         <Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="auth-form-button"
-            loading={authStore.isLoading}
-          >
-            Sign Up
+          <Button type="primary" htmlType="submit" loading={authStore.isLoading} className="auth-form-button">
+            Continue
           </Button>
         </Item>
       </Form>
+
       <div className="form-switch">
-        <span>Already have an account?</span>
-        <a onClick={toggleForm} className="auth-form-link">Log in</a>
+        <span>Already have an account? </span>
+        <a onClick={toggleForm}>Log in</a>
       </div>
-    </>
+      <div className="auth-alt-options">
+        <Button type="default">
+          Sign in with GitHub
+        </Button>
+      </div>
+    </div>
   );
 });
 

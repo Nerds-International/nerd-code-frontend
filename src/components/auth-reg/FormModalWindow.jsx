@@ -9,10 +9,6 @@ import './FormModalWindow.css';
 const FormModalWindow = ({ onClose, isLogin }) => {
   const [formType, setFormType] = useState(() => (isLogin ? 'signIn' : 'signUp')); // Установка начального состояния один раз
 
-  useEffect(() => {
-    setFormType(isLogin ? 'signIn' : 'signUp');
-  }, [isLogin]);
-
   return (
     <div className="form-modal">
       <div className="form-container auth-form-container">

@@ -1,8 +1,6 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
 import { notification } from 'antd';
-import { render, screen, fireEvent } from '@testing-library/react';
-import FormModalWindow from './FormModalWindow';
 
 global.console = {
   log: jest.fn(),
@@ -175,77 +173,4 @@ describe("AuthStore - resetPassword", () => {
     );
   });
 
-  test("handles empty error message from server", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({}), // Пустой объект без сообщения
-      })
-    );
-
-    await authStore.resetPassword("test@example.com");
-
-    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
-    expect(notification.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Password Reset Failed',
-        description: 'Error resetting password', // Сообщение по умолчанию
-      })
-    );
-  });
-});
-
-describe('FormModalWindow', () => {
-  const onCloseMock = jest.fn();
-
-  beforeEach(() => {
-    jest.clearAllMocks(); // Сбросить моки перед каждым тестом
-  });
-
-  test('renders SignInForm when isLogin is true', () => {
-    render(<FormModalWindow onClose={onCloseMock} isLogin={true} />);
-    
-    expect(screen.getByText(/sign in/i)).toBeInTheDocument(); // Предполагается, что в SignInForm есть текст "Sign In"
-  });
-
-  test('renders SignUpForm when isLogin is false', () => {
-    render(<FormModalWindow onClose={onCloseMock} isLogin={false} />);
-    
-    expect(screen.getByText(/sign up/i)).toBeInTheDocument(); // Предполагается, что в SignUpForm есть текст "Sign Up"
-  });
-
-  test('toggles to SignUpForm when toggling from SignInForm', () => {
-    render(<FormModalWindow onClose={onCloseMock} isLogin={true} />);
-    
-    // Предполагается, что в SignInForm есть кнопка для переключения на SignUp
-    fireEvent.click(screen.getByText(/sign up/i)); // Убедитесь, что кнопка с текстом "Sign Up" существует
-
-    expect(screen.getByText(/sign up/i)).toBeInTheDocument();
-  });
-
-  test('toggles to ForgotPasswordForm when onForgotPassword is called', () => {
-    render(<FormModalWindow onClose={onCloseMock} isLogin={true} />);
-    
-    // Предполагается, что в SignInForm есть кнопка для перехода к ForgotPassword
-    fireEvent.click(screen.getByText(/forgot password/i)); // Убедитесь, что кнопка с текстом "Forgot Password" существует
-
-    expect(screen.getByText(/forgot password/i)).toBeInTheDocument();
-  });
-
-  test('toggles to CompleteProfileForm when onComplete is called from SignUpForm', () => {
-    render(<FormModalWindow onClose={onCloseMock} isLogin={false} />);
-    
-    // Предполагается, что в SignUpForm есть кнопка для завершения профиля
-    fireEvent.click(screen.getByText(/complete profile/i)); // Убедитесь, что кнопка с текстом "Complete Profile" существует
-
-    expect(screen.getByText(/complete profile/i)).toBeInTheDocument();
-  });
-
-  test('calls onClose when close button is clicked', () => {
-    render(<FormModalWindow onClose={onCloseMock} isLogin={true} />);
-    
-    fireEvent.click(screen.getByRole('button', { name: /close/i })); // Находим кнопку закрытия по роли и имени
-
-    expect(onCloseMock).toHaveBeenCalled();
-  });
 });

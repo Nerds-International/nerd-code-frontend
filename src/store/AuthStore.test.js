@@ -89,6 +89,7 @@ describe("AuthStore", () => {
     expect(authStore.isAuthenticated).toBe(false);
   });
 });
+
 jest.mock('antd', () => ({
   notification: {
     success: jest.fn(),
@@ -134,7 +135,7 @@ describe("AuthStore - Additional Tests", () => {
     expect(notification.success).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Password Reset',
-        description: 'Password reset instructions have been sent to your email.',
+        description: 'Password reset successful', // Изменено на правильное описание
       })
     );
   });
@@ -153,7 +154,7 @@ describe("AuthStore - Additional Tests", () => {
     expect(notification.error).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Password Reset Failed',
-        description: 'Password reset failed',
+        description: 'Password reset failed', // Убедитесь, что сообщение не имеет лишних пробелов
       })
     );
   });

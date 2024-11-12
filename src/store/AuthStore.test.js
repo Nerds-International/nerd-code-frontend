@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
 import { notification } from 'antd';
+import { render, screen, fireEvent } from '@testing-library/react';
+import FormModalWindow from './FormModalWindow';
 
 global.console = {
   log: jest.fn(),

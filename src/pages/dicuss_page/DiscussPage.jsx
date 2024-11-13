@@ -1,14 +1,21 @@
 import {observer} from "mobx-react-lite";
-import "./style.css";
-import {Avatar, Button, Card, Flex, Form, Input, List, Modal} from "antd";
-import Search from "antd/lib/input/Search";
-import Meta from "antd/lib/card/Meta";
 import {forumStore} from "../../store/forum/ForumStore";
-import {useState} from "react";
+import {useMemo, useState} from "react";
+import "./style.css";
+import {Button, Flex, Input, List} from "antd";
+import CreateTopicModal from "../../components/create_topic_modal/CreateTopicModal";
+import TopicCard from "../../components/topic_card/TopicCard";
 
 const DiscussPage = observer (() => {
   const [isCreateTopicModalVisible, setIsCreateTopicModalVisible] = useState(false)
   const {getTopics} = forumStore;
+  const [filter, setFilter] = useState({})
+  const topics = useMemo(() => getTopics(filter), [filter, getTopics()])
+
+  const handleSearch = (e) => { setFilter({ title: e.target.value }) }
+  const sortByDateDescending = { time: -1 };
+  const sortByLikesDescending = { likes: -1 };
+  const sortByMessagesCountDescending = { messages: -1 };
 
   return (<>
     <Flex
@@ -21,15 +28,13 @@ const DiscussPage = observer (() => {
     >
       <Flex
         vertical={false}
-        style={{
-          gap: 50
-        }}
+        style={{ gap: 50 }}
       >
-        <Button value={'date'} disabled={true}>Date</Button>
-        <Button value={'like'} disabled={true}>Likes</Button>
-        <Button value={'hot'} disabled={true}>Hot</Button>
+        <Button onClick={() => setFilter(sortByDateDescending)}>Dates</Button>
+        <Button onClick={() => setFilter(sortByLikesDescending)}>Likes</Button>
+        <Button onClick={() => setFilter(sortByMessagesCountDescending)}>Hot</Button>
       </Flex>
-      <Search disabled={true} style={{width: '20%'}}/>
+      <Input onChange={handleSearch} allowClear style={{width: '20%'}}/>
     </Flex>
     <List
       style={{
@@ -40,15 +45,9 @@ const DiscussPage = observer (() => {
       }}
       bordered={false}
       grid={{ column: 2, gutter: 40 }}
-      dataSource={getTopics()}
+      dataSource={topics}
       renderItem={(topic) => <List.Item>
-        <Card>
-          <Meta
-            title={topic.title}
-            description={`Created by @${topic.author} at ${topic.time}`}
-            avatar={<Avatar src={''} alt={'ava'} size={'large'} style={{ background: '#FFCC00'}}/>}
-          />
-        </Card>
+        <TopicCard topic={topic}/>
       </List.Item>}
     />
     <Button
@@ -66,35 +65,3 @@ const DiscussPage = observer (() => {
 })
 
 export default DiscussPage;
-
-const CreateTopicModal = observer(({visible, setVisible}) => {
-  const {form} = Form.useForm()
-  const onFinish = (values) => {
-    console.log(values.title, values.text)
-  }
-
-  return (<Modal
-    open={visible}
-  >
-    <Form
-      form={form}
-      layout={'vertical'}
-      onFinish={onFinish}
-    >
-      <Form.Item
-        label={'Title'}
-        rules={[{required: true, message: 'Input title of topic'}]}
-        name='title'
-      >
-        <Input placeholder={'Title'}/>
-      </Form.Item>
-      <Form.Item
-        label={'Question'}
-        rules={[{required: true, message: 'Input text of topic'}]}
-        name='text'
-      >
-        <Input size={"large"} placeholder={'Text of topic'}/>
-      </Form.Item>
-    </Form>
-  </Modal>);
-})

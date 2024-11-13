@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
+import { Input, Radio, Card } from 'antd';
 import TaskStore from '../../store/task/TaskStore';
 import ListTask from "../../components/list_task/ListTask";
 import './ProblemsListPage.css';
@@ -31,71 +32,28 @@ const ProblemsListPage = observer(() => {
 
     return (
         <div className="problems-list-page">
-            <div className="filters">
-                <input className="name-search"
-                       type="text"
-                       placeholder="Search by name"
-                       value={searchTerm}
-                       onChange={(e) => setSearchTerm(e.target.value)}
+            <Card className="filters" title="Filter Options">
+                <Input.Search
+                    placeholder="Search by name"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    allowClear
+                    style={{ marginBottom: '15px' }}
                 />
-                <span>Difficulty options:</span>
-                <div className="radio-buttons">
-                    <label className="line">
-                        <input
-                            type="radio"
-                            value="all"
-                            checked={filter === 'all'}
-                            onChange={(e) => setFilter(e.target.value)}
-                        />
-                        All
-                    </label>
-                    <label className="line">
-                        <input
-                            type="radio"
-                            value="Easy"
-                            checked={filter === 'Easy'}
-                            onChange={(e) => setFilter(e.target.value)}
-                        />
-                        Easy
-                    </label>
-                    <label className="line">
-                        <input
-                            type="radio"
-                            value="Medium"
-                            checked={filter === 'Medium'}
-                            onChange={(e) => setFilter(e.target.value)}
-                        />
-                        Medium
-                    </label>
-                    <label className="line">
-                        <input
-                            type="radio"
-                            value="Hard"
-                            checked={filter === 'Hard'}
-                            onChange={(e) => setFilter(e.target.value)}
-                        />
-                        Hard
-                    </label>
-                    <label className="line">
-                        <input
-                            type="radio"
-                            value="Easy to Hard"
-                            checked={filter === 'Easy to Hard'}
-                            onChange={(e) => setFilter(e.target.value)}
-                        />
-                        Easy to Hard
-                    </label>
-                    <label className="line">
-                        <input
-                            type="radio"
-                            value="Hard to Easy"
-                            checked={filter === 'Hard to Easy'}
-                            onChange={(e) => setFilter(e.target.value)}
-                        />
-                        Hard to Easy
-                    </label>
-                </div>
-            </div>
+                <span>Difficulty:</span>
+                <Radio.Group
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+                >
+                    <Radio value="all">All</Radio>
+                    <Radio value="Easy">Easy</Radio>
+                    <Radio value="Medium">Medium</Radio>
+                    <Radio value="Hard">Hard</Radio>
+                    <Radio value="Easy to Hard">Easy to Hard</Radio>
+                    <Radio value="Hard to Easy">Hard to Easy</Radio>
+                </Radio.Group>
+            </Card>
             <div className="task-list-container">
                 <ListTask tasks={filteredTasks} />
             </div>
@@ -104,4 +62,3 @@ const ProblemsListPage = observer(() => {
 });
 
 export default ProblemsListPage;
-

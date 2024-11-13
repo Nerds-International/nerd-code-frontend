@@ -1,61 +1,84 @@
 .problems-list-page {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding-right: 10px;
-    padding-left: 10px;
-    padding-top: 15px;
-    height: 100%;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f4f6f9;
+    min-height: 91vh;
+    box-sizing: border-box;
 }
 
 .filters {
-    width: 21%;
-    margin-right: 15px;
-    margin-top: 10px;
-    margin-left: 5%;
-    background-color: white;
-    border: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 25%;
+    max-height: 80vh;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.filters:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.filters h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 .task-list-container {
-    margin-left: 5%;
-    width: 60%;
-    height: calc(100% - 30px);
-    overflow-y: auto;
+    flex-grow: 1;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(80vh - 80px);
     box-sizing: border-box;
+}
+
+.task-list-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .filters input,
 .filters select {
-    margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 15px !important;
+    padding: 10px !important;
+    border-radius: 6px;
+    height: 20px !important; 
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
 }
 
-.radio-buttons label {
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: flex-start;
-    margin-right: 180px;
+.filters input:focus,
+.filters select:focus {
+    border-color: #40a9ff;
+    box-shadow: 0 0 4px rgba(64, 169, 255, 0.3);
+    outline: none;
 }
 
-.line {
+.radio-buttons {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
     gap: 10px;
 }
 
-.name-search {
-    width: 70%;
-    height: 20px;
-    background-color: white;
-    border: 2px solid #FFD600;
-    border-radius: 10px;
-    color: black;
-    padding: 3px;
+.radio-buttons label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.2s ease;
+}
+
+.radio-buttons label:hover {
+    color: #1890ff;
 }

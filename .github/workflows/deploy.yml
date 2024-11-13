@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install sshpass
+      run: sudo apt-get install -y sshpass
+
+    - name: SSH into server and deploy
+      env:
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+      run: |
+        sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SERVER_IP << 'EOF'
+          cd /nerd-code-frontend
+          git pull origin main
+          docker-compose down
+          docker-compose up --игшдв -d
+        EOF

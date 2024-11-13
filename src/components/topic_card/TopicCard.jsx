@@ -2,6 +2,7 @@ import {observer} from "mobx-react-lite";
 import {Avatar, Card, Divider, List} from "antd";
 import Meta from "antd/lib/card/Meta";
 import {useNavigate} from "react-router-dom";
+import Like from "../like/Like";
 
 const TopicCard = observer(({topic, showMessages}) => {
 
@@ -14,9 +15,10 @@ const TopicCard = observer(({topic, showMessages}) => {
   return (<Card onClick={handleClick}>
     <Meta
       title={topic.title}
-      description={`Created by @${topic.author} at ${topic.time}`}
+      description={`Created by @${topic.author} at ${topic.time}.`}
       avatar={<Avatar src={''} alt={'ava'} size={'large'} style={{ background: '#FFCC00'}}/>}
     />
+    <Like count={topic.likes} clickable={false}/>
 
     {showMessages && showMessages > 0 && topic.messages.length > 0 && (
       <>

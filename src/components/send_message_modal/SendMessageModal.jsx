@@ -12,7 +12,7 @@ const SendMessageModal = observer(({visible, setVisible, addToMessageList}) => {
       /* ======================== mock ================================ */
       const messageData = {
         author: 'RomaXXX',
-        time: new Date().toLocaleTimeString(),
+        time: new Date().toLocaleDateString(),
         text: values.text
       }
 

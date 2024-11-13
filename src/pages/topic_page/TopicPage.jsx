@@ -6,11 +6,12 @@ import Meta from "antd/lib/card/Meta";
 import NerdFaceImage from "../../components/nerd_face_image/NerdFaceImage";
 import {useMemo, useState} from "react";
 import SendMessageModal from "../../components/send_message_modal/SendMessageModal";
+import Like from "../../components/like/Like";
 
 const {Title} = Typography;
 
 const TopicPage = observer(() => {
-  const {getTopic, addMessageToTopic} = forumStore;
+  const {getTopic, addMessageToTopic, addValueToTopicLikes} = forumStore;
   const {topicId} = useParams();
   const topic = useMemo(() => getTopic(topicId), [topicId]);
   const [isSendMessageModalVisible, setIsSendMessageModalVisible] = useState(false);
@@ -23,12 +24,17 @@ const TopicPage = observer(() => {
     addMessageToTopic(topicId, messageData);
   }
 
+  const handleEditCount = (value) => {
+    addValueToTopicLikes(topicId, value);
+  }
+
   return (<>
     <Card style={{ margin: 50 }}>
       <Meta
         title={<Title level={1}>{topic.title}</Title>}
         description={`Created by @${topic.author}, at ${topic.time}`}
       />
+      <Like clickable={true} count={topic.likes} editCount={handleEditCount}/>
       <Divider/>
       <Title level={3}>{topic.text}</Title>
     </Card>

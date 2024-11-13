@@ -1,15 +1,21 @@
 import {observer} from "mobx-react-lite";
 import {forumStore} from "../../store/forum/ForumStore";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import "./style.css";
-import {Button, Flex, List} from "antd";
-import Search from "antd/lib/input/Search";
+import {Button, Flex, Input, List} from "antd";
 import CreateTopicModal from "../../components/create_topic_modal/CreateTopicModal";
 import TopicCard from "../../components/topic_card/TopicCard";
 
 const DiscussPage = observer (() => {
   const [isCreateTopicModalVisible, setIsCreateTopicModalVisible] = useState(false)
   const {getTopics} = forumStore;
+  const [filter, setFilter] = useState({})
+  const topics = useMemo(() => getTopics(filter), [filter, getTopics()])
+
+  const handleSearch = (e) => { setFilter({ title: e.target.value }) }
+  const sortByDateDescending = { time: -1 };
+  const sortByLikesDescending = { likes: -1 };
+  const sortByMessagesCountDescending = { messages: -1 };
 
   return (<>
     <Flex
@@ -22,15 +28,13 @@ const DiscussPage = observer (() => {
     >
       <Flex
         vertical={false}
-        style={{
-          gap: 50
-        }}
+        style={{ gap: 50 }}
       >
-        <Button value={'date'} disabled={true}>Date</Button>
-        <Button value={'like'} disabled={true}>Likes</Button>
-        <Button value={'hot'} disabled={true}>Hot</Button>
+        <Button onClick={() => setFilter(sortByDateDescending)}>Dates</Button>
+        <Button onClick={() => setFilter(sortByLikesDescending)}>Likes</Button>
+        <Button onClick={() => setFilter(sortByMessagesCountDescending)}>Hot</Button>
       </Flex>
-      <Search disabled={true} style={{width: '20%'}}/>
+      <Input onChange={handleSearch} allowClear style={{width: '20%'}}/>
     </Flex>
     <List
       style={{
@@ -41,7 +45,7 @@ const DiscussPage = observer (() => {
       }}
       bordered={false}
       grid={{ column: 2, gutter: 40 }}
-      dataSource={getTopics()}
+      dataSource={topics}
       renderItem={(topic) => <List.Item>
         <TopicCard topic={topic}/>
       </List.Item>}

@@ -47,7 +47,7 @@ const CreateTopicModal = observer(({visible, setVisible}) => {
       </Form.Item>
 
       <Form.Item
-        label={'Question'}
+        label={'Text'}
         rules={[{required: true, message: 'Input text of topic'}]}
         name='text'
       >

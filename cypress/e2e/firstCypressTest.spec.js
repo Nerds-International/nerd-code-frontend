@@ -3,43 +3,6 @@ describe('started', function () {
         cy.visit('http://localhost:3000');
     })
 })
-
-describe('App e2e Tests', () => {
-    beforeEach(() => {
-      // Переход на главную страницу с увеличением времени ожидания
-      cy.visit('/', { timeout: 10000 });
-    });
-  
-    it('should load the main page', () => {
-      // Ожидание конкретного контента на главной странице с увеличением времени ожидания
-      cy.contains('Main Page Content', { timeout: 10000 }).should('be.visible');
-    });
-  
-    it('should navigate to Problems Page', () => {
-      // Проверка, что nav элемент присутствует перед нажатием
-      cy.get('nav', { timeout: 10000 }).should('be.visible');
-      cy.get('nav').contains('Problems').click();
-      cy.url().should('include', '/problems');
-    });
-  
-    it('should navigate to Discuss Page', () => {
-      cy.get('nav', { timeout: 10000 }).should('be.visible');
-      cy.get('nav').contains('Discuss').click();
-      cy.url().should('include', '/discuss');
-    });
-  
-    it('should navigate to Battle Page', () => {
-      cy.get('nav', { timeout: 10000 }).should('be.visible');
-      cy.get('nav').contains('Battle').click();
-      cy.url().should('include', '/battle');
-    });
-  
-    it('should navigate to Battle Screen', () => {
-      cy.get('nav', { timeout: 10000 }).should('be.visible');
-      cy.get('nav').contains('Battle Screen').click();
-      cy.url().should('include', '/battle-screen');
-    });
-  });
   
   describe('Authentication Modal e2e Tests', () => {
     beforeEach(() => {

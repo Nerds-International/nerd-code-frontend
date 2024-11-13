@@ -7,7 +7,13 @@ import { CloseOutlined } from '@ant-design/icons';
 import './FormModalWindow.css';
 
 const FormModalWindow = ({ onClose, isLogin }) => {
-  const [formType, setFormType] = useState(() => (isLogin ? 'signIn' : 'signUp')); // Установка начального состояния один раз
+  const [formType, setFormType] = useState(() => (isLogin ? 'signIn' : 'signUp'));
+  const [userData, setUserData] = useState({});
+
+  const handleComplete = (email, password) => {
+    setUserData({ email, password });
+    setFormType('completeProfile');
+  };
 
   return (
     <div className="form-modal">
@@ -27,7 +33,7 @@ const FormModalWindow = ({ onClose, isLogin }) => {
           {formType === 'signUp' && (
             <SignUpForm
               toggleForm={() => setFormType('signIn')}
-              onComplete={() => setFormType('completeProfile')}
+              onComplete={handleComplete}
             />
           )}
           {formType === 'forgotPassword' && (
@@ -38,6 +44,7 @@ const FormModalWindow = ({ onClose, isLogin }) => {
           {formType === 'completeProfile' && (
             <CompleteProfileForm
               backToSignIn={() => setFormType('signIn')}
+              userData={userData}
             />
           )}
         </div>

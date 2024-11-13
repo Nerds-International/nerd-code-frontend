@@ -3,7 +3,6 @@ import "@testing-library/jest-dom/extend-expect";
 import SignUpForm from "./SignUpForm";
 import { authStore } from "../../store/auth/AuthStore";
 
-// Mock `authStore`
 jest.mock("../../store/auth/AuthStore", () => ({
     authStore: {
         isLoading: false,
@@ -17,8 +16,8 @@ beforeAll(() => {
             matches: false,
             media: query,
             onchange: null,
-            addListener: jest.fn(), // Deprecated
-            removeListener: jest.fn(), // Deprecated
+            addListener: jest.fn(),
+            removeListener: jest.fn(),
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
             dispatchEvent: jest.fn(),
@@ -28,7 +27,6 @@ beforeAll(() => {
 
 describe("SignUpForm Component", () => {
     beforeEach(() => {
-        // Reset isLoading to false before each test to avoid interference
         authStore.isLoading = false;
     });
 

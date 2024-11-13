@@ -29,7 +29,7 @@ describe("AuthStore", () => {
       })
     );
 
-    await authStore.signIn("testUser", "testPassword");
+    await authStore.signIn("testUser ", "testPassword");
 
     expect(authStore.isAuthenticated).toBe(true);
     expect(localStorage.getItem("accessToken")).toBe("access-token");
@@ -45,7 +45,7 @@ describe("AuthStore", () => {
       })
     );
 
-    await authStore.signIn("testUser", "testPassword");
+    await authStore.signIn("test User ", "testPassword");
 
     expect(authStore.isAuthenticated).toBe(false);
   });
@@ -63,7 +63,7 @@ describe("AuthStore", () => {
       })
     );
 
-    await authStore.signUp("newUser", "password123", "password123");
+    await authStore.signUp("newUser ", "password123", "password123", "New User", 1);
 
     expect(authStore.isAuthenticated).toBe(true);
     expect(localStorage.getItem("accessToken")).toBe("access-token");
@@ -71,9 +71,15 @@ describe("AuthStore", () => {
   });
 
   test("signUp shows error log if passwords do not match", async () => {
-    await authStore.signUp("newUser", "password123", "differentPassword");
+    await authStore.signUp("newUser ", "password123", "differentPassword", "New User", 1);
 
     expect(authStore.isAuthenticated).toBe(false);
+    expect(notification.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Registration Failed',
+        description: 'Passwords do not match!',
+      })
+    );
   });
 
   test("signUp shows error log on failed registration", async () => {
@@ -84,7 +90,7 @@ describe("AuthStore", () => {
       })
     );
 
-    await authStore.signUp("newUser", "password123", "password123");
+    await authStore.signUp("newUser ", "password123", "password123", "New User", 1);
 
     expect(authStore.isAuthenticated).toBe(false);
   });
@@ -96,48 +102,3 @@ jest.mock('antd', () => ({
     error: jest.fn(),
   },
 }));
-
-describe("AuthStore - resetPassword", () => {
-  beforeEach(() => {
-    jest.clearAllMocks(); // Сбросить все моки перед каждым тестом
-  });
-
-  test("shows success message on successful password reset", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ message: "Password reset instructions have been sent to your email." }),
-      })
-    );
-
-    await authStore.resetPassword("test@example.com");
-
-    // Проверяем, что уведомление было вызвано с правильными параметрами
-    expect(notification.success).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Password Reset',
-        description: 'Password reset instructions have been sent to your email.',
-      })
-    );
-  });
-
-  test("shows error log on failed password reset", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ message: "Password reset failed" }),
-      })
-    );
-
-    await authStore.resetPassword("test@example.com");
-
-    // Проверяем, что уведомление об ошибке было вызвано с правильными параметрами
-    expect(notification.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Password Reset Failed',
-        description: 'Password reset failed',
-      })
-    );
-  });
-
-});

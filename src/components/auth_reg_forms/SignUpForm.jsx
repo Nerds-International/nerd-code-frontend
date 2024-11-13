@@ -9,7 +9,7 @@ const SignUpForm = observer(({ toggleForm, onComplete }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    onComplete();
+    onComplete(values.email, values.password);
   };
 
   return (

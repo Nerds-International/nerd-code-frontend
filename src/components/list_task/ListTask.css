@@ -8,8 +8,8 @@
 }
 
 .task-item {
-    background-color: #F6F6F6;
-    border: 1px solid #FFD600;
+    background-color: white;
+    border: 1px solid #ddd;
     align-items: center;
     display: flex;
     flex-direction: column;

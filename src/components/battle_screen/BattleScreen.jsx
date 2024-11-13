@@ -33,18 +33,23 @@ const TaskDescription = observer(() => {
 const EnergyBar = observer(() => {
   const { energy, maxEnergy } = energyStore;
 
-  const pieces = Array.from({ length: maxEnergy }, (_, index) => (
-    <div
-      key={index}
-      style={{
-        width: `${100 / maxEnergy}%`,
-        height: '20px',
-        backgroundColor: index < energy ? '#ffcc00' : '#ddd',
-        display: 'inline-block',
-        transition: 'background-color 0.5s',
-      }}
-    ></div>
-  ));
+  const pieces = Array.from({ length: maxEnergy }, (_, index) => {
+    const fraction = (index + 1) / 10;
+    const isFilled = energy / maxEnergy >= fraction;
+    return (
+      <div
+        key={index}
+        style={{
+          width: '9%',
+          height: '20px',
+          backgroundColor: isFilled ? '#ffcc00' : '#ddd',
+          display: 'inline-block',
+          marginRight: '1%',
+          transition: 'background-color 0.5s',
+        }}
+      ></div>
+    )
+  });
 
   return (
     <div style={{ width: '100%', padding: '10px' }}>
@@ -58,20 +63,21 @@ const EnergyBar = observer(() => {
 
 const ButtonCostContainer = observer(() => {
   //MOCKED DATA================================================================================
+  const { energy, setEnergy } = energyStore;
   const dataSource = [
     {
       key: '1',
-      action: <Button className="points-button" type="primary">Перевернуть</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 5)}>Перевернуть</Button>,
       cost: 5,
     },
     {
       key: '2',
-      action: <Button className="points-button" type="primary">Невидимость</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 3)}>Невидимость</Button>,
       cost: 3,
     },
     {
       key: '3',
-      action: <Button className="points-button" type="primary">Стереть 10 символов</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 7)}>Стереть 10 символов</Button>,
       cost: 7,
     },
   ];

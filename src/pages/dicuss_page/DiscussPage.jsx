@@ -2,10 +2,10 @@ import {observer} from "mobx-react-lite";
 import {forumStore} from "../../store/forum/ForumStore";
 import {useState} from "react";
 import "./style.css";
-import {Avatar, Button, Card, Flex, List} from "antd";
+import {Button, Flex, List} from "antd";
 import Search from "antd/lib/input/Search";
-import Meta from "antd/lib/card/Meta";
 import CreateTopicModal from "../../components/create_topic_modal/CreateTopicModal";
+import TopicCard from "../../components/topic_card/TopicCard";
 
 const DiscussPage = observer (() => {
   const [isCreateTopicModalVisible, setIsCreateTopicModalVisible] = useState(false)
@@ -43,13 +43,7 @@ const DiscussPage = observer (() => {
       grid={{ column: 2, gutter: 40 }}
       dataSource={getTopics()}
       renderItem={(topic) => <List.Item>
-        <Card>
-          <Meta
-            title={topic.title}
-            description={`Created by @${topic.author} at ${topic.time}`}
-            avatar={<Avatar src={''} alt={'ava'} size={'large'} style={{ background: '#FFCC00'}}/>}
-          />
-        </Card>
+        <TopicCard topic={topic}/>
       </List.Item>}
     />
     <Button

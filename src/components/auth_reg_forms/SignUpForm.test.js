@@ -4,7 +4,7 @@ import SignUpForm from "./SignUpForm";
 import { authStore } from "../../store/AuthStore";
 
 // Mock `authStore`
-jest.mock("../../store/AuthStore", () => ({
+jest.mock("../../store/auth/AuthStore", () => ({
     authStore: {
         isLoading: false,
     },

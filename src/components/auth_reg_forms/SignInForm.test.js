@@ -2,10 +2,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import SignInForm from "./SignInForm";
 import { authStore } from "../../store/AuthStore";
-import { act } from "react-dom/test-utils";
 
 // Mock `authStore`
-jest.mock("../../store/AuthStore", () => ({
+jest.mock("../../store/auth/AuthStore", () => ({
     authStore: {
         isLoading: false,
     },

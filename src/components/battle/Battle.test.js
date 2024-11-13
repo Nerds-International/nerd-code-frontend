@@ -8,6 +8,14 @@ global.fetch = jest.fn(() =>
   }),
 );
 
+window.matchMedia = window.matchMedia || function () {
+  return {
+    matches: false,
+    addListener: function () { },
+    removeListener: function () { }
+  };
+};
+
 describe("Battle Component", () => {
   beforeEach(() => {
     fetch.mockClear();

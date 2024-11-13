@@ -8,6 +8,14 @@ jest.mock("../../store/language/LanguageStore", () => ({
     },
 }));
 
+window.matchMedia = window.matchMedia || function () {
+    return {
+        matches: false,
+        addListener: function () { },
+        removeListener: function () { }
+    };
+};
+
 describe("BattleScreen Component", () => {
     test("renders BattleScreen component", () => {
         render(<BattleScreen />);

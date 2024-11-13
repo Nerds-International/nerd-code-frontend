@@ -1,0 +1,66 @@
+.task-list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    height: 600px;
+    overflow-y: auto;
+}
+
+.task-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-item h3 {
+    margin: 2px;
+}
+
+.task-item p {
+    margin: 5px;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+}
+
+.difficulty-circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.difficulty-circle.easy {
+    background-color: #ffebb5;
+}
+
+.difficulty-circle.medium {
+    background-color: #ffdc7a;
+}
+
+.difficulty-circle.hard {
+    background-color: #ffc012;
+}
+
+.task-link {
+    display: inline-block;
+    background-color: #FFD600;
+    color: black;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.task-link:hover {
+    background-color: #E6B800;
+}

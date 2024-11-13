@@ -1,0 +1,111 @@
+/* Общие стили для формы */
+.auth-form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: none; /* Убираем тень */
+    border: none; /* Убираем обводку */
+}
+
+/* Заголовок формы */
+.auth-form-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Поля ввода */
+.ant-form-item {
+    margin-bottom: 15px;
+}
+
+.ant-form-item-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.ant-form-item-control {
+    width: 100%;
+}
+
+.ant-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 39px;
+}
+
+/* Кнопка входа */
+.auth-form-button {
+    width: 100%;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.auth-form-button:hover {
+    background-color: #555;
+}
+
+/* Ссылки */
+.form-switch {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.form-switch a {
+    display: inline-block;
+    margin-left: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.form-switch a:hover {
+    text-decoration: underline;
+}
+
+.auth-alt-options {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.auth-alt-options a {
+    display: block;
+    margin-bottom: 20px;
+    color: #333;
+    text-decoration: none;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.auth-alt-options a:hover {
+    background-color: #ddd;
+    text-decoration: underline;
+}
+
+.forgot-password-link {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+    color: #007bff; /* Цвет подсветки */
+}

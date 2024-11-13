@@ -1,8 +1,13 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import CompleteProfileForm from "./CompeteProfileForm"; // Убедитесь, что путь к компоненту правильный
+import CompleteProfileForm from "./CompleteProfileForm"; // Исправлено имя файла
 
-// Mock `window.matchMedia`
+jest.mock('../../store/auth/AuthStore', () => ({
+    authStore: {
+        signUp: jest.fn().mockResolvedValue(Promise.resolve()),
+    },
+}));
+
 beforeAll(() => {
     Object.defineProperty(window, "matchMedia", {
         writable: true,
@@ -10,8 +15,8 @@ beforeAll(() => {
             matches: false,
             media: query,
             onchange: null,
-            addListener: jest.fn(), // Deprecated
-            removeListener: jest.fn(), // Deprecated
+            addListener: jest.fn(),
+            removeListener: jest.fn(),
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
             dispatchEvent: jest.fn(),
@@ -20,38 +25,30 @@ beforeAll(() => {
 });
 
 describe("CompleteProfileForm Component", () => {
+    const mockUser   = { 
+        email: "test@example.com", 
+        password: "password123", 
+        confirmPassword: "password123" // Убедитесь, что пароли совпадают
+    };
+    const mockBackToSignIn = jest.fn();
+
     test("renders form elements and text", () => {
-        render(<CompleteProfileForm />);
+        render(<CompleteProfileForm userData={mockUser } backToSignIn={mockBackToSignIn} />);
 
-        // Проверка заголовка формы
         expect(screen.getByText("Complete Your Profile")).toBeInTheDocument();
-
-        // Проверка наличия полей ввода
         expect(screen.getByLabelText("Username")).toBeInTheDocument();
         expect(screen.getByLabelText("Full Name")).toBeInTheDocument();
         expect(screen.getByLabelText("Avatar")).toBeInTheDocument();
-
-        // Проверка наличия кнопки
         expect(screen.getByRole("button", { name: "Create account" })).toBeInTheDocument();
     });
 
-    test("accepts input and submits form when all fields are filled", () => {
-        render(<CompleteProfileForm />);
+    test("shows validation messages when fields are empty", async () => {
+        render(<CompleteProfileForm userData={mockUser } backToSignIn={mockBackToSignIn} />);
 
-        // Заполнение полей ввода
-        fireEvent.change(screen.getByLabelText("Username"), { target: { value: "testuser" } });
-        fireEvent.change(screen.getByLabelText("Full Name"), { target: { value: "Test User" } });
-
-        // Выбор аватара
-        fireEvent.mouseDown(screen.getByLabelText("Avatar")); // Открываем выпадающий список
-        fireEvent.click(screen.getByText("Avatar 1")); // Выбираем первый аватар
-
-        // Согласие с условиями
-        fireEvent.click(screen.getByLabelText(/i have read and agree with the terms of service and code of conduct/i));
-
-        // Отправка формы
         fireEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-        // Здесь можно добавить дополнительные проверки, если необходимо
+        expect(await screen.findByText(/Please input your username!/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Please input your full name!/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Please choose an avatar!/i)).toBeInTheDocument();
     });
 });

@@ -1,9 +1,9 @@
-import { observer } from "mobx-react-lite";
-import { Card, Flex, List, Typography, Col, Row, Avatar } from "antd";
-import { Link } from "react-router-dom";
-import { mainStore } from "../../store/main/MainStore";
-import { forumStore } from "../../store/forum/ForumStore";
+import {observer} from "mobx-react-lite";
+import {Avatar, Card, Col, Flex, List, Row, Typography} from "antd";
+import {mainStore} from "../../store/main/MainStore";
+import {forumStore} from "../../store/forum/ForumStore";
 import Meta from "antd/lib/card/Meta";
+import TopicCard from "../../components/topic_card/TopicCard";
 
 const { Title } = Typography;
 
@@ -65,30 +65,7 @@ const MainPage = observer(() => {
               dataSource={getTopics().slice(0, 3)}
               renderItem={(topic) => (
                 <List.Item>
-                  <Card>
-                    <Meta
-                      title={<Link to={`/discuss/${topic.id}`}>{topic.title}</Link>}
-                      description={`Created by @${topic.author} at ${topic.time}`}
-                      avatar={<Avatar src={''} alt={'ava'} size={'large'} style={{ background: '#FFCC00' }} />}
-                      style={{ textAlign: 'center' }}
-                    />
-                    {topic.messages.length > 0 ? (
-                      <List
-                        dataSource={topic.messages.slice(0, 3)}
-                        renderItem={(message) => (
-                          <List.Item>
-                            <Meta
-                              title={message.text}
-                              description={`Author: @${message.author} at ${message.time}`}
-                              style={{ textAlign: 'center' }}
-                            />
-                          </List.Item>
-                        )}
-                      />
-                    ) : (
-                      <p style={{ textAlign: 'center' }}>Start the discussion!</p>
-                    )}
-                  </Card>
+                  <TopicCard topic={topic} showMessages={3}/>
                 </List.Item>
               )}
             />

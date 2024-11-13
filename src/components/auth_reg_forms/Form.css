@@ -1,4 +1,3 @@
-/* Общие стили для формы */
 .auth-form-container {
     max-width: 400px;
     margin: 0 auto;
@@ -6,18 +5,16 @@
     border-radius: 8px;
     background-color: #fff;
     text-align: center;
-    box-shadow: none; /* Убираем тень */
-    border: none; /* Убираем обводку */
+    box-shadow: none;
+    border: none;
 }
 
-/* Заголовок формы */
 .auth-form-title {
     margin-bottom: 20px;
     color: #333;
     font-size: 24px;
 }
 
-/* Поля ввода */
 .ant-form-item {
     margin-bottom: 15px;
 }
@@ -41,7 +38,6 @@
     height: 39px;
 }
 
-/* Кнопка входа */
 .auth-form-button {
     width: 100%;
     padding: 20px;
@@ -58,7 +54,6 @@
     background-color: #555;
 }
 
-/* Ссылки */
 .form-switch {
     margin-top: 20px;
     text-align: center;
@@ -107,5 +102,5 @@
 
 .forgot-password-link:hover {
     text-decoration: underline;
-    color: #007bff; /* Цвет подсветки */
+    color: #007bff;
 }

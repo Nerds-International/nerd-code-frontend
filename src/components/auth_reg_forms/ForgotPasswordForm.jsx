@@ -1,14 +1,16 @@
 import { Form, Input, Button } from 'antd';
 import { observer } from 'mobx-react-lite';
 import './Form.css';
+import { authStore } from '../../store/auth/AuthStore';
 
 const { Item } = Form;
 
 const ForgotPasswordForm = observer(({ onCancel }) => {
   const [form] = Form.useForm();
 
-   const onFinish = (values) => {
-   };
+  const onFinish = (values) => {
+    authStore.resetPassword(values.email, values.password);
+  };
 
   return (
     <div className="auth-form-container">
@@ -20,6 +22,14 @@ const ForgotPasswordForm = observer(({ onCancel }) => {
           rules={[{ required: true, message: 'Please input your email!' }]}
         >
           <Input placeholder="Your email" />
+        </Item>
+
+        <Item
+          label="New password"
+          name="password"
+          rules={[{ required: true, message: 'Please input your new password!' }]}
+        >
+          <Input placeholder="Your new password" />
         </Item>
 
         <Item>

@@ -10,7 +10,7 @@ class AuthStore {
     makeAutoObservable(this);
   }
 
-  async signIn(username, password) {
+  async signIn(email, password) {
     this.isLoading = true;
 
     try {
@@ -19,7 +19,7 @@ class AuthStore {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -52,7 +52,7 @@ class AuthStore {
     }
   }
 
-  async signUp(username, password, confirmPassword) {
+  async signUp(email, password, username, fullname, avatar_number, confirmPassword = null) {
     this.isLoading = true;
 
     if (password !== confirmPassword) {
@@ -70,7 +70,7 @@ class AuthStore {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, email, fullname, avatar_number }),
       });
 
       if (!response.ok) {
@@ -103,46 +103,7 @@ class AuthStore {
     }
   }
 
-  async completeProfile(username, fullName, avatar) {
-    this.isLoading = true;
-
-    try {
-      const response = await fetch('http://localhost:3000/auth/complete-profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify({ username, fullName, avatar }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error completing profile');
-      }
-
-      const data = await response.json();
-      notification.success({
-        message: 'Profile Updated',
-        description: 'Your profile has been successfully updated!',
-      });
-
-      runInAction(() => {
-        this.userData = data; // Assuming the API returns user data
-      });
-    } catch (error) {
-      notification.error({
-        message: 'Profile Update Failed',
-        description: error.message || 'Error updating profile',
-      });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
-    }
-  }
-
-  async resetPassword(email) {
+  async resetPassword(email, password) {
     this.isLoading = true;
   
     try {
@@ -151,7 +112,7 @@ class AuthStore {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       });
   
       if (!response.ok) {
@@ -159,15 +120,13 @@ class AuthStore {
         throw new Error(errorData.message || 'Error resetting password');
       }
   
-      const data = await response.json();
       notification.success({
         message: 'Password Reset',
-        description: data.message || 'Password reset instructions have been sent to your email.',
       });
     } catch (error) {
       notification.error({
         message: 'Password Reset Failed',
-        description: error.message.trim(), // Убедитесь, что здесь нет лишних пробелов
+        description: error.message.trim(),
       });
     } finally {
       runInAction(() => {

@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import CompleteProfileForm from "./CompeteProfileForm";
+import CompleteProfileForm from "./CompleteProfileForm"; // Исправлено имя файла
 
 jest.mock('../../store/auth/AuthStore', () => ({
     authStore: {
@@ -25,7 +25,11 @@ beforeAll(() => {
 });
 
 describe("CompleteProfileForm Component", () => {
-    const mockUser  = { email: "test@example.com", password: "password123" };
+    const mockUser   = { 
+        email: "test@example.com", 
+        password: "password123", 
+        confirmPassword: "password123" // Убедитесь, что пароли совпадают
+    };
     const mockBackToSignIn = jest.fn();
 
     test("renders form elements and text", () => {
@@ -36,5 +40,15 @@ describe("CompleteProfileForm Component", () => {
         expect(screen.getByLabelText("Full Name")).toBeInTheDocument();
         expect(screen.getByLabelText("Avatar")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Create account" })).toBeInTheDocument();
+    });
+
+    test("shows validation messages when fields are empty", async () => {
+        render(<CompleteProfileForm userData={mockUser } backToSignIn={mockBackToSignIn} />);
+
+        fireEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+        expect(await screen.findByText(/Please input your username!/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Please input your full name!/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Please choose an avatar!/i)).toBeInTheDocument();
     });
 });

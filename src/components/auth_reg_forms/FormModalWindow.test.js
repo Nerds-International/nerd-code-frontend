@@ -25,7 +25,7 @@ jest.mock('./ForgotPasswordForm', () => (props) => (
     </div>
 ));
 
-jest.mock('./CompeteProfileForm', () => (props) => (
+jest.mock('./CompleteProfileForm', () => (props) => (
     <div>
         <h2>Complete Profile Form</h2>
         <button onClick={props.backToSignIn}>Back to Sign In</button>

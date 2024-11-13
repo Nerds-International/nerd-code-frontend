@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
-import CompleteProfileForm from './CompeteProfileForm';
+import CompleteProfileForm from './CompleteProfileForm';
 import { CloseOutlined } from '@ant-design/icons';
 import './FormModalWindow.css';
 

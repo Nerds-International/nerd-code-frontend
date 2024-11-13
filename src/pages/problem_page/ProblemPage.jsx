@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import TaskStore from '../../store/task/TaskStore';
 import './ProblemPage.css';
@@ -11,11 +11,29 @@ const ProblemPage = observer(() => {
     const id = searchParams.get('id');
     const task = TaskStore.tasks.find(task => task.id === parseInt(id));
     const [code2, setCode2] = useState("");
+    const [code3, setCode3] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
-    const [inputTest, setInputTest] = useState('');
 
-    const handleInputTest = (e) => {
-        setInputTest(e.target.value);
+    useEffect(() => {
+        if (task) {
+            const functionName = generateFunctionName(task.name);
+            let functionTemplate;
+            if (getCurrentLanguage() ===  Languages.JAVASCRIPT){
+                 functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+                setCode3(functionName + "( );");
+            }else{
+                functionTemplate = `def ${functionName}() :\n    // Your function code here\n    return 0 \n`;
+                setCode3(functionName + "( )");
+            }
+            setCode2(functionTemplate);
+        }
+    }, [task, getCurrentLanguage()]);
+
+    const generateFunctionName = (name) => {
+        const words = name.split(/\s+/);
+        const firstWord = words[0].charAt(0).toLowerCase() + words[0].slice(1);
+        const functionName = firstWord + words.slice(1).join('');
+        return functionName;
     };
 
     if (!task) {
@@ -31,16 +49,7 @@ const ProblemPage = observer(() => {
                 </div>
 
                 <div className="tests">
-                    <div className="test-cases">
-                        <h3>Test Cases:</h3>
-                        <p>Test1: (A, B) ➔ C</p>
-                        <p>Test2: (F, G) ➔ H</p>
-                    </div>
-                    <div className="test-results">
-                        <h3>Test Results:</h3>
-                        <p>Test1: C ✔️</p>
-                        <p>Test2: Z ❌, expected: H </p>
-                    </div>
+                    <h2>Results:</h2>
                 </div>
 
                 <div className="additional-info">
@@ -50,7 +59,7 @@ const ProblemPage = observer(() => {
             </div>
 
             <div className="code-block">
-                <div>
+                <div className="language">
                     <label htmlFor="language-select">Choose a programming language:</label>
                     <select
                         id="language-select"
@@ -79,14 +88,20 @@ const ProblemPage = observer(() => {
                 <div className="self-test">
                     <div className="input-test">
                         <p>Test input:</p>
-                        <textarea
-                            placeholder="Enter test"
-                            value={inputTest}
-                            onChange={handleInputTest}
+                        <CodeEditor
+                            className="w-tc-editor-var"
+                            minHeight={200}
+                            value={code3}
+                            language={getCurrentLanguage()}
+                            onChange={(evn) => setCode3(evn.target.value)}
+                            padding={15}
+                            data-color-mode="dark"
+                            style={{
+                                backgroundColor: "#f5f5f5",
+                                fontFamily:
+                                    "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                            }}
                         />
-                    </div>
-                    <div className="test-result-container">
-                        <p>Test output:</p>
                     </div>
                 </div>
                 <div className="button-group">
@@ -94,7 +109,7 @@ const ProblemPage = observer(() => {
                     <button>Run</button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 });
 

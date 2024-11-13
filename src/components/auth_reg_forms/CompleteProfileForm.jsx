@@ -7,16 +7,20 @@ const { Item } = Form;
 const { Option } = Select;
 
 const avatarOptions = [
-  { label: 'Avatar 1', value: 'avatar1' },
-  { label: 'Avatar 2', value: 'avatar2' },
-  { label: 'Avatar 3', value: 'avatar3' },
+  { label: 'Avatar 1', value: 1 },
+  { label: 'Avatar 2', value: 2 },
+  { label: 'Avatar 3', value: 3 },
 ];
 
-const CompleteProfileForm = observer(() => {
+const CompleteProfileForm = observer(({ userData, backToSignIn }) => {
   const [form] = Form.useForm();
 
-//   const onFinish = (values) => {
-//   };
+  const onFinish = async (values) => {
+    const { email, password, confirmPassword } = userData;
+    console.log(confirmPassword);
+    await authStore.signUp(email, password, values.username, values.fullName, values.avatar, confirmPassword);
+    backToSignIn();
+  };
 
   return (
     <div className="auth-form-container">

@@ -8,9 +8,9 @@ const { Item } = Form;
 const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
   const [form] = Form.useForm();
 
-  // const onFinish = async (values) => {
-  //   authStore.signIn(values.email, values.password);
-  // };
+  const onFinish = async (values) => {
+     authStore.signIn(values.email, values.password);
+   };
 
   return (
     <div className="auth-form-container">

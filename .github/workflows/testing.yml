@@ -21,6 +21,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Add Secret
+        run: |
+          touch .env
+          echo ${{secrets.SECRET}} >> .env
+        
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -48,7 +54,7 @@ jobs:
         run: npm install cypress@13.15.0
 
       - name: Run Cypress tests
-        run: npx cypress run
+        run: npx cypress run --headed
 
   lint:
     runs-on: ubuntu-latest

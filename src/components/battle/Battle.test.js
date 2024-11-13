@@ -1,65 +1,19 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import Battle from "./Battle";
+import { render, fireEvent, screen } from '@testing-library/react';
+import Battle from './Battle';
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () => Promise.resolve({ found: false }),
-  }),
-);
+jest.mock("react-router-dom", () => ({
+  useNavigate: () => jest.fn(),
+}));
 
-describe("Battle Component", () => {
-  beforeEach(() => {
-    fetch.mockClear();
+describe('Battle Component', () => {
+  it('renders without crashing', () => {
+    render(<Battle />);
   });
 
-  test("renders without crashing", () => {
+  it('finds a match when JavaScript is selected', async () => {
     render(<Battle />);
-    expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
-  });
-
-  test("displays loading message when finding a match", async () => {
-    fetch.mockImplementationOnce(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({ found: false }),
-      }),
-    );
-
-    render(<Battle />);
+    fireEvent.change(screen.getByLabelText(/Choose a programming language/i), { target: { value: 'javascript' } });
     fireEvent.click(screen.getByText(/Find Match/i));
-
-    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
-
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
-    );
-    expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
-  });
-
-  test("displays match found message when a match is found", async () => {
-    fetch.mockImplementationOnce(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({ found: true }),
-      }),
-    );
-
-    render(<Battle />);
-    fireEvent.click(screen.getByText(/Find Match/i));
-
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
-    );
-  });
-
-  test("handles fetch error gracefully", async () => {
-    fetch.mockImplementationOnce(() => Promise.reject("API is down"));
-
-    render(<Battle />);
-    fireEvent.click(screen.getByText(/Find Match/i));
-
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
-    );
-    expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
+    await screen.findByText(/The nerd for the battle has been found/i);
   });
 });

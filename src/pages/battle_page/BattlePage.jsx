@@ -1,8 +1,9 @@
 import {observer} from "mobx-react-lite";
 import Battle from "../../components/battle/Battle";
+// import BattleScreen from "../../components/battle/BattleScreen";
 
 const BattlePage = observer (() => {
-  return (<Battle/>);
+  return (<Battle />);
 })
 
 export default BattlePage;

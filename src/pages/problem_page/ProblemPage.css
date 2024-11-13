@@ -22,13 +22,13 @@
     justify-content: space-around;
 }
 
-.test-cases{
+.test-cases {
     border: 2px none black;
     border-right-style: solid;
     padding-right: 30px;
 }
 
-.test-results{
+.test-results {
     text-align: center;
     padding-right: 30px;
 }

@@ -13,9 +13,19 @@ const ProblemPage = observer(() => {
     const [code2, setCode2] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
     const [inputTest, setInputTest] = useState('');
+    const [output, setOutput] = useState('');
 
     const handleInputTest = (e) => {
         setInputTest(e.target.value);
+    };
+
+    const handleTest = () => {
+        try {
+            const result = eval(code2);
+            setOutput(result);
+        } catch (error) {
+            setOutput(`Error: ${error.message}`);
+        }
     };
 
     if (!task) {
@@ -85,16 +95,19 @@ const ProblemPage = observer(() => {
                             onChange={handleInputTest}
                         />
                     </div>
-                    <div className="test-result-container">
+                    <div className="output-test">
                         <p>Test output:</p>
+                        <textarea
+                            value={output}
+                        />
                     </div>
                 </div>
                 <div className="button-group">
-                    <button>Test</button>
+                    <button onClick={handleTest}>Test</button>
                     <button>Run</button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 });
 

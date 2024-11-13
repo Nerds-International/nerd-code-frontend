@@ -2,6 +2,8 @@ import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { languageStore } from "../../store/language/LanguageStore";
+import { Table, Button } from 'antd';
+import energyStore from '../../store/energy/EnergyStore';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
 const BattleScreen = observer(() => {
@@ -10,6 +12,7 @@ const BattleScreen = observer(() => {
       <div className="left-column">
         <TaskDescription />
         <ButtonCostContainer />
+        <EnergyBar />
       </div>
       <div className="right-column">
         <BattleWindows />
@@ -27,22 +30,73 @@ const TaskDescription = observer(() => {
   );
 });
 
-const ButtonCostContainer = observer(() => {
+const EnergyBar = observer(() => {
+  const { energy, maxEnergy } = energyStore;
+
+  const pieces = Array.from({ length: maxEnergy }, (_, index) => {
+    const fraction = (index + 1) / 10;
+    const isFilled = energy / maxEnergy >= fraction;
+    return (
+      <div
+        key={index}
+        style={{
+          width: '9%',
+          height: '20px',
+          backgroundColor: isFilled ? '#ffcc00' : '#ddd',
+          display: 'inline-block',
+          marginRight: '1%',
+          transition: 'background-color 0.5s',
+        }}
+      ></div>
+    )
+  });
+
   return (
-    <div className="button-cost-container">
-      <div className="buttons-column">
-        <button className="action-button">Перевернуть</button>
-        <button className="action-button">Невидимость</button>
-        <button className="action-button">Стереть 10 символов</button>
-      </div>
-      <div className="cost-column">
-        <div className="cost-numbers">
-          <p>100</p>
-          <p>200</p>
-          <p>300</p>
-        </div>
+    <div style={{ width: '100%', padding: '10px' }}>
+      <div style={{ display: 'flex', height: '20px' }}>{pieces}</div>
+      <div style={{ textAlign: 'center', marginTop: '5px' }}>
+        {energy}/{maxEnergy}
       </div>
     </div>
+  );
+});
+
+const ButtonCostContainer = observer(() => {
+  //MOCKED DATA================================================================================
+  const { energy, setEnergy } = energyStore;
+  const dataSource = [
+    {
+      key: '1',
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 5)}>Перевернуть</Button>,
+      cost: 5,
+    },
+    {
+      key: '2',
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 3)}>Невидимость</Button>,
+      cost: 3,
+    },
+    {
+      key: '3',
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 7)}>Стереть 10 символов</Button>,
+      cost: 7,
+    },
+  ];
+
+  const columns = [
+    {
+      title: 'Действие',
+      dataIndex: 'action',
+      key: 'action',
+    },
+    {
+      title: 'Стоимость',
+      dataIndex: 'cost',
+      key: 'cost',
+    },
+  ];
+  //MOCKED DATA====================================================================
+  return (
+    <Table dataSource={dataSource} columns={columns} pagination={false} />
   );
 });
 
@@ -66,6 +120,7 @@ const BattleWindows = observer(() => {
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            color: "black"
           }}
         />
         <div className="button-group">
@@ -82,6 +137,7 @@ const BattleWindows = observer(() => {
           onChange={(evn) => setCode2(evn.target.value)}
           padding={15}
           data-color-mode="dark"
+          readOnly={true}
           style={{
             backgroundColor: "#f5f5f5",
             fontFamily:
@@ -89,8 +145,8 @@ const BattleWindows = observer(() => {
           }}
         />
         <div className="button-group">
-          <button>Test</button>
-          <button>Run</button>
+          <Button type="primary">Test</Button>
+          <Button type="primary">Run</Button>
         </div>
       </div>
     </div>

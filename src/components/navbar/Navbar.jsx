@@ -26,7 +26,7 @@ const Navbar = observer(() => {
       key: Pages.DISCUSS,
     },
     {
-      label: <Link className="tab" to="/battle">Battle</Link>,
+      label: <Link className="tab" to="/search_battle">Battle</Link>,
       key: Pages.BATTLE,
     },
   ];

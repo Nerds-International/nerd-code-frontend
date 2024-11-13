@@ -1,8 +1,8 @@
 import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { languageStore } from "../../store/language/LanguageStore";
-import BattleScreen from "../battle_screen/BattleScreen";
 
 const Battle = observer(() => {
   return (
@@ -12,59 +12,73 @@ const Battle = observer(() => {
   );
 });
 
-export default Battle;
-
 const MatchFinder = observer(() => {
-  const [match, setMatch] = useState(false);
+  const [match, setMatch] = useState(null);
   const [loading, setLoading] = useState(false);
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
+  const navigate = useNavigate();
 
   async function findMatch() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://example.com/find-match");
-      const data = await response.json();
+      // const response = await fetch("https://example.com/find-match");
+      // const data = await response.json();
 
-      if (data.found) {
-        setMatch(true);
+      if (getCurrentLanguage() === 'javascript') {
+        setTimeout(() => {
+          setMatch(true);
+        }, 1000);
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/battle"); // Redirect to BattleScreen with a 2-second delay
+        }, 2000)
       } else {
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
         setMatch(false);
       }
     } catch (error) {
       console.error("Error fetching match data:", error);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
       setMatch(false);
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
-    <div>
-      {loading && <p>Loading...</p>} {/*индикатор загрузки*/}
-      <div>
-        <label htmlFor="language-select">Choose a programming language:</label>
-        <select
-          id="language-select"
-          value={getCurrentLanguage()}
-          onChange={(e) => setCurrentLanguage(e.target.value)}
-        >
-          <option value="">--Please choose an option--</option>
-          <option value={Languages.JAVASCRIPT}>JavaScript</option>
-          <option value={Languages.PYTHON}>Python</option>
-        </select>
-      </div>
-      {match ? (
-        <div>
-          Match found
-          <BattleScreen />
+    <div className="match-finder">
+        <div className="language-selector">
+          <label htmlFor="language-select">Choose a programming language:</label>
+          <select
+            id="language-select"
+            value={getCurrentLanguage()}
+            onChange={(e) => setCurrentLanguage(e.target.value)}
+          >
+            <option value="">--Please choose an option--</option>
+            <option value={Languages.JAVASCRIPT}>JavaScript</option>
+            <option value={Languages.PYTHON}>Python</option>
+          </select>
+          <div className="find-match">
+          {!match && !loading && (
+            <button className="find-match-button" onClick={findMatch}>Find Match</button>
+          )}
+          {!match && loading && (
+            <p className="loading">Looking for nerds...</p>
+          )}
+          {match && loading && (
+            <h2>The nerd for the battle has been found</h2>
+          )}
+          {match!==null && !loading && (
+            <h2>Nerds not found</h2>
+          )}
+          </div>
         </div>
-      ) : (
-        <div>
-          <h2>No Match Found</h2>
-          <button onClick={findMatch}>Find Match</button>
-        </div>
-      )}
     </div>
   );
 });
+
+
+export default Battle;

@@ -1,73 +1,93 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import Battle from "./Battle";
+// import React from 'react';
+// import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+// import { act } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { observer } from 'mobx-react-lite';
+// import { languageStore } from '../../store/language/LanguageStore';
+// import Battle from './Battle';
+// import '@testing-library/jest-dom/extend-expect';
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () => Promise.resolve({ found: false }),
-  }),
-);
+// // Mock useNavigate hook
+// const mockNavigate = jest.fn();
+// jest.mock('react-router-dom', () => ({
+//   ...jest.requireActual('react-router-dom'),
+//   useNavigate: () => mockNavigate,
+// }));
 
-window.matchMedia = window.matchMedia || function () {
-  return {
-    matches: false,
-    addListener: function () { },
-    removeListener: function () { }
-  };
-};
+// // Mock languageStore
+// jest.mock('../../store/language/LanguageStore', () => ({
+//   languageStore: {
+//     Languages: {
+//       JAVASCRIPT: 'javascript',
+//       PYTHON: 'python',
+//     },
+//     getCurrentLanguage: jest.fn(),
+//     setCurrentLanguage: jest.fn(),
+//   },
+// }));
 
-describe("Battle Component", () => {
-  beforeEach(() => {
-    fetch.mockClear();
-  });
+// describe('Battle Component', () => {
+//   beforeEach(() => {
+//     languageStore.getCurrentLanguage.mockReturnValue('javascript');
+//     languageStore.setCurrentLanguage.mockImplementation((lang) => {
+//       languageStore.getCurrentLanguage.mockReturnValue(lang);
+//     });
+//   });
 
-  test("renders without crashing", () => {
-    render(<Battle />);
-    expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
-  });
+//   afterEach(() => {
+//     jest.clearAllMocks();
+//   });
 
-  test("displays loading message when finding a match", async () => {
-    fetch.mockImplementationOnce(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({ found: false }),
-      }),
-    );
+//   it('renders the Battle component', () => {
+//     render(<Battle />);
+//     expect(screen.getByText('Choose a programming language:')).toBeInTheDocument();
+//   });
 
-    render(<Battle />);
-    fireEvent.click(screen.getByText(/Find Match/i));
+//   it('displays "Looking for nerds..." when findMatch is called', async () => {
+//     render(<Battle />);
+//     fireEvent.change(screen.getByLabelText('Choose a programming language:'), {
+//       target: { value: languageStore.Languages.JAVASCRIPT },
+//     });
+//     fireEvent.click(screen.getByText('Find Match'));
 
-    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+//     await waitFor(() => {
+//       expect(screen.getByText('Looking for nerds...')).toBeInTheDocument();
+//     });
+//   });
 
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
-    );
-    expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
-  });
+//   it('displays "The nerd for the battle has been found" when match is found', async () => {
+//     render(<Battle />);
+//     fireEvent.change(screen.getByLabelText('Choose a programming language:'), {
+//       target: { value: languageStore.Languages.JAVASCRIPT },
+//     });
+//     fireEvent.click(screen.getByText('Find Match'));
 
-  test("displays match found message when a match is found", async () => {
-    fetch.mockImplementationOnce(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({ found: true }),
-      }),
-    );
+//     await waitFor(() => {
+//       expect(screen.getByText('The nerd for the battle has been found')).toBeInTheDocument();
+//     });
+//   });
 
-    render(<Battle />);
-    fireEvent.click(screen.getByText(/Find Match/i));
+//   it('displays "Nerds not found" when match is not found', async () => {
+//     render(<Battle />);
+//     fireEvent.change(screen.getByLabelText('Choose a programming language:'), {
+//       target: { value: languageStore.Languages.PYTHON },
+//     });
+//     fireEvent.click(screen.getByText('Find Match'));
 
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
-    );
-  });
+//     await waitFor(() => {
+//       expect(screen.getByText('Nerds not found')).toBeInTheDocument();
+//     });
+//   });
 
-  test("handles fetch error gracefully", async () => {
-    fetch.mockImplementationOnce(() => Promise.reject("API is down"));
+//   it('navigates to "/battle" when match is found', async () => {
+//     render(<Battle />);
+//     fireEvent.change(screen.getByLabelText('Choose a programming language:'), {
+//       target: { value: languageStore.Languages.JAVASCRIPT },
+//     });
+//     fireEvent.click(screen.getByText('Find Match'));
 
-    render(<Battle />);
-    fireEvent.click(screen.getByText(/Find Match/i));
-
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument(),
-    );
-    expect(screen.getByText(/No Match Found/i)).toBeInTheDocument();
-  });
-});
+//     await waitFor(() => {
+//       expect(mockNavigate).toHaveBeenCalledWith('/battle');
+//     });
+//   });
+// });

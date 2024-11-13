@@ -1,6 +1,5 @@
 import { Form, Input, Button, Checkbox, Select } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { authStore } from '../../store/auth/AuthStore';
 import './Form.css';
 
 const { Item } = Form;
@@ -15,8 +14,8 @@ const avatarOptions = [
 const CompleteProfileForm = observer(() => {
   const [form] = Form.useForm();
 
-//   const onFinish = (values) => {
-//   };
+   const onFinish = (values) => {
+   };
 
   return (
     <div className="auth-form-container">

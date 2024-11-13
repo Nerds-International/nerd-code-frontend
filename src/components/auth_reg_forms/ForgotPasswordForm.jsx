@@ -7,8 +7,8 @@ const { Item } = Form;
 const ForgotPasswordForm = observer(({ onCancel }) => {
   const [form] = Form.useForm();
 
-//   const onFinish = (values) => {
-//   };
+   const onFinish = (values) => {
+   };
 
   return (
     <div className="auth-form-container">

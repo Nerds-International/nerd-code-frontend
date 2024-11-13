@@ -114,6 +114,7 @@ const BattleWindows = observer(() => {
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            color: "black"
           }}
         />
         <div className="button-group">
@@ -130,6 +131,7 @@ const BattleWindows = observer(() => {
           onChange={(evn) => setCode2(evn.target.value)}
           padding={15}
           data-color-mode="dark"
+          readOnly={true}
           style={{
             backgroundColor: "#f5f5f5",
             fontFamily:

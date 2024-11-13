@@ -2,7 +2,6 @@ import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { languageStore } from "../../store/language/LanguageStore";
-import { Table, Button } from 'antd';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
 const BattleScreen = observer(() => {
@@ -28,42 +27,22 @@ const TaskDescription = observer(() => {
   );
 });
 
-
 const ButtonCostContainer = observer(() => {
-  //MOCKED DATA================================================================================
-  const dataSource = [
-    {
-      key: '1',
-      action: <Button className="points-button" type="primary">Перевернуть</Button>,
-      cost: 100,
-    },
-    {
-      key: '2',
-      action: <Button className="points-button" type="primary">Невидимость</Button>,
-      cost: 200,
-    },
-    {
-      key: '3',
-      action: <Button className="points-button" type="primary">Стереть 10 символов</Button>,
-      cost: 300,
-    },
-  ];
-
-  const columns = [
-    {
-      title: 'Действие',
-      dataIndex: 'action',
-      key: 'action',
-    },
-    {
-      title: 'Стоимость',
-      dataIndex: 'cost',
-      key: 'cost',
-    },
-  ];
-  //MOCKED DATA====================================================================
   return (
-    <Table dataSource={dataSource} columns={columns} pagination={false} />
+    <div className="button-cost-container">
+      <div className="buttons-column">
+        <button className="action-button">Перевернуть</button>
+        <button className="action-button">Невидимость</button>
+        <button className="action-button">Стереть 10 символов</button>
+      </div>
+      <div className="cost-column">
+        <div className="cost-numbers">
+          <p>100</p>
+          <p>200</p>
+          <p>300</p>
+        </div>
+      </div>
+    </div>
   );
 });
 
@@ -110,8 +89,8 @@ const BattleWindows = observer(() => {
           }}
         />
         <div className="button-group">
-          <Button type="primary">Test</Button>
-          <Button type="primary">Run</Button>
+          <button>Test</button>
+          <button>Run</button>
         </div>
       </div>
     </div>

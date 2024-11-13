@@ -58,20 +58,21 @@ const EnergyBar = observer(() => {
 
 const ButtonCostContainer = observer(() => {
   //MOCKED DATA================================================================================
+  const { energy, setEnergy } = energyStore;
   const dataSource = [
     {
       key: '1',
-      action: <Button className="points-button" type="primary">Перевернуть</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 5)}>Перевернуть</Button>,
       cost: 5,
     },
     {
       key: '2',
-      action: <Button className="points-button" type="primary">Невидимость</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 3)}>Невидимость</Button>,
       cost: 3,
     },
     {
       key: '3',
-      action: <Button className="points-button" type="primary">Стереть 10 символов</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => setEnergy(energy - 7)}>Стереть 10 символов</Button>,
       cost: 7,
     },
   ];

@@ -21,19 +21,19 @@ describe('ForumStore', () => {
     expect(sortedTopics[0].messages.length).toBeLessThanOrEqual(sortedTopics[1].messages.length);
   });
 
-  test('getTopics should return topics sorted by likes when filter is applied', () => {
+  test('getTopics likes ascending sort', () => {
     const filter = { likes: 1 };
     const sortedTopics = store.getTopics(filter);
     expect(sortedTopics[0].likes).toBeLessThanOrEqual(sortedTopics[1].likes);
   });
 
-  test('getTopics should return topics sorted by likes when filter is applied', () => {
+  test('getTopics likes descending sort', () => {
     const filter = { likes: -1 };
     const sortedTopics = store.getTopics(filter);
     expect(sortedTopics[1].likes).toBeLessThanOrEqual(sortedTopics[0].likes);
   });
 
-  test('getTopics should return topics sorted by likes when filter is applied', () => {
+  test('getTopics title filter', () => {
     store.topics = Array.from({length: 20}, (_, index) => ({
       id: `${index}`,
       author: '',

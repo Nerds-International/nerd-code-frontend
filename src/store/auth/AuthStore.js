@@ -55,7 +55,7 @@ class AuthStore {
   async signUp(email, password, username, fullname, avatar_number, confirmPassword = null) {
     this.isLoading = true;
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       notification.error({
         message: 'Registration Failed',
         description: 'Passwords do not match!',

@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 
 class ForumStore {
 
-  // mock data
+  /* ================== mock =========================== */
   topics = Array.from({length: 50}, (_, index) => ({
     id: index,
     author: 'RomaZZZ',
@@ -23,6 +23,13 @@ class ForumStore {
 
   getTopics = () => {
     return this.topics
+  }
+
+  addTopic = (topicData) => { // topicData = { author: 'smthng' , title: 'smthng', text: 'smthng' }
+    topicData.id = this.topics.length // mock
+    topicData.time = new Date().toLocaleTimeString()
+    topicData.messages = []
+    this.topics.push(topicData)
   }
 
 /*

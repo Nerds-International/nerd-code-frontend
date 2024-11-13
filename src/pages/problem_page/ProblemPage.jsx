@@ -20,8 +20,10 @@ const ProblemPage = observer(() => {
             let functionTemplate;
             if (getCurrentLanguage() ===  Languages.JAVASCRIPT){
                  functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+                setCode3(functionName + "( );");
             }else{
                 functionTemplate = `def ${functionName}() :\n    // Your function code here\n    return 0 \n`;
+                setCode3(functionName + "( )");
             }
             setCode2(functionTemplate);
         }

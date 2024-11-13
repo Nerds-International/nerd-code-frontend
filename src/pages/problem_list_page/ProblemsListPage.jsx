@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
-import TaskStore from '../../store/task/TaskStore';
+import ProblemsStore from '../../store/problem/ProblemsStore';
 import ListTask from "../../components/list_task/ListTask";
 import './ProblemsListPage.css';
 
 const ProblemsListPage = observer(() => {
-    const { tasks } = TaskStore;
+    const { tasks } = ProblemsStore;
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 

@@ -27,7 +27,7 @@ jobs:
       run: |
         sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SERVER_IP << 'EOF'
           cd /root/nerd-code-frontend
-          echo $SECRETS >> .env
+          echo "$SECRETS" >> .env
           git pull origin main
           docker-compose down
           docker-compose up --build -d

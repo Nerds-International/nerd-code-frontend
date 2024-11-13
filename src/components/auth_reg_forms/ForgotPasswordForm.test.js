@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import ForgotPasswordForm from "./ForgotPasswordForm";
-import { act } from "react-dom/test-utils";
 
 // Mock `window.matchMedia`
 beforeAll(() => {

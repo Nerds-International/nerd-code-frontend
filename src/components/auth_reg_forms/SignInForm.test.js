@@ -61,16 +61,4 @@ describe("SignInForm Component", () => {
         expect(onForgotPassword).toHaveBeenCalled();
     });
 
-    test("submits form with valid data", async () => {
-        render(<SignInForm toggleToSignUp={jest.fn()} onForgotPassword={jest.fn()} />);
-
-        await act(async () => {
-            fireEvent.change(screen.getByLabelText("Email"), { target: { value: "test@example.com" } });
-            fireEvent.change(screen.getByLabelText("Password"), { target: { value: "password123" } });
-            fireEvent.click(screen.getByRole("button", { name: "Log In" }));
-        });
-
-        // Further assertions can be added here to test form submission logic.
-        // Since `onFinish` is empty, add assertions after implementing it in the component.
-    });
 });

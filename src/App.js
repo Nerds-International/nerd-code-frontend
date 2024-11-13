@@ -6,6 +6,13 @@ import DiscussPage from './pages/dicuss_page/DiscussPage';
 import ProblemsPage from './pages/problem_list_page/ProblemsListPage';
 import BattlePage from './pages/battle_page/BattlePage';
 import BattleScreen from './components/battle_screen/BattleScreen';
+import Bugsnag from '@bugsnag/js'
+import BugsnagPluginReact from '@bugsnag/plugin-react'
+
+Bugsnag.start({
+    apiKey: process.env.REACT_APP_BUGSNAG_API_KEY,
+    plugins: [new BugsnagPluginReact()]
+})
 
 const App = () => {
     return (

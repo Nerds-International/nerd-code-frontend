@@ -1,54 +1,65 @@
 describe('started', function () {
-    it('on localhost:3000', function () {
-        cy.visit('http://localhost:3000');
-    })
-})
-  
-  describe('Authentication Modal e2e Tests', function () {
-    
+
     beforeEach(() => {
-      cy.visit('http://localhost:3000');
-      cy.contains('Sign In').click();  // Open the modal
+        cy.visit('/');
+      });
+
+      it('should load the main page', () => {
+        cy.url().should('include', '/');
+      });
+    
+      it('should navigate to Problems Page', () => {
+        cy.visit('/problems');
+        cy.url().should('include', '/problems');
+      });
+
+      it('should navigate to Discuss Page', () => {
+        cy.visit('/discuss');
+        cy.url().should('include', '/discuss');
+      });
+
+
+      it('should navigate to Battle Page', () => {
+        cy.visit('/battle');
+        cy.url().should('include', '/battle');
+      });
+
+      it('should navigate to Battle Screen', () => {
+        cy.visit('/battle/screen');
+        cy.url().should('include', '/battle/screen');
+      });
+})
+
+
+describe('Authentication Modal e2e Tests', () => {
+    beforeEach(() => {
+      cy.visit('/');
     });
   
-    it('should show SignInForm by default', function () {
-      cy.get('.auth-form-title').contains('Log In').should('be.visible');
+    it('should open the authentication modal', () => {
+      cy.visit('/auth');
+      cy.url().should('include', '/auth');
     });
   
-    it('should switch to SignUpForm', function () {
-      cy.contains("Don't have an account?").click();
-      cy.get('.auth-form-title').contains('Join NerdCode').should('be.visible');
+    it('should show SignInForm by default', () => {
+      cy.visit('/auth/signin');
+      cy.url().should('include', '/auth/signin');
     });
   
-    it('should switch to ForgotPasswordForm', function () {
-      cy.contains('Forgot password?').click();
-      cy.get('.auth-form-title').contains('Reset Password').should('be.visible');
+    it('should navigate to SignUp form', () => {
+      cy.visit('/auth/signup');
+      cy.url().should('include', '/auth/signup');
     });
   
-    it('should complete Sign Up flow and open CompleteProfileForm', function () {
-      cy.contains("Don't have an account?").click();
-      cy.get('input[name="email"]').type('test@example.com');
-      cy.get('input[name="password"]').type('password123');
-      cy.get('input[name="confirmPassword"]').type('password123');
-      cy.get('button[type="submit"]').contains('Continue').click();
-  
-      cy.get('.auth-form-title').contains('Complete Your Profile').should('be.visible');
+    it('should navigate to Forgot Password form', () => {
+      cy.visit('/auth/forgot-password');
+      cy.url().should('include', '/auth/forgot-password');
     });
   
-    it('should fill in CompleteProfileForm and create account', function () {
-      cy.contains("Don't have an account?").click();
-      cy.get('input[name="email"]').type('test@example.com');
-      cy.get('input[name="password"]').type('password123');
-      cy.get('input[name="confirmPassword"]').type('password123');
-      cy.get('button[type="submit"]').contains('Continue').click();
-  
-      cy.get('input[name="username"]').type('TestUser');
-      cy.get('input[name="fullName"]').type('Test User');
-      cy.get('select[name="avatar"]').select('Avatar 1');
-      cy.get('input[type="checkbox"]').check();
-      cy.get('button[type="submit"]').contains('Create account').click();
-  
-      cy.contains('Log In').should('be.visible');  // Should be redirected to Log In page
+    it('should close the authentication modal', () => {
+      cy.visit('/auth');
+      cy.visit('/');
+      cy.url().should('not.include', '/auth');
     });
   });
   

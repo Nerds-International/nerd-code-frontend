@@ -28,5 +28,5 @@ jobs:
           cd /nerd-code-frontend
           git pull origin main
           docker-compose down
-          docker-compose up --игшдв -d
+          docker-compose up --build -d
         EOF

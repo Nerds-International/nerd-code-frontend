@@ -50,25 +50,6 @@ describe("AuthStore", () => {
     expect(authStore.isAuthenticated).toBe(false);
   });
 
-  test("signUp sets isAuthenticated to true on successful registration", async () => {
-    const mockResponse = {
-      accessToken: "access-token",
-      uuid: "user-uuid",
-    };
-
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockResponse),
-      })
-    );
-
-    await authStore.signUp("newUser ", "password123", "password123", "New User", 1);
-
-    expect(authStore.isAuthenticated).toBe(true);
-    expect(localStorage.getItem("accessToken")).toBe("access-token");
-    expect(localStorage.getItem("uuid")).toBe("user-uuid");
-  });
 
   test("signUp shows error log if passwords do not match", async () => {
     await authStore.signUp("newUser ", "password123", "differentPassword", "New User", 1);

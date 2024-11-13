@@ -16,8 +16,9 @@ const CompleteProfileForm = observer(({ userData, backToSignIn }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    const { email, password } = userData;
-    await authStore.signUp(email, password, values.username, values.fullName, values.avatar);
+    const { email, password, confirmPassword } = userData;
+    console.log(confirmPassword);
+    await authStore.signUp(email, password, values.username, values.fullName, values.avatar, confirmPassword);
     backToSignIn();
   };
 

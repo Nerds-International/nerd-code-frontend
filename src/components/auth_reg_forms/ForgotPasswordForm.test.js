@@ -28,7 +28,7 @@ describe("ForgotPasswordForm Component", () => {
     expect(screen.getByPlaceholderText("Your email")).toBeInTheDocument();
 
     expect(screen.getByLabelText("New password")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Your new password")).toBeInTheDocument(); // Обновлено на "Your new password"
+    expect(screen.getByPlaceholderText("Your new password")).toBeInTheDocument();
 
     expect(screen.getByRole("button", { name: "Reset Password" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();

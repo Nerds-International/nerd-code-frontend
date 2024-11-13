@@ -52,7 +52,7 @@ class AuthStore {
     }
   }
 
-  async signUp(email, password,confirmPassword = null, username, fullname, avatar_number) {
+  async signUp(email, password, username, fullname, avatar_number, confirmPassword = null) {
     this.isLoading = true;
 
     if (password !== confirmPassword) {

@@ -10,8 +10,8 @@ const FormModalWindow = ({ onClose, isLogin }) => {
   const [formType, setFormType] = useState(() => (isLogin ? 'signIn' : 'signUp'));
   const [userData, setUserData] = useState({});
 
-  const handleComplete = (email, password) => {
-    setUserData({ email, password });
+  const handleComplete = (email, password, confirmPassword) => {
+    setUserData({ email, password, confirmPassword});
     setFormType('completeProfile');
   };
 

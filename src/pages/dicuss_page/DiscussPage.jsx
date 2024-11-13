@@ -1,11 +1,13 @@
 import {observer} from "mobx-react-lite";
 import "./style.css";
-import {Avatar, Button, Card, Flex, List} from "antd";
+import {Avatar, Button, Card, Flex, Form, Input, List, Modal} from "antd";
 import Search from "antd/lib/input/Search";
 import Meta from "antd/lib/card/Meta";
-import {forumStore} from "../../store/forumStore/ForumStore";
+import {forumStore} from "../../store/forum/ForumStore";
+import {useState} from "react";
 
 const DiscussPage = observer (() => {
+  const [isCreateTopicModalVisible, setIsCreateTopicModalVisible] = useState(false)
   const {getTopics} = forumStore;
 
   return (<>
@@ -55,11 +57,44 @@ const DiscussPage = observer (() => {
         left: '40%',
         width: '20%',
       }}
-      disabled={true}
+      onClick={() => setIsCreateTopicModalVisible(true)}
     >
       Create topic
     </Button>
+    <CreateTopicModal visible={isCreateTopicModalVisible} setVisible={setIsCreateTopicModalVisible}/>
   </>);
 })
 
 export default DiscussPage;
+
+const CreateTopicModal = observer(({visible, setVisible}) => {
+  const {form} = Form.useForm()
+  const onFinish = (values) => {
+    console.log(values.title, values.text)
+  }
+
+  return (<Modal
+    open={visible}
+  >
+    <Form
+      form={form}
+      layout={'vertical'}
+      onFinish={onFinish}
+    >
+      <Form.Item
+        label={'Title'}
+        rules={[{required: true, message: 'Input title of topic'}]}
+        name='title'
+      >
+        <Input placeholder={'Title'}/>
+      </Form.Item>
+      <Form.Item
+        label={'Question'}
+        rules={[{required: true, message: 'Input text of topic'}]}
+        name='text'
+      >
+        <Input size={"large"} placeholder={'Text of topic'}/>
+      </Form.Item>
+    </Form>
+  </Modal>);
+})

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
-import TaskStore from '../store/TaskStore';
-import ListTask from "../components/list_task/ListTask";
+import TaskStore from '../../store/task/TaskStore';
+import ListTask from "../../components/list_task/ListTask";
 import './ProblemsListPage.css';
 
 const ProblemsListPage = observer(() => {

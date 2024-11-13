@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import ListTask from './ListTask';
-import TaskStore from '../../store/TaskStore';
+import TaskStore from '../../store/task/TaskStore';
 
 describe('ListTask Component', () => {
     beforeEach(() => {

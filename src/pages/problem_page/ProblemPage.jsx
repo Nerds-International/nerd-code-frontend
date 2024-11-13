@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import TaskStore from '../store/TaskStore';
+import TaskStore from '../../store/task/TaskStore';
 import './ProblemPage.css';
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import { languageStore } from "../store/LanguageStore";
+import { languageStore } from "../../store/language/LanguageStore";
 
 const ProblemPage = observer(() => {
     const [searchParams] = useSearchParams();

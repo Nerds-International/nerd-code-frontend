@@ -1,7 +1,7 @@
 import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { languageStore } from "../../store/LanguageStore";
+import { languageStore } from "../../store/language/LanguageStore";
 import BattleScreen from "../battle_screen/BattleScreen";
 
 const Battle = observer(() => {

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { Card, Flex, List, Typography, Col, Row, Avatar } from "antd";
 import { Link } from "react-router-dom";
-import { mainStore } from "../../store/main_store/MainStore";
-import { forumStore } from "../../store/forumStore/ForumStore";
+import { mainStore } from "../../store/main/MainStore";
+import { forumStore } from "../../store/forum/ForumStore";
 import Meta from "antd/lib/card/Meta";
 
 const { Title } = Typography;

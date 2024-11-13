@@ -1,7 +1,7 @@
 import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { languageStore } from "../../store/LanguageStore";
+import { languageStore } from "../../store/language/LanguageStore";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
 const BattleScreen = observer(() => {

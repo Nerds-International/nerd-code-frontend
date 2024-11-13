@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import BattleScreen from "./BattleScreen";
 
-jest.mock("../../store/LanguageStore", () => ({
+jest.mock("../../store/language/LanguageStore", () => ({
     languageStore: {
         getCurrentLanguage: jest.fn().mockReturnValue("javascript"),
     },

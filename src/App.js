@@ -9,18 +9,18 @@ import ProblemsPage from './pages/problem_list_page/ProblemsListPage';
 import ProblemPage from './pages/problem_page/ProblemPage';
 
 const App = () => {
-    return (
-        <Router>
-            <Navbar />
-            <Routes>
-                <Route path="/problems" element={<ProblemsPage />} />
-                <Route path="/problem" element={<ProblemPage />} />
-                <Route path="/discuss" element={<DiscussPage />} />
-                <Route path="/battle" element={<BattleScreen />} />
-                <Route path="/" element={<MainPage />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/problems" element={<ProblemsPage />} />
+        <Route path="/problem" element={<ProblemPage />} />
+        <Route path="/discuss" element={<DiscussPage />} />
+        <Route path="/battle" element={<BattleScreen />} />
+        <Route path="/" element={<MainPage />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;

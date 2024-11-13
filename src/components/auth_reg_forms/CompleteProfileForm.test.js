@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import CompleteProfileForm from "./CompleteProfileForm";
+import CompleteProfileForm from "./CompeteProfileForm";
 
 // Mock `window.matchMedia`
 beforeAll(() => {

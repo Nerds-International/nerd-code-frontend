@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 class EnergyStore {
-    energy = 2;
+    energy = 8;
     maxEnergy = 10;
     refillRate = 1;
     interval = null;
@@ -11,7 +11,7 @@ class EnergyStore {
         this.startRefill();
     }
 
-    startRefill() {
+    startRefill = () => {
         this.interval = setInterval(() => {
             if (this.energy < this.maxEnergy) {
                 this.energy = Math.min(this.energy + this.refillRate, this.maxEnergy);
@@ -19,11 +19,11 @@ class EnergyStore {
         }, 5000);
     }
 
-    stopRefill() {
+    stopRefill = () => {
         clearInterval(this.interval);
     }
 
-    setEnergy(newEnergy) {
+    setEnergy = (newEnergy) => {
         if (newEnergy >= 0 && newEnergy <= this.maxEnergy) {
             this.energy = newEnergy;
         } else {

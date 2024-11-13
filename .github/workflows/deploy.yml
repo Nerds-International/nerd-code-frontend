@@ -20,12 +20,14 @@ jobs:
 
     - name: SSH into server and deploy
       env:
+        SECRETS: ${{ secrets.SECRET }}
         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         SERVER_IP: ${{ secrets.SERVER_IP }}
       run: |
         sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SERVER_IP << 'EOF'
           cd /root/nerd-code-frontend
+          echo $SECRETS >> .env
           git pull origin main
           docker-compose down
           docker-compose up --build -d

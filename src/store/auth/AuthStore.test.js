@@ -90,7 +90,6 @@ describe("AuthStore", () => {
 
     const signUpPromise = authStore.signUp("newUser", "password123", "newUser", "fullname", 1, "password123");
 
-    // Check if isLoading is true after calling signUp
     expect(authStore.isLoading).toBe(true);
     
     await signUpPromise;

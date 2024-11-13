@@ -2,6 +2,8 @@ import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { languageStore } from "../../store/language/LanguageStore";
+import { Table, Button } from 'antd';
+import energyStore from '../../store/energy/EnergyStore';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
 const BattleScreen = observer(() => {
@@ -10,6 +12,7 @@ const BattleScreen = observer(() => {
       <div className="left-column">
         <TaskDescription />
         <ButtonCostContainer />
+        <EnergyBar />
       </div>
       <div className="right-column">
         <BattleWindows />
@@ -27,22 +30,67 @@ const TaskDescription = observer(() => {
   );
 });
 
-const ButtonCostContainer = observer(() => {
+const EnergyBar = observer(() => {
+  const { energy, maxEnergy } = energyStore;
+
+  const pieces = Array.from({ length: maxEnergy }, (_, index) => (
+    <div
+      key={index}
+      style={{
+        width: `${100 / maxEnergy}%`,
+        height: '20px',
+        backgroundColor: index < energy ? '#ffcc00' : '#ddd',
+        display: 'inline-block',
+        transition: 'background-color 0.5s',
+      }}
+    ></div>
+  ));
+
   return (
-    <div className="button-cost-container">
-      <div className="buttons-column">
-        <button className="action-button">Перевернуть</button>
-        <button className="action-button">Невидимость</button>
-        <button className="action-button">Стереть 10 символов</button>
-      </div>
-      <div className="cost-column">
-        <div className="cost-numbers">
-          <p>100</p>
-          <p>200</p>
-          <p>300</p>
-        </div>
+    <div style={{ width: '100%', padding: '10px' }}>
+      <div style={{ display: 'flex', height: '20px' }}>{pieces}</div>
+      <div style={{ textAlign: 'center', marginTop: '5px' }}>
+        {energy}/{maxEnergy}
       </div>
     </div>
+  );
+});
+
+const ButtonCostContainer = observer(() => {
+  //MOCKED DATA================================================================================
+  const dataSource = [
+    {
+      key: '1',
+      action: <Button className="points-button" type="primary">Перевернуть</Button>,
+      cost: 5,
+    },
+    {
+      key: '2',
+      action: <Button className="points-button" type="primary">Невидимость</Button>,
+      cost: 3,
+    },
+    {
+      key: '3',
+      action: <Button className="points-button" type="primary">Стереть 10 символов</Button>,
+      cost: 7,
+    },
+  ];
+
+  const columns = [
+    {
+      title: 'Действие',
+      dataIndex: 'action',
+      key: 'action',
+    },
+    {
+      title: 'Стоимость',
+      dataIndex: 'cost',
+      key: 'cost',
+    },
+  ];
+  //MOCKED DATA====================================================================
+  return (
+    <Table dataSource={dataSource} columns={columns} pagination={false} />
   );
 });
 
@@ -89,8 +137,8 @@ const BattleWindows = observer(() => {
           }}
         />
         <div className="button-group">
-          <button>Test</button>
-          <button>Run</button>
+          <Button type="primary">Test</Button>
+          <Button type="primary">Run</Button>
         </div>
       </div>
     </div>

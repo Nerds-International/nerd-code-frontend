@@ -4,18 +4,6 @@ describe('started', function () {
     })
 })
   
-  describe('Authentication Modal e2e Tests', () => {
-    beforeEach(() => {
-      // Убедиться, что открыта форма авторизации
-      cy.visit('/login', { timeout: 10000 });
-    });
-  
-    it('should show SignInForm by default', () => {
-      // Проверка, что текст 'Sign In' отображается
-      cy.contains('Sign In', { timeout: 10000 }).should('be.visible');
-    });
-  });
-  
   describe('Authentication Modal e2e Tests', function () {
     
     beforeEach(() => {

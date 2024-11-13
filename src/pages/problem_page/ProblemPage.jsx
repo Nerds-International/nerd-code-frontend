@@ -60,7 +60,7 @@ const ProblemPage = observer(() => {
             </div>
 
             <div className="code-block">
-                <div>
+                <div className="language">
                     <label htmlFor="language-select">Choose a programming language:</label>
                     <select
                         id="language-select"

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import SignInForm from "./SignInForm";
-import { authStore } from "../../store/AuthStore";
+import { authStore } from "../../store/auth/AuthStore";
 
 // Mock `authStore`
 jest.mock("../../store/auth/AuthStore", () => ({

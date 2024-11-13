@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { observer } from "mobx-react-lite";
 import { Menu } from "antd";
-import { pageStore } from "../../store/PageStore";
+import { pageStore } from "../../store/page/PageStore";
 import { Link } from 'react-router-dom';
-import NerdFaceImage from "../nerdFaceImage/NerdFaceImage";
-import FormModalWindow from "../auth-reg/FormModalWindow";
+import NerdFaceImage from "../nerd_face_image/NerdFaceImage";
+import FormModalWindow from "../auth_reg_forms/FormModalWindow";
 import './Navbar.css';
 
 const Navbar = observer(() => {

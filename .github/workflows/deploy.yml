@@ -25,7 +25,7 @@ jobs:
         SERVER_IP: ${{ secrets.SERVER_IP }}
       run: |
         sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SERVER_IP << 'EOF'
-          cd /nerd-code-frontend
+          cd /root/nerd-code-frontend
           git pull origin main
           docker-compose down
           docker-compose up --build -d

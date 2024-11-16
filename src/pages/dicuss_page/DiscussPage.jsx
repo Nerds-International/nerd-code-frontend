@@ -1,14 +1,14 @@
-import {observer} from "mobx-react-lite";
-import {forumStore} from "../../store/forum/ForumStore";
-import {useMemo, useState} from "react";
+import { observer } from "mobx-react-lite";
+import { forumStore } from "../../store/forum/ForumStore";
+import { useMemo, useState } from "react";
 import "./style.css";
-import {Button, Flex, Input, List} from "antd";
+import { Button, Flex, Input, List } from "antd";
 import CreateTopicModal from "../../components/create_topic_modal/CreateTopicModal";
 import TopicCard from "../../components/topic_card/TopicCard";
 
-const DiscussPage = observer (() => {
+const DiscussPage = observer(() => {
   const [isCreateTopicModalVisible, setIsCreateTopicModalVisible] = useState(false)
-  const {getTopics} = forumStore;
+  const { getTopics } = forumStore;
   const [filter, setFilter] = useState({})
   const topics = useMemo(() => getTopics(filter), [filter, getTopics()])
 
@@ -34,7 +34,7 @@ const DiscussPage = observer (() => {
         <Button onClick={() => setFilter(sortByLikesDescending)}>Likes</Button>
         <Button onClick={() => setFilter(sortByMessagesCountDescending)}>Hot</Button>
       </Flex>
-      <Input onChange={handleSearch} allowClear style={{width: '20%'}}/>
+      <Input onChange={handleSearch} allowClear style={{ width: '20%' }} />
     </Flex>
     <List
       style={{
@@ -47,7 +47,7 @@ const DiscussPage = observer (() => {
       grid={{ column: 2, gutter: 40 }}
       dataSource={topics}
       renderItem={(topic) => <List.Item>
-        <TopicCard topic={topic}/>
+        <TopicCard topic={topic} />
       </List.Item>}
     />
     <Button
@@ -60,7 +60,7 @@ const DiscussPage = observer (() => {
     >
       Create topic
     </Button>
-    <CreateTopicModal visible={isCreateTopicModalVisible} setVisible={setIsCreateTopicModalVisible}/>
+    <CreateTopicModal visible={isCreateTopicModalVisible} setVisible={setIsCreateTopicModalVisible} />
   </>);
 })
 

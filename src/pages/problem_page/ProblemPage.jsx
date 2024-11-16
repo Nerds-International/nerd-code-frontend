@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import {useEffect, useState} from 'react';
 import { useSearchParams } from 'react-router-dom';
-import TaskStore from '../../store/task/TaskStore';
+import ProblemsStore from '../../store/problem/ProblemsStore';
 import './ProblemPage.css';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { languageStore } from "../../store/language/LanguageStore";
@@ -9,7 +9,7 @@ import { languageStore } from "../../store/language/LanguageStore";
 const ProblemPage = observer(() => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get('id');
-    const task = TaskStore.tasks.find(task => task.id === parseInt(id));
+    const task = ProblemsStore.tasks.find(task => task.id === parseInt(id));
     const [code2, setCode2] = useState("");
     const [code3, setCode3] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-class TaskStore {
+class ProblemsStore {
     // потом берем из бд
     tasks = [
         { id: 1, name: 'Task 1', description: 'This is the description for task 1', difficulty: 'Easy' },
@@ -21,5 +21,5 @@ class TaskStore {
     }
 }
 
-const taskStore = new TaskStore();
-export default taskStore;
+const problemsStore = new ProblemsStore();
+export default problemsStore;

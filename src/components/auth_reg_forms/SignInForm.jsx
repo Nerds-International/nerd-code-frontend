@@ -12,6 +12,10 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
      authStore.signIn(values.email, values.password);
    };
 
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:3000/auth/github';
+  };
+
   return (
     <div className="auth-form-container">
       <h2 className="auth-form-title">Log In</h2>
@@ -44,7 +48,7 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
         <a onClick={toggleToSignUp}>Sign Up</a>
       </div>
       <div className="auth-alt-options">
-        <Button type="default">
+        <Button onClick={handleLogin}  type="default">
           Sign in with GitHub
         </Button>
       </div>

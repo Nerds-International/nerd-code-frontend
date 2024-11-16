@@ -1,6 +1,6 @@
 describe('started', function () {
 
-    beforeEach(() => {
+      beforeEach(() => {
         cy.visit('/');
       });
 

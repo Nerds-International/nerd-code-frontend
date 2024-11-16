@@ -13,6 +13,10 @@ const SignUpForm = observer(({ toggleForm, onComplete }) => {
     onComplete(values.email, values.password, values.confirmPassword);
   };
 
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:3000/auth/github';
+  };
+
   return (
     <div className="auth-form-container">
       <h2 className="auth-form-title">Join NerdCode</h2>
@@ -53,7 +57,7 @@ const SignUpForm = observer(({ toggleForm, onComplete }) => {
         <a onClick={toggleForm}>Log in</a>
       </div>
       <div className="auth-alt-options">
-        <Button type="default">
+        <Button onClick={handleLogin} type="default">
           Sign in with GitHub
         </Button>
       </div>

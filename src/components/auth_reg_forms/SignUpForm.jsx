@@ -13,8 +13,9 @@ const SignUpForm = observer(({ toggleForm, onComplete }) => {
     onComplete(values.email, values.password, values.confirmPassword);
   };
 
-  const handleLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/github';
+  const handleLogin = (e) => {
+    e.preventDefault();
+    window.location.assign('http://localhost:3000/auth/github');
   };
 
   return (

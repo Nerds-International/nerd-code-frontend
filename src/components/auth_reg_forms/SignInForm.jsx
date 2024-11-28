@@ -12,8 +12,9 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
      authStore.signIn(values.email, values.password);
    };
 
-  const handleLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/github';
+  const handleLogin = (e) => {
+    e.preventDefault();
+    window.location.assign('http://localhost:3000/auth/github');
   };
 
   return (

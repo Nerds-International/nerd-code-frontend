@@ -14,6 +14,11 @@
     padding-left: 20px;
 }
 
+.name {
+    display: flex;
+    flex-direction: row;
+}
+
 .tests {
     border: 2px solid black;
     border-top: none;
@@ -84,4 +89,24 @@ select {
 
 .like-dislike-buttons button.dislike-selected {
     background-color: lightcoral;
+}
+
+.big-difficulty-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+    margin-top: 25px;
+}
+
+.big-difficulty-circle.easy {
+    background-color: #ffebb5;
+}
+
+.big-difficulty-circle.medium {
+    background-color: #ffdc7a;
+}
+
+.big-difficulty-circle.hard {
+    background-color: #ffc012;
 }

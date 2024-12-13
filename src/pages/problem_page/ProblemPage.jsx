@@ -67,7 +67,10 @@ const ProblemPage = observer(() => {
         <div className="general">
             <div className="problem-container">
                 <div className="problem-info">
-                    <h2>{task.name}</h2>
+                    <span className={"name"}>
+                        <div className={`big-difficulty-circle ${task.difficulty.toLowerCase()}`}></div>
+                        <h2>{task.name}</h2>
+                    </span>
                     <p>{task.description}</p>
                 </div>
 

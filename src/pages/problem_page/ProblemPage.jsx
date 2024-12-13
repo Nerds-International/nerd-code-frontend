@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ProblemsStore from '../../store/problem/ProblemsStore';
 import './ProblemPage.css';
@@ -13,15 +13,18 @@ const ProblemPage = observer(() => {
     const [code2, setCode2] = useState("");
     const [code3, setCode3] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
+    const [likeCount, setLikeCount] = useState(148);
+    const [dislikeCount, setDislikeCount] = useState(53);
+    const [selectedButton, setSelectedButton] = useState(null);
 
     useEffect(() => {
         if (task) {
             const functionName = generateFunctionName(task.name);
             let functionTemplate;
-            if (getCurrentLanguage() ===  Languages.JAVASCRIPT){
-                 functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+            if (getCurrentLanguage() === Languages.JAVASCRIPT) {
+                functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
                 setCode3(functionName + "( );");
-            }else{
+            } else {
                 functionTemplate = `def ${functionName}() :\n    // Your function code here\n    return 0 \n`;
                 setCode3(functionName + "( )");
             }
@@ -36,6 +39,26 @@ const ProblemPage = observer(() => {
         return functionName;
     };
 
+    const handleLike = () => {
+        if (selectedButton !== 'like') {
+            setLikeCount(likeCount + 1);
+            setSelectedButton('like');
+            if (selectedButton === 'dislike') {
+                setDislikeCount(dislikeCount - 1);
+            }
+        }
+    };
+
+    const handleDislike = () => {
+        if (selectedButton !== 'dislike') {
+            setDislikeCount(dislikeCount + 1);
+            setSelectedButton('dislike');
+            if (selectedButton === 'like') {
+                setLikeCount(likeCount - 1);
+            }
+        }
+    };
+
     if (!task) {
         return <div>Task not found</div>;
     }
@@ -44,7 +67,10 @@ const ProblemPage = observer(() => {
         <div className="general">
             <div className="problem-container">
                 <div className="problem-info">
-                    <h2>{task.name}</h2>
+                    <span className={"name"}>
+                        <div className={`big-difficulty-circle ${task.difficulty.toLowerCase()}`}></div>
+                        <h2>{task.name}</h2>
+                    </span>
                     <p>{task.description}</p>
                 </div>
 
@@ -54,7 +80,20 @@ const ProblemPage = observer(() => {
 
                 <div className="additional-info">
                     <h3>Total Solutions: 267</h3>
-                    <p>👍 148 👎 53</p>
+                    <div className="like-dislike-buttons">
+                        <button
+                            onClick={handleLike}
+                            className={selectedButton === 'like' ? 'selected' : ''}
+                        >
+                            👍 {likeCount}
+                        </button>
+                        <button
+                            onClick={handleDislike}
+                            className={selectedButton === 'dislike' ? 'dislike-selected' : ''}
+                        >
+                            👎 {dislikeCount}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -109,10 +148,11 @@ const ProblemPage = observer(() => {
                     <button>Run</button>
                 </div>
             </div>
-        </div >
+        </div>
     );
 });
 
 export default ProblemPage;
+
 
 

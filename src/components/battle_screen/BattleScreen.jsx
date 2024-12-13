@@ -1,10 +1,11 @@
 import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { languageStore } from "../../store/language/LanguageStore";
 import { Table, Button } from 'antd';
 import energyStore from '../../store/energy/EnergyStore';
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import useWebSocket from '../../hooks/useWebSocket';
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
@@ -12,10 +13,52 @@ const BattleScreen = observer(() => {
   const [isUpsideDown, setIsUpsideDown] = useState(false);
   const [lagCount, setLagCount] = useState(0);
   const [pressCounter, setPressCounter] = useState(0);
+  const [battleId, setBattleId] = useState("");
+  const socket = useWebSocket('http://localhost:3000');
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('battleCreated', (data) => {
+        console.log('Battle created:', data);
+        setBattleId(data.battleId);
+      });
+
+      socket.on('opponentJoined', (data) => {
+        console.log('Opponent joined:', data);
+      });
+
+      socket.on('codeUpdated', (data) => {
+        console.log('Code updated:', data);
+        setCode2(data.code);
+      });
+
+      socket.on('error', (data) => {
+        console.error('Error:', data.message);
+      });
+    }
+  }, [socket]);
+
+  const createBattle = () => {
+    if (socket) {
+      socket.emit('createBattle', '5252');
+    }
+  };
+
+  const joinBattle = () => {
+    if (socket) {
+      socket.emit('joinBattle', battleId);
+    }
+  };
+
+  const syncCode = () => {
+    if (socket) {
+      socket.emit('syncCode', { battleId, code: code1 });
+    }
+  };
 
   const reverseCode = () => {
     setIsUpsideDown(true);
-    setTimeout(() => setIsUpsideDown(false), 10000);
+    setTimeout(() => setIsUpsideDown(false), 5000);
   };
 
   const applyLag = () => {
@@ -49,6 +92,11 @@ const BattleScreen = observer(() => {
           pressCounter={pressCounter}
           setPressCounter={setPressCounter}
         />
+        <div className="button-group">
+          <Button type="primary" onClick={createBattle}>Create Battle</Button>
+          <Button type="primary" onClick={joinBattle}>Join Battle</Button>
+          <Button type="primary" onClick={syncCode}>Sync Code</Button>
+        </div>
       </div>
     </div>
   );

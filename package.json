@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/icons": "^5.5.2",
     "@bugsnag/browser-performance": "^2.10.1",
     "@bugsnag/js": "^8.1.2",
     "@bugsnag/plugin-react": "^8.1.1",

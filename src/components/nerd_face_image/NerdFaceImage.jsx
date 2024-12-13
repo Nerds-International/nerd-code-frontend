@@ -1,11 +1,11 @@
 import {observer} from "mobx-react-lite";
 
-const NerdFaceImage = observer(() => {
+const NerdFaceImage = observer(({style = { width: 80 }}) => {
 
   return (<img
     alt="nerd-face-image"
     src={process.env.PUBLIC_URL + "/img/nerd.png"}
-    style={{ width: 80}}
+    style={style}
   />);
 })
 

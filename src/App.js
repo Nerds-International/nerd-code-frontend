@@ -7,8 +7,10 @@ import ProblemPage from './pages/problem_page/ProblemPage';
 import BattlePage from './pages/battle_page/BattlePage';
 import BattleScreen from './components/battle_screen/BattleScreen';
 import TopicPage from "./pages/topic_page/TopicPage";
-import Bugsnag from '@bugsnag/js'
-import BugsnagPluginReact from '@bugsnag/plugin-react'
+import Bugsnag from '@bugsnag/js';
+import BugsnagPluginReact from '@bugsnag/plugin-react';
+import "./App.css";
+import MobileAlert from "./pages/mobile_alert/MobileAlert";
 
 Bugsnag.start({
     apiKey: process.env.REACT_APP_BUGSNAG_API_KEY,
@@ -17,6 +19,8 @@ Bugsnag.start({
 
 const App = () => {
     return (
+      <>
+      <div className="App">
         <Router>
             <Navbar />
             <Routes>
@@ -29,6 +33,9 @@ const App = () => {
                 <Route path="/" element={<MainPage />} />
             </Routes>
         </Router>
+      </div>
+      <MobileAlert/>
+      </>
     );
 };
 

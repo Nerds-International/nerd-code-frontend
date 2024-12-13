@@ -9,7 +9,7 @@ import { languageStore } from "../../store/language/LanguageStore";
 const ProblemPage = observer(() => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get('id');
-    const task = ProblemsStore.tasks.find(task => task.id === parseInt(id));
+    const task = ProblemsStore.tasks.find(task => task.id === id);
     const [code2, setCode2] = useState("");
     const [code3, setCode3] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;

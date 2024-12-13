@@ -1,22 +1,58 @@
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ListTask from "../../components/list_task/ListTask";
-import { Input, Radio, Card } from 'antd';
-import ProblemsStore from '../../store/problem/ProblemsStore';
+import { Input, Radio, Card} from 'antd';
 import './ProblemsListPage.css';
+import problemsStore from "../../store/problem/ProblemsStore";
 
 const ProblemsListPage = observer(() => {
-    const { tasks } = ProblemsStore;
+    const store = problemsStore;
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 
     const difficultyOrder = {
-        'Easy': 1,
-        'Medium': 2,
-        'Hard': 3
+        'easy': 1,
+        'medium': 2,
+        'hard': 3
     };
 
-    const filteredTasks = tasks.filter(task => {
+    async function getAllProblems(page = 1, limit = 10) {
+
+        try {
+            const url = new URL('http://localhost:3000/tasks/list');
+            url.searchParams.append('page', page);
+            url.searchParams.append('limit', limit);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error fetching tasks');
+            }
+
+            const data = await response.json();
+            const getTask = [];
+            for (let i =0; i < data.total; i++){
+                getTask.push({ id: data.tasks[i]._id, name: data.tasks[i].title, description: data.tasks[i].description, difficulty: data.tasks[i].difficulty, likes: data.tasks[i].likes, dislikes: data.tasks[i].dislikes,  created_at: data.tasks[i].created_at});
+            }
+            store.setTask(getTask);
+        } catch (error) {
+            console.error('Error fetching tasks:', error.message || 'Error fetching tasks');
+        } finally {
+            console.log("nice")
+        }
+    }
+
+    useEffect(() => {
+        getAllProblems(1, 10);
+    }, []);
+
+    const filteredTasks = store.tasks.filter(task => {
         const matchesDifficulty = filter === 'all' || filter === 'Easy to Hard' || filter === 'Hard to Easy' || task.difficulty === filter;
         const matchesName = task.name.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesDifficulty && matchesName;
@@ -47,9 +83,9 @@ const ProblemsListPage = observer(() => {
                     style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
                 >
                     <Radio value="all">All</Radio>
-                    <Radio value="Easy">Easy</Radio>
-                    <Radio value="Medium">Medium</Radio>
-                    <Radio value="Hard">Hard</Radio>
+                    <Radio value="easy">Easy</Radio>
+                    <Radio value="medium">Medium</Radio>
+                    <Radio value="hard">Hard</Radio>
                     <Radio value="Easy to Hard">Easy to Hard</Radio>
                     <Radio value="Hard to Easy">Hard to Easy</Radio>
                 </Radio.Group>

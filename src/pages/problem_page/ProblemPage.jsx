@@ -10,26 +10,31 @@ const ProblemPage = observer(() => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get('id');
     const task = problemsStore.tasks.find(task => task.id === id);
-    console.log(problemsStore.tasks)
     const [code2, setCode2] = useState("");
     const [code3, setCode3] = useState("");
     const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
-    const [likeCount, setLikeCount] = useState(148);
-    const [dislikeCount, setDislikeCount] = useState(53);
+    const [likeCount, setLikeCount] = useState(task.likes);
+    const [dislikeCount, setDislikeCount] = useState(task.dislikes);
     const [selectedButton, setSelectedButton] = useState(null);
 
     useEffect(() => {
         if (task) {
             const functionName = generateFunctionName(task.name);
             let functionTemplate;
+            let tests = ``
             if (getCurrentLanguage() === Languages.JAVASCRIPT) {
                 functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
-                setCode3(functionName + "( );");
+                for (let i = 0; i < task.testCases.length; i++){
+                    tests = tests + `${functionName}(${task.testCases[i].input}) === ${task.testCases[i].expected_output};\n`
+                }
             } else {
                 functionTemplate = `def ${functionName}() :\n    // Your function code here\n    return 0 \n`;
-                setCode3(functionName + "( )");
+                for (let i = 0; i < task.testCases.length; i++){
+                    tests = tests + `${functionName}(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`
+                }
             }
             setCode2(functionTemplate);
+            setCode3(tests);
         }
     }, [task, getCurrentLanguage()]);
 

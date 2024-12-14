@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { MemoryRouter } from 'react-router-dom';
 import ListTask from './ListTask';
 import problemsStore from '../../store/problem/ProblemsStore';
 
@@ -13,7 +14,11 @@ describe('ListTask Component', () => {
     });
 
     test('renders ListTask component', () => {
-        render(<ListTask tasks={problemsStore.tasks} />);
+        render(
+            <MemoryRouter>
+                <ListTask tasks={problemsStore.tasks} />
+            </MemoryRouter>
+        );
         expect(screen.getByText('Task 1')).toBeInTheDocument();
         expect(screen.getByText('Task 2')).toBeInTheDocument();
         expect(screen.getByText('Task 3')).toBeInTheDocument();

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import MainPage from './pages/main_page/MainPage';
-import DiscussPage from './pages/dicuss_page/DiscussPage';
+import DiscussPage from './pages/discuss_page/DiscussPage';
 import ProblemsListPage from './pages/problem_list_page/ProblemsListPage';
 import ProblemPage from './pages/problem_page/ProblemPage';
 import BattlePage from './pages/battle_page/BattlePage';

@@ -25,12 +25,16 @@ const ProblemPage = observer(() => {
         if (task) {
             const functionName = generateFunctionName(task.name);
             let functionTemplate;
-            let tests = ``
+            let tests = ``;
+            let tests_output = ``;
             if (getCurrentLanguage() === Languages.JAVASCRIPT) {
                 functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+                tests_output = `[`
                 for (let i = 0; i < task.testCases.length; i++){
-                    tests = tests + `${functionName}(${task.testCases[i].input}) === ${task.testCases[i].expected_output};\n`
+                    tests = tests + `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+                    tests_output = tests_output + `result${i}, `;
                 }
+                tests_output = tests_output.slice(0, -2) + `];`;
             } else {
                 functionTemplate = `def ${functionName}() :\n    // Your function code here\n    return 0 \n`;
                 for (let i = 0; i < task.testCases.length; i++){
@@ -38,7 +42,7 @@ const ProblemPage = observer(() => {
                 }
             }
             setCode2(functionTemplate);
-            setCode3(tests);
+            setCode3(tests + tests_output);
         }
     }, [task, getCurrentLanguage()]);
 

@@ -5,6 +5,8 @@ import problemsStore from "../../store/problem/ProblemsStore";
 import './ProblemPage.css';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { languageStore } from "../../store/language/LanguageStore";
+import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
+
 
 const ProblemPage = observer(() => {
     const [searchParams] = useSearchParams();
@@ -16,6 +18,8 @@ const ProblemPage = observer(() => {
     const [likeCount, setLikeCount] = useState(task.likes);
     const [dislikeCount, setDislikeCount] = useState(task.dislikes);
     const [selectedButton, setSelectedButton] = useState(null);
+    const [combinedCode, setCombinedCode] = useState("");
+    const { result, error } = useCodeRunnerJS(combinedCode);
 
     useEffect(() => {
         if (task) {
@@ -65,6 +69,11 @@ const ProblemPage = observer(() => {
         }
     };
 
+    const handleTest = () => {
+        const combined = `${code2}\n${code3}`;
+        setCombinedCode(combined);
+    };
+
     if (!task) {
         return <div>Task not found</div>;
     }
@@ -82,6 +91,8 @@ const ProblemPage = observer(() => {
 
                 <div className="tests">
                     <h2>Results:</h2>
+                    {result && <div>Result: {JSON.stringify(result)}</div>}
+                    {error && <div>Error: {error}</div>}
                 </div>
 
                 <div className="additional-info">
@@ -150,7 +161,7 @@ const ProblemPage = observer(() => {
                     </div>
                 </div>
                 <div className="button-group">
-                    <button>Test</button>
+                    <button onClick={handleTest}>Test</button>
                     <button>Run</button>
                 </div>
             </div>
@@ -159,6 +170,5 @@ const ProblemPage = observer(() => {
 });
 
 export default ProblemPage;
-
 
 

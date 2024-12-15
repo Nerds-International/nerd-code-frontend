@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import useCodeRunnerJS from './useCodeRunnerJS';
 import {render} from "@testing-library/react";
 

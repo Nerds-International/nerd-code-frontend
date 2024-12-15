@@ -3,7 +3,6 @@ import "@testing-library/jest-dom/extend-expect";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import BattleScreen from "./BattleScreen";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
-import { languageStore } from "../../store/language/LanguageStore";
 
 jest.mock("../../store/language/LanguageStore", () => ({
     languageStore: {

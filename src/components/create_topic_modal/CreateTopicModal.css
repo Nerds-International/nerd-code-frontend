@@ -1,0 +1,67 @@
+.create-topic-title {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+  border-radius: 15px;
+}
+
+.create-topic-title:hover {
+  border-color: #2b2b2b !important;
+  box-shadow: none !important;
+}
+
+.create-topic-text {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+  border-radius: 15px;
+}
+
+.create-topic-text:hover {
+  border-color: #2b2b2b !important;
+  box-shadow: none !important;
+}
+
+.create-topic-modal-button {
+  width: 100px; 
+  height: 40px;
+  border-radius: 35px;
+  font-family: "RopaSans";
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-topic-cancel-button {
+  background-color: #2b2b2b; 
+  color: white;
+  border-radius: 35px;
+  box-shadow: none;
+}
+
+.create-topic-cancel-button:hover {
+  background-color: white; 
+  color: #2b2b2b !important; 
+  border: 1px solid #2b2b2b !important;
+}
+
+.create-topic-cancel-button:active {
+  background-color: #d9d9d9 !important; 
+}
+
+.create-topic-ok-button {
+  background-color: white; 
+  color: #2b2b2b;
+  border-radius: 35px;
+  border: 1px solid #2b2b2b;
+  box-shadow: none;
+}
+
+.create-topic-ok-button:hover {
+  background-color: #2b2b2b !important;
+  color: white;
+}
+
+.create-topic-ok-button:active {
+  background-color: #ffcc00 !important; 
+  color: #2b2b2b !important;
+}

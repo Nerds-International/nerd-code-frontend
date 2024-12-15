@@ -25,7 +25,7 @@ const MainPage = observer(() => {
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Row gutter={16} style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
           {/* ============ NEWS ============== */}
-          <Col span={8} style={{ height: '100%', width: '45%', overflow: 'hidden' }}>
+          <Col span={8} style={{ height: '100%', width: '45%', overflow: 'hidden', cursor: 'default'}}>
             <Title level={2} style={{ textAlign: 'center' }}>News</Title>
             <List
               style={{
@@ -64,14 +64,14 @@ const MainPage = observer(() => {
               grid={{ column: 1 }}
               dataSource={getTopics().slice(0, 3)}
               renderItem={(topic) => (
-                <List.Item>
+                <List.Item style={{cursor: 'pointer'}}>
                   <TopicCard topic={topic} showMessages={3}/>
                 </List.Item>
               )}
             />
           </Col>
           {/* ============ TOP NERDS ============== */}
-          <Col span={8} style={{ height: '100%', width: '20%', overflow: 'hidden' }}>
+          <Col span={8} style={{ height: '100%', width: '20%', overflow: 'hidden', cursor: 'default'}}>
             <Title level={2} style={{ textAlign: 'center' }}>Top Nerds</Title>
             <div style={{ display: 'flex', flexDirection: 'column', padding: 20, maxHeight: '100%', overflow: 'auto' }}>
               {mainStore.nerds.map((nerd, index) => (

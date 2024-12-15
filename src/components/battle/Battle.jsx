@@ -20,6 +20,7 @@ const MatchFinder = observer(() => {
   const navigate = useNavigate();
   const { socket } = webSocketStore;
 
+
   useEffect(() => {
     if (socket) {
       socket.on('opponentJoined', (data) => {
@@ -71,17 +72,18 @@ const MatchFinder = observer(() => {
         </select>
         <div className="find-match">
           {!match && !loading && (
-            <button className="find-match-button" onClick={findMatch}>Find Match</button>
+            <button className="find-match-button" onClick={findMatch}>
+              Find Match
+            </button>
           )}
           {!match && loading && (
-            <p className="loading">Looking for nerds...</p>
+            <div className="loading-container">
+              <p className="loading">Looking for nerds...</p>
+              <div className="loader"></div>
+            </div>
           )}
-          {match && loading && (
-            <h2>The nerd for the battle has been found</h2>
-          )}
-          {match !== null && !loading && (
-            <h2>Nerds not found</h2>
-          )}
+          {match && loading && <h2>The nerd for the battle has been found</h2>}
+          {match !== null && !loading && <h2>Nerds not found</h2>}
         </div>
       </div>
     </div>

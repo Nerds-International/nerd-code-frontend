@@ -1,6 +1,7 @@
 import "./BattleScreen.css";
 import { observer } from "mobx-react-lite";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { languageStore } from "../../store/language/LanguageStore";
 import { Table, Button } from 'antd';
 import energyStore from '../../store/energy/EnergyStore';
@@ -13,16 +14,12 @@ const BattleScreen = observer(() => {
   const [isUpsideDown, setIsUpsideDown] = useState(false);
   const [lagCount, setLagCount] = useState(0);
   const [pressCounter, setPressCounter] = useState(0);
-  const [battleId, setBattleId] = useState("");
+  const location = useLocation();
+  const battleId = location.state?.battleId || "defaultBattleId";
   const socket = useWebSocket('http://localhost:3000');
 
   useEffect(() => {
     if (socket) {
-      socket.on('battleCreated', (data) => {
-        console.log('Battle created:', data);
-        setBattleId(data.battleId);
-      });
-
       socket.on('opponentJoined', (data) => {
         console.log('Opponent joined:', data);
       });
@@ -37,18 +34,6 @@ const BattleScreen = observer(() => {
       });
     }
   }, [socket]);
-
-  const createBattle = () => {
-    if (socket) {
-      socket.emit('createBattle', '5252');
-    }
-  };
-
-  const joinBattle = () => {
-    if (socket) {
-      socket.emit('joinBattle', battleId);
-    }
-  };
 
   const syncCode = () => {
     if (socket) {
@@ -69,6 +54,10 @@ const BattleScreen = observer(() => {
   const eraseCharacters = () => {
     setCode2(code2.slice(10));
   };
+
+  useEffect(() => {
+    syncCode();
+  }, [code1, socket, battleId]);
 
   return (
     <div className="BattleScreen">
@@ -92,11 +81,6 @@ const BattleScreen = observer(() => {
           pressCounter={pressCounter}
           setPressCounter={setPressCounter}
         />
-        <div className="button-group">
-          <Button type="primary" onClick={createBattle}>Create Battle</Button>
-          <Button type="primary" onClick={joinBattle}>Join Battle</Button>
-          <Button type="primary" onClick={syncCode}>Sync Code</Button>
-        </div>
       </div>
     </div>
   );

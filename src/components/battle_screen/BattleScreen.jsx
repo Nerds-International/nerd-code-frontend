@@ -6,7 +6,7 @@ import { languageStore } from "../../store/language/LanguageStore";
 import { Table, Button } from 'antd';
 import energyStore from '../../store/energy/EnergyStore';
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import useWebSocket from '../../hooks/useWebSocket';
+import { webSocketStore } from "../../store/socket/WebSocketStore";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
@@ -16,7 +16,7 @@ const BattleScreen = observer(() => {
   const [pressCounter, setPressCounter] = useState(0);
   const location = useLocation();
   const battleId = location.state?.battleId || "defaultBattleId";
-  const socket = useWebSocket('http://localhost:3000');
+  const { socket } = webSocketStore;
 
   useEffect(() => {
     if (socket) {

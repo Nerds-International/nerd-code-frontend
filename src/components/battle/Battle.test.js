@@ -10,10 +10,10 @@ describe('Battle Component', () => {
     render(<Battle />);
   });
 
-  it('finds a match when JavaScript is selected', async () => {
+  it('finding match', async () => {
     render(<Battle />);
     fireEvent.change(screen.getByLabelText(/Choose a programming language/i), { target: { value: 'javascript' } });
     fireEvent.click(screen.getByText(/Find Match/i));
-    await screen.findByText(/The nerd for the battle has been found/i);
+    await screen.findByText(/Looking for nerds/i);
   });
 });

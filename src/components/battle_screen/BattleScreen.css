@@ -1,31 +1,42 @@
 .BattleScreen {
   display: flex;
-  flex-direction: row; /* Горизонтальное расположение */
+  flex-direction: row;
+  /* Горизонтальное расположение */
   padding: 20px;
   background-color: white;
 }
 
 .left-column {
-  width: 30%; /* Ширина левого столбца */
+  width: 30%;
+  /* Ширина левого столбца */
   display: flex;
   flex-direction: column;
-  padding-right: 20px; /* Отступ справа */
+  padding-right: 20px;
+  /* Отступ справа */
 }
 
 .right-column {
-  width: 70%; /* Ширина правого столбца */
+  width: 70%;
+  /* Ширина правого столбца */
   display: flex;
-  flex-direction: row; /* Горизонтальное расположение */
-  padding-left: 10%; /* Отступ слева */
+  flex-direction: row;
+  /* Горизонтальное расположение */
+  padding-left: 10%;
+  /* Отступ слева */
 }
 
 .task-container {
-  background-color: #fff; /* Белый фон для блока */
-  border: 1px solid #ddd; /* Светлая рамка */
-  border-radius: 8px; /* Закругленные углы */
+  background-color: #fff;
+  /* Белый фон для блока */
+  border: 1px solid #ddd;
+  /* Светлая рамка */
+  border-radius: 8px;
+  /* Закругленные углы */
   padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для блока */
-  margin-bottom: 20px; /* Отступ снизу для блока с кнопками */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Тень для блока */
+  margin-bottom: 20px;
+  /* Отступ снизу для блока с кнопками */
 }
 
 .button-cost-container {
@@ -34,100 +45,152 @@
   border-radius: 8px;
   padding: 15px;
   display: flex;
-  flex-wrap: wrap; /* Добавляем возможность переноса кнопок на новую строку */
-  margin-bottom: 20px; /* Отступ снизу для блоков кода */
+  flex-wrap: wrap;
+  /* Добавляем возможность переноса кнопок на новую строку */
+  margin-bottom: 20px;
+  /* Отступ снизу для блоков кода */
 }
 
 .buttons-column {
   display: flex;
   flex-direction: column;
-  width: 100%; /* Ширина колонки кнопок */
+  width: 100%;
+  /* Ширина колонки кнопок */
 }
 
 .cost-column {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  width: 100%; /* Ширина колонки стоимости */
+  width: 100%;
+  /* Ширина колонки стоимости */
 }
 
 .action-button {
-  margin-bottom: 10px; /* Отступ между кнопками */
-  padding: 10px; /* Внутренний отступ */
-  background-color: #ffcc00; /* Цвет фона кнопок */
-  color: black; /* Цвет текста */
-  border: none; /* Без рамки */
-  border-radius: 4px; /* Закругленные углы */
-  cursor: pointer; /* Курсор в виде указателя */
+  margin-bottom: 10px;
+  /* Отступ между кнопками */
+  padding: 10px;
+  /* Внутренний отступ */
+  background-color: #ffcc00;
+  /* Цвет фона кнопок */
+  color: black;
+  /* Цвет текста */
+  border: none;
+  /* Без рамки */
+  border-radius: 4px;
+  /* Закругленные углы */
+  cursor: pointer;
+  /* Курсор в виде указателя */
 }
 
 .action-button:hover {
-  background-color: #ffcc00; /* Темный цвет при наведении */
+  background-color: #ffcc00;
+  /* Темный цвет при наведении */
 }
 
 .cost-numbers {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Выравнивание по правому краю */
+  align-items: flex-end;
+  /* Выравнивание по правому краю */
 }
 
 .code-blocks {
   display: flex;
-  flex-direction: row; /* Горизонтальное расположение */
-  justify-content: space-between; /* Равномерное распределение блоков кода */
-  width: 100%; /* Ширина контейнера */
+  flex-direction: row;
+  /* Горизонтальное расположение */
+  justify-content: space-between;
+  /* Равномерное распределение блоков кода */
+  width: 100%;
+  /* Ширина контейнера */
 }
 
 .code-block {
-  background-color: #fff; /* Белый фон для блоков кода */
-  border: 1px solid #ddd; /* Светлая рамка */
-  border-radius: 8px; /* Закругленные углы */
+  background-color: #fff;
+  /* Белый фон для блоков кода */
+  border: 1px solid #ddd;
+  /* Светлая рамка */
+  border-radius: 8px;
+  /* Закругленные углы */
   padding: 15px;
-  margin-bottom: 20px; /* Отступ между блоками кода */
-  width: 48%; /* Ширина каждого блока кода */
-  box-sizing: border-box; /* Учитывать padding в ширине */
+  margin-bottom: 20px;
+  /* Отступ между блоками кода */
+  width: 48%;
+  /* Ширина каждого блока кода */
+  box-sizing: border-box;
+  /* Учитывать padding в ширине */
 }
 
 .code-input {
-  width: 100%; /* Занимать всю ширину блока */
-  height: 100px; /* Высота текстового поля */
-  margin-bottom: 10px; /* Отступ снизу */
-  padding: 10px; /* Внутренний отступ */
-  border: 1px solid #ddd; /* Светлая рамка */
-  border-radius: 4px; /* Закругленные углы */
-  box-sizing: border-box; /* Учитывать padding в ширине */
+  width: 100%;
+  /* Занимать всю ширину блока */
+  height: 100px;
+  /* Высота текстового поля */
+  margin-bottom: 10px;
+  /* Отступ снизу */
+  padding: 10px;
+  /* Внутренний отступ */
+  border: 1px solid #ddd;
+  /* Светлая рамка */
+  border-radius: 4px;
+  /* Закругленные углы */
+  box-sizing: border-box;
+  /* Учитывать padding в ширине */
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between; /* Равномерное распределение кнопок */
-  margin-top: 10px; /* Отступ сверху */
+  justify-content: space-between;
+  /* Равномерное распределение кнопок */
+  margin-top: 10px;
+  /* Отступ сверху */
 }
 
 .button-group button {
-  padding: 10px; /* Внутренний отступ */
-  background-color: #ffcc00; /* Цвет фона кнопок */
-  color: black; /* Цвет текста */
-  border: none; /* Без рамки */
-  border-radius: 4px; /* Закругленные углы */
-  cursor: pointer; /* Курсор в виде указателя */
-  margin-bottom: 10px; /* Отступ между кнопками */
+  padding: 10px;
+  /* Внутренний отступ */
+  background-color: #ffcc00;
+  /* Цвет фона кнопок */
+  color: black;
+  /* Цвет текста */
+  border: none;
+  /* Без рамки */
+  border-radius: 4px;
+  /* Закругленные углы */
+  cursor: pointer;
+  /* Курсор в виде указателя */
+  margin-bottom: 10px;
+  /* Отступ между кнопками */
 }
 
 .button-group button:hover {
-  background-color: #218838; /* Темный цвет при наведении */
+  background-color: #218838;
+  /* Темный цвет при наведении */
 }
 
 .points-button {
-  padding: 10px; /* Внутренний отступ */
-  background-color: #ffcc00; /* Цвет фона кнопок */
-  color: black; /* Цвет текста */
-  border: none; /* Без рамки */
-  border-radius: 4px; /* Закругленные углы */
-  cursor: pointer; /* Курсор в виде указателя */
-  margin-bottom: 10px; /* Отступ между кнопками */
+  padding: 10px;
+  /* Внутренний отступ */
+  background-color: #ffcc00;
+  /* Цвет фона кнопок */
+  color: black;
+  /* Цвет текста */
+  border: none;
+  /* Без рамки */
+  border-radius: 4px;
+  /* Закругленные углы */
+  cursor: pointer;
+  /* Курсор в виде указателя */
+  margin-bottom: 10px;
+  /* Отступ между кнопками */
 }
 
 .points-button:hover {
-  background-color: #ffcc00; /* Темный цвет при наведении */
+  background-color: #ffcc00;
+  /* Темный цвет при наведении */
+}
+
+.invisible {
+  color: transparent !important;
+  background-color: transparent !important;
 }

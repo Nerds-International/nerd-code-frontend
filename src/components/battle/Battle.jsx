@@ -1,9 +1,9 @@
 import "./Battle.css";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { languageStore } from "../../store/language/LanguageStore";
+import { webSocketStore } from "../../store/socket/WebSocketStore";
 
 const Battle = observer(() => {
   return (
@@ -18,34 +18,42 @@ const MatchFinder = observer(() => {
   const [loading, setLoading] = useState(false);
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
   const navigate = useNavigate();
+  const { socket } = webSocketStore;
+
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('opponentJoined', (data) => {
+        console.log('Opponent joined:', data);
+        setMatch(true);
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/battle", { state: { battleId: data.battleId } })
+        }, 2000);
+      });
+    }
+  }, [socket, navigate]);
 
   async function findMatch() {
     setLoading(true);
-
     try {
-      // const response = await fetch("https://example.com/find-match");
-      // const data = await response.json();
-
-      if (getCurrentLanguage() === "javascript") {
-        setTimeout(() => {
-          setMatch(true);
-        }, 1000);
-        setTimeout(() => {
-          setLoading(false);
-          navigate("/battle"); // Redirect to BattleScreen with a 2-second delay
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
-        setMatch(false);
-      }
+      // openNewWebSocket();
+      const response = await fetch("http://localhost:3000/battles/getKeys");
+      const data = await response.text();
+      const battleId = data;
+      joinBattle(battleId);
     } catch (error) {
       console.error("Error fetching match data:", error);
       setTimeout(() => {
         setLoading(false);
       }, 2000);
       setMatch(false);
+    }
+  }
+
+  function joinBattle(battleId) {
+    if (socket) {
+      socket.emit('joinBattle', battleId);
     }
   }
 

@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 class EnergyStore {
-    energy = 8;
+    energy = 10;
     maxEnergy = 10;
     refillRate = 1;
     interval = null;

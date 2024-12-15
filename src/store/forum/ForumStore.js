@@ -3,23 +3,28 @@ import {makeAutoObservable} from "mobx";
 class ForumStore {
 
   /* ================== mock =========================== */
-  topics = Array.from({length: 50}, (_, index) => ({
-    id: `${index}`,
-    author: 'RomaZZZ',
-    time: new Date().toLocaleDateString(),
-    title: `Topic ${index}`,
-    text: 'Чето прям спрашиваю много текста здесь',
-    likes: Math.floor(Math.random() * 1488),
-    messages: Array.from({length: Math.floor(Math.random() * 5) }, (_, messageIndex) => ({
-      id: `${messageIndex}`,
-      author: 'RomaXXX',
-      time: new Date().toLocaleDateString(),
-      text: 'Чето отвечаю'
-    }))
-  }))
+  // topics = Array.from({length: 50}, (_, index) => ({
+  //   id: `${index}`,
+  //   author: 'RomaZZZ',
+  //   time: new Date().toLocaleDateString(),
+  //   title: `Topic ${index}`,
+  //   text: 'Чето прям спрашиваю много текста здесь',
+  //   likes: Math.floor(Math.random() * 1488),
+  //   messages: Array.from({length: Math.floor(Math.random() * 5) }, (_, messageIndex) => ({
+  //     id: `${messageIndex}`,
+  //     author: 'RomaXXX',
+  //     time: new Date().toLocaleDateString(),
+  //     text: 'Чето отвечаю'
+  //   }))
+  // }))
+  topics = [];
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setTopics(newTopics) {
+    this.topics = newTopics;
   }
 
   getTopics = (filter = {}) => {

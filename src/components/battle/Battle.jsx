@@ -36,6 +36,7 @@ const MatchFinder = observer(() => {
   async function findMatch() {
     setLoading(true);
     try {
+      // openNewWebSocket();
       const response = await fetch("http://localhost:3000/battles/getKeys");
       const data = await response.text();
       const battleId = data;

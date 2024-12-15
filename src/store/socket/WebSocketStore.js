@@ -28,6 +28,11 @@ class WebSocketStore {
             this.socket.close();
         }
     };
+
+    openNewWebSocket = () => {
+        this.closeWebSocket();
+        this.initWebSocket();
+    };
 }
 
 export const webSocketStore = new WebSocketStore();

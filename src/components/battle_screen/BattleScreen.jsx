@@ -7,6 +7,7 @@ import { Table, Button } from 'antd';
 import energyStore from '../../store/energy/EnergyStore';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
+import { useNavigate } from "react-router-dom";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
@@ -170,7 +171,13 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
 
 const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown, lagCount, pressCounter, setPressCounter }) => {
   const { getCurrentLanguage } = languageStore;
-
+  const { closeWebSocket, initWebSocket } = webSocketStore;
+  const navigate = useNavigate();
+  const endMatch = () => {
+    closeWebSocket();
+    initWebSocket();
+    navigate("/search_battle");
+  }
   const handleButtonPress = (action) => {
     if (lagCount > 0) {
       setPressCounter(pressCounter + 1);
@@ -227,6 +234,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           <Button type="primary" onClick={() => handleButtonPress(() => console.log('Run'))}>Run</Button>
         </div>
       </div>
+      <Button type="primary" onClick={() => endMatch()}>END BATTLE()</Button>
     </div>
   );
 });

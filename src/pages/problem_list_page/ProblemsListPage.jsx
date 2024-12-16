@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import ListTask from "../../components/list_task/ListTask";
-import { Input, Radio, Card} from 'antd';
+import { Input, Radio, Card } from 'antd';
 import './ProblemsListPage.css';
 import problemsStore from "../../store/problem/ProblemsStore";
 
@@ -16,8 +16,7 @@ const ProblemsListPage = observer(() => {
         'hard': 3
     };
 
-    async function getAllProblems(page = 1, limit = 10) {
-
+    const fetchTasks = async (page = 1, limit = 10) => {
         try {
             const url = new URL('http://localhost:3000/tasks/list');
             url.searchParams.append('page', page);
@@ -36,36 +35,46 @@ const ProblemsListPage = observer(() => {
             }
 
             const data = await response.json();
-            const getTask = [];
-            for (let i = 0; i < data.total; i++){
-                getTask.push({ id: data.tasks[i]._id, name: data.tasks[i].title, description: data.tasks[i].description, difficulty: data.tasks[i].difficulty, likes: data.tasks[i].likes, dislikes: data.tasks[i].dislikes,  createdAt: data.tasks[i].created_at, testCases: data.tasks[i].test_cases});
-            }
-            store.setTask(getTask);
-            console.log(getTask)
+            const tasks = data.tasks.map(task => ({
+                id: task._id,
+                name: task.title,
+                description: task.description,
+                difficulty: task.difficulty,
+                likes: task.likes,
+                dislikes: task.dislikes,
+                createdAt: task.created_at,
+                testCases: task.test_cases
+            }));
+            store.setTask(tasks);
+            console.log(tasks);
         } catch (error) {
             console.error('Error fetching tasks:', error.message || 'Error fetching tasks');
         } finally {
-            console.log("nice")
+            console.log("nice");
         }
-    }
+    };
 
     useEffect(() => {
-        getAllProblems(1, 10);
+        fetchTasks(1, 10);
     }, []);
 
-    const filteredTasks = store.tasks.filter(task => {
-        const matchesDifficulty = filter === 'all' || filter === 'Easy to Hard' || filter === 'Hard to Easy' || task.difficulty === filter;
-        const matchesName = task.name.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesDifficulty && matchesName;
-    }).sort((a, b) => {
-        if (filter === 'Easy to Hard') {
-            return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-        }
-        if (filter === 'Hard to Easy') {
-            return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
-        }
-        return 0;
-    });
+    const filterTasks = () => {
+        return store.tasks.filter(task => {
+            const matchesDifficulty = filter === 'all' || filter === 'Easy to Hard' || filter === 'Hard to Easy' || task.difficulty === filter;
+            const matchesName = task.name.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesDifficulty && matchesName;
+        }).sort((a, b) => {
+            if (filter === 'Easy to Hard') {
+                return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+            }
+            if (filter === 'Hard to Easy') {
+                return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+            }
+            return 0;
+        });
+    };
+
+    const filteredTasks = filterTasks();
 
     return (
         <div className="problems-list-page">

@@ -23,7 +23,9 @@
     border: 2px solid black;
     border-top: none;
     display: flex;
+    align-items: center;
     padding-left: 20px;
+    font-family: 'RopaSans';
 }
 
 .additional-info {
@@ -109,4 +111,19 @@ select {
 
 .big-difficulty-circle.hard {
     background-color: #ffc012;
+}
+
+.problem-results-text {
+    white-space: pre-wrap;
+    text-align: center;
+    margin: 10px;
+    font-family: 'RopaSans';
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
 }

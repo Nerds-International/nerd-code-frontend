@@ -19,20 +19,26 @@ const MatchFinder = observer(() => {
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
   const navigate = useNavigate();
   const { socket } = webSocketStore;
+  const [joined, setJoined] = useState(false);
 
 
   useEffect(() => {
     if (socket) {
       socket.on('opponentJoined', (data) => {
-        console.log('Opponent joined:', data);
-        setMatch(true);
-        setTimeout(() => {
-          setLoading(false);
-          navigate("/battle", { state: { battleId: data.battleId } })
-        }, 2000);
+        if(joined){
+          console.log('Opponent joined:', data.battleId);
+          setMatch(true);
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/battle", { state: { battleId: data.battleId } })
+            setJoined(false);
+            socket.emit('startMatch', data.battleId);
+          }, 2000);
+        }
+        setJoined(true);
       });
     }
-  }, [socket, navigate]);
+  }, [socket, navigate, joined, setJoined]);
 
   async function findMatch() {
     setLoading(true);

@@ -115,15 +115,20 @@ select {
 
 .problem-results-text {
     white-space: pre-wrap;
-    text-align: center;
+    /* text-align: center; */
     margin: 10px;
     font-family: 'RopaSans';
 }
 
-.red {
+.problem-result-red {
     color: red;
 }
 
-.green {
+.problem-result-green {
     color: green;
+}
+
+.problem-result-error {
+    color: red;
+    text-decoration: underline;
 }

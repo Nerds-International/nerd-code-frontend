@@ -37,7 +37,7 @@ const ProblemPage = observer(() => {
         }
         tests_output = tests_output.slice(0, -2) + `];`;
       } else {
-        functionTemplate = `def ${functionName}() :\n    // Your function code here\n    return 0 \n`;
+        functionTemplate = `def ${functionName}() :\n   return 0 \n`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
             tests +
@@ -76,10 +76,39 @@ const ProblemPage = observer(() => {
     }
   };
 
-  const handleTest = () => {
-    const combined = `${code2}\n${code3}`;
-    setCombinedCode(combined);
+  const handleTest = async () => {
+    if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
+      try {
+        const response = await fetch('http://localhost:3000/tasks/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            code: code2,
+            tests: [
+              { input: '[3, 1, 2]', expected: '[1, 2, 3]' },
+              { input: '[5, 4, 6]', expected: '[4, 5, 6]' },
+            ],
+          }),
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.log(errorData)
+        }
+  
+        const result = await response.json();
+        console.log('Execution Result:', result);
+      } catch (error) {
+        console.error('Error executing Python code:', error.message);
+      }
+    } else {
+      const combined = `${code2}\n${code3}`;
+      setCombinedCode(combined);
+    }
   };
+  
 
   const handleResult = () => {
     if (!result) return "";

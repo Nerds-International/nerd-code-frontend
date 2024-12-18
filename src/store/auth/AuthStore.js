@@ -138,6 +138,8 @@ class AuthStore {
   setAuthenticated(value) {
     this.isAuthenticated = value;
   }
+
+  
 }
 
 export const authStore = new AuthStore();

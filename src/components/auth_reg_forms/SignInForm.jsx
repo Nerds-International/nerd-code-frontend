@@ -9,8 +9,13 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-     authStore.signIn(values.email, values.password);
-   };
+    authStore.signIn(values.email, values.password);
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    window.location.assign('http://localhost:3000/auth/github');
+  };
 
   return (
     <div className="auth-form-container">
@@ -44,7 +49,7 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
         <a onClick={toggleToSignUp}>Sign Up</a>
       </div>
       <div className="auth-alt-options">
-        <Button type="default">
+        <Button onClick={handleLogin} type="default">
           Sign in with GitHub
         </Button>
       </div>

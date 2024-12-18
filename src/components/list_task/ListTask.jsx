@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import './ListTask.css';
+import {Link} from "react-router-dom";
 
 const ListTask = observer(({ tasks }) => {
     return (
@@ -11,7 +12,7 @@ const ListTask = observer(({ tasks }) => {
                         <h3>{task.name}</h3>
                     </div>
                     <p>{task.description.slice(0, 50)}...</p>
-                    <a href={`/problem?id=${task.id}`} className="task-link">View Task</a>
+                    <Link to={`/problem?id=${task.id}`} className="task-link">View Task</Link>
                 </div>
             ))}
         </div>

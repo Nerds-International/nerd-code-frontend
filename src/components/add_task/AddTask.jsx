@@ -78,13 +78,6 @@ const Task = () => {
                 }),
             });
 
-            const data = await response.json();
-
-            if (data.success) {
-                setSuccess(true);
-            } else {
-                setSuccess(false);
-            }
         } catch (error) {
             console.error("Error submitting task:", error);
             setSuccess(false);

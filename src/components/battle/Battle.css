@@ -1,70 +1,94 @@
 .Battle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: "RopaSans";
-    padding: 20px;
-  }
-  
-  .match-finder {
-    display: block;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .language-selector {
-    margin-bottom: 20px;
-  }
-  
-  .language-selector label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  .language-selector select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .loading {
-    color: #2c2c2c;
-    margin-bottom: 20px;
-    text-align: center;  
-    font-family: "RopaSans";
-    font-size: x-large;
-  }
-  
-  .find-match {
-    text-align: center;
-  }
-  
-  .find-match-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #FFCC00;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "RopaSans";
-  }
-  
-  .find-match-button:hover {
-    background-color: white;
-    outline: 1px solid black;
-    border-radius: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "RopaSans";
+  padding: 20px;
 }
 
-    .find-match-button:active {
-    background-color: #E6E6E6;
-    outline: 1px solid black;
-    border-radius: 35px;
+.match-finder {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: 200px; 
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.language-selector {
+  margin-bottom: 20px;
+}
+
+.language-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.language-selector select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.find-match {
+  text-align: center;
+}
+
+.find-match-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #FFCC00;
+  color: black;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  font-family: "RopaSans";
+}
+
+.find-match-button:hover {
+  background-color: white;
+  outline: 1px solid black;
+  border-radius: 35px;
+}
+
+.find-match-button:active {
+  background-color: #E6E6E6;
+  outline: 1px solid black;
+  border-radius: 35px;
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  color: #2c2c2c;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  text-align: center;
+  font-family: "RopaSans";
+  font-size: x-large;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2b2b2b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

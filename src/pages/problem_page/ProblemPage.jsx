@@ -32,7 +32,7 @@ const ProblemPage = observer(() => {
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
             tests +
-            `const result${i} = ${functionName}(${task.testCases[i].input}) === ${task.testCases[i].expected_output};\n`;
+            `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
           tests_output = tests_output + `result${i}, `;
         }
         tests_output = tests_output.slice(0, -2) + `];`;
@@ -83,14 +83,27 @@ const ProblemPage = observer(() => {
 
   const handleResult = () => {
     if (!result) return "";
-
+  
     const resultArray = JSON.stringify(result).slice(1, -1).split(",");
-    return resultArray.map((element, index) =>
-      element === 'true' ?
-        `<span class="green">Test${index + 1}: [✓]</span>\n` : //TODO: если все тесты == true, выводить All tests passed!
-        `<span class="red">Test${index + 1}: [✗]</span>\n`
-    ).join('');
+    const errorArray = error ? [error] : [];
+  
+    const combinedResults = resultArray.map((element, index) => {
+      let expectedValue = null;
+      try {
+        expectedValue = task.testCases[index].expected_output;
+      } catch (error) {
+        console.log("Expected value detected, but no test case found");
+        expectedValue = true; //FIXME: При добавлении const result3, const result4, ... Срабатывает этот catch!
+      }
+      return element === 'true' ?
+        `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
+        `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
+    }).concat(errorArray.map(err => `<span class="problem-result-error">\nError: ${err}!!!</span>\n`));
+  
+    return combinedResults.join('');
   };
+  
+  
 
   if (!task) {
     return <div>Task not found</div>;
@@ -108,15 +121,14 @@ const ProblemPage = observer(() => {
           </span>
           <p>{task.description}</p>
         </div>
-
+  
         <div className="tests">
           <h2>Results:</h2>
-          {result && (
+          {(result || error) && (
             <pre className="problem-results-text" dangerouslySetInnerHTML={{ __html: handleResult() }} />
           )}
-          {error && <div>Error: {error}</div>}
         </div>
-
+  
         <div className="additional-info">
           <h3>Total Solutions: 267</h3>
           <div className="like-dislike-buttons">
@@ -135,7 +147,7 @@ const ProblemPage = observer(() => {
           </div>
         </div>
       </div>
-
+  
       <div className="code-block">
         <div className="language">
           <label htmlFor="language-select">
@@ -190,7 +202,7 @@ const ProblemPage = observer(() => {
         </div>
       </div>
     </div>
-  );
+  );  
 });
 
 export default ProblemPage;

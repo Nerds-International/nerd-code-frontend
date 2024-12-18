@@ -4,10 +4,10 @@ import {mainStore} from "./MainStore";
 describe('MainStore',() => {
 
   test('getNerds',() => {
-    expect(mainStore.getNerds() === mainStore.nerds)
+    expect(mainStore.getNerds() === mainStore.nerds).toBe(true)
   })
 
   test('getNews', () => {
-    expect(mainStore.getNews() === mainStore.news)
+    expect(mainStore.getNews() === mainStore.news).toBe(true)
   })
 })

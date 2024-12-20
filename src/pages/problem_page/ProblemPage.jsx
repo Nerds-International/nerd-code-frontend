@@ -1,11 +1,12 @@
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import {observer} from "mobx-react-lite";
+import {useEffect, useState} from "react";
+import {useSearchParams} from "react-router-dom";
 import problemsStore from "../../store/problem/ProblemsStore";
 import "./ProblemPage.css";
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import { languageStore } from "../../store/language/LanguageStore";
+import {languageStore} from "../../store/language/LanguageStore";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
+import VisualizingTestCase from "../../components/visualizing_test_case/VisualizingTestCase";
 
 const ProblemPage = observer(() => {
   const [searchParams] = useSearchParams();
@@ -150,14 +151,30 @@ const ProblemPage = observer(() => {
           </span>
           <p>{task.description}</p>
         </div>
-  
+
+        <div className="test-case-visualizing">
+          <h2 style={{ marginTop: 0, paddingTop: 20 }}>Examples</h2>
+          {task.testCases.slice(0, 2).map(testCase => (
+            <VisualizingTestCase
+              data={{
+                input: testCase.input,
+                output: testCase.expected_output,
+              }}
+              type={{
+                input: parseInt(task.input_type),
+                output: parseInt(task.output_type),
+              }}
+            />
+          ))}
+        </div>
+
         <div className="tests">
           <h2>Results:</h2>
           {(result || error) && (
-            <pre className="problem-results-text" dangerouslySetInnerHTML={{ __html: handleResult() }} />
+            <pre className="problem-results-text" dangerouslySetInnerHTML={{__html: handleResult()}}/>
           )}
         </div>
-  
+
         <div className="additional-info">
           <h3>Total Solutions: 267</h3>
           <div className="like-dislike-buttons">
@@ -176,7 +193,7 @@ const ProblemPage = observer(() => {
           </div>
         </div>
       </div>
-  
+
       <div className="code-block">
         <div className="language">
           <label htmlFor="language-select">

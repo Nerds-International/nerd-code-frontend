@@ -4,14 +4,64 @@ import {mainStore} from "../../store/main/MainStore";
 import {forumStore} from "../../store/forum/ForumStore";
 import Meta from "antd/lib/card/Meta";
 import TopicCard from "../../components/topic_card/TopicCard";
+import {useEffect} from "react";
 
 const { Title } = Typography;
 
 const MainPage = observer(() => {
-  const { getNews } = mainStore;
-  const { getTopics } = forumStore;
+    const { getNews } = mainStore;
+    const { getTopics } = forumStore;
+    const store = forumStore;
+    const fetchTopics = async (page = 1, limit = 10) => {
+        try {
+            const url = new URL('http://localhost:3000/forums');
+            url.searchParams.append('page', page);
+            url.searchParams.append('limit', limit);
 
-  return (
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error fetching topics');
+            }
+
+            const data = await response.json();
+            const getTopic = data.map(item => {
+                const messages = item.comments.map(comment => ({
+                    id: comment._id,
+                    author: comment.user_id,
+                    time: comment.created_at,
+                    text: comment.comment
+                }));
+                return {
+                    id: item._id,
+                    author: item.author_id,
+                    time: item.created_at,
+                    title: item.title,
+                    text: item.description,
+                    likes: item.likes,
+                    messages: messages
+                };
+            });
+            store.setTopics(getTopic);
+            console.log(store.getTopics());
+        } catch (error) {
+            console.error('Error fetching topics:', error.message || 'Error fetching topics');
+        } finally {
+            console.log("nice");
+        }
+    };
+
+    useEffect(() => {
+        fetchTopics(1, 10);
+    }, []);
+
+    return (
     <Flex
       vertical={false}
       style={{

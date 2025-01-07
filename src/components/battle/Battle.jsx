@@ -20,11 +20,12 @@ const MatchFinder = observer(() => {
   const navigate = useNavigate();
   const { getSocket, setSocket, initWebSocket, closeWebSocket } = webSocketStore;
   const [joined, setJoined] = useState(false);
+  const [searchingOpponent, setSearchingOpponent] = useState(false);
 ;
 
 
   useEffect(() => {
-    if (getSocket()) {
+    if (getSocket() & searchingOpponent) {
       let socket = getSocket();
       socket.on('opponentJoined', (data) => {
         if(joined){
@@ -40,7 +41,7 @@ const MatchFinder = observer(() => {
         setJoined(true);
       });
     }
-  }, [getSocket, navigate, joined, setJoined]);
+  }, [getSocket, navigate, joined, setJoined, searchingOpponent]);
 
   async function findMatch() {
     setLoading(true);
@@ -63,6 +64,7 @@ const MatchFinder = observer(() => {
   function joinBattle(battleId) {
     if (getSocket()) {
       getSocket().emit('joinBattle', battleId);
+      setSearchingOpponent(true);
     } else {
       console.log("NO SOCKET")
     }

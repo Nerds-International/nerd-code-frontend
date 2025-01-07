@@ -18,12 +18,14 @@ const MatchFinder = observer(() => {
   const [loading, setLoading] = useState(false);
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
   const navigate = useNavigate();
-  const { socket } = webSocketStore;
+  const { getSocket, setSocket, initWebSocket, closeWebSocket } = webSocketStore;
   const [joined, setJoined] = useState(false);
+;
 
 
   useEffect(() => {
-    if (socket) {
+    if (getSocket()) {
+      let socket = getSocket();
       socket.on('opponentJoined', (data) => {
         if(joined){
           console.log('Opponent joined:', data.battleId);
@@ -38,28 +40,31 @@ const MatchFinder = observer(() => {
         setJoined(true);
       });
     }
-  }, [socket, navigate, joined, setJoined]);
+  }, [getSocket, navigate, joined, setJoined]);
 
   async function findMatch() {
     setLoading(true);
     try {
-      // openNewWebSocket();
+      setSocket(initWebSocket());
       const response = await fetch("http://localhost:3000/battles/getKeys");
       const data = await response.text();
       const battleId = data;
-      joinBattle(battleId);
+      setTimeout(joinBattle(battleId),2000)
     } catch (error) {
       console.error("Error fetching match data:", error);
       setTimeout(() => {
         setLoading(false);
       }, 2000);
       setMatch(false);
+      closeWebSocket();
     }
   }
 
   function joinBattle(battleId) {
-    if (socket) {
-      socket.emit('joinBattle', battleId);
+    if (getSocket()) {
+      getSocket().emit('joinBattle', battleId);
+    } else {
+      console.log("NO SOCKET")
     }
   }
 

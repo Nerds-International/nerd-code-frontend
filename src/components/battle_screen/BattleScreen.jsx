@@ -12,7 +12,8 @@ import { useNavigate } from "react-router-dom";
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
   const [code2, setCode2] = useState("console.log(\"Enemy Nerd\");\nconsole.log(\"evil nerds attack!\")");
-  const [isUpsideDown, setIsUpsideDown] = useState(false);
+  const [isUpsideDown1, setIsUpsideDown1] = useState(false);
+  const [isUpsideDown2, setIsUpsideDown2] = useState(false);
   const [lagCount, setLagCount] = useState(0);
   const [pressCounter, setPressCounter] = useState(0);
   const location = useLocation();
@@ -45,18 +46,27 @@ const BattleScreen = observer(() => {
     }
   };
 
-  const reverseCode = () => {
-    setIsUpsideDown(true);
-    setTimeout(() => setIsUpsideDown(false), 5000);
+  const reverseCode = (target) => {
+    if(target == 1){
+      setIsUpsideDown1(true);
+      setTimeout(() => setIsUpsideDown1(false), 5000); 
+    } else {
+      setIsUpsideDown2(true);
+      setTimeout(() => setIsUpsideDown2(false), 5000);
+    }
   };
 
-  const applyLag = () => {
+  const applyLag = (target) => {
     setLagCount(Math.floor(Math.random() * 3) + 3);
     setPressCounter(0);
   };
 
-  const eraseCharacters = () => {
-    setCode2(code2.slice(10));
+  const eraseCharacters = (target) => {
+    if(target == 1){
+      setCode1(code1.slice(10));  
+    } else {
+      setCode2(code2.slice(10));
+    }
   };
 
   useEffect(() => {
@@ -80,7 +90,8 @@ const BattleScreen = observer(() => {
           setCode1={setCode1}
           code2={code2}
           setCode2={setCode2}
-          isUpsideDown={isUpsideDown}
+          isUpsideDown1={isUpsideDown1}
+          isUpsideDown2={isUpsideDown2}
           lagCount={lagCount}
           pressCounter={pressCounter}
           setPressCounter={setPressCounter}
@@ -169,7 +180,7 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
   );
 });
 
-const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown, lagCount, pressCounter, setPressCounter }) => {
+const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1,  isUpsideDown2, lagCount, pressCounter, setPressCounter }) => {
   const { getCurrentLanguage } = languageStore;
   const { closeWebSocket, initWebSocket } = webSocketStore;
   const navigate = useNavigate();
@@ -192,7 +203,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
 
   return (
     <div className="code-blocks">
-      <div className="code-block">
+      <div className="code-block" style={{ transform: isUpsideDown1 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
         <CodeEditor
           className="w-tc-editor-var"
           minHeight={500}
@@ -213,7 +224,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           <button onClick={() => handleButtonPress(() => console.log('Run'))}>Run</button>
         </div>
       </div>
-      <div className="code-block" style={{ transform: isUpsideDown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+      <div className="code-block" style={{ transform: isUpsideDown2 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
         <CodeEditor
           className="w-tc-editor-var"
           minHeight={500}

@@ -24,24 +24,33 @@ const MatchFinder = observer(() => {
 ;
 
 
-  useEffect(() => {
-    if (getSocket() & searchingOpponent) {
-      let socket = getSocket();
-      socket.on('opponentJoined', (data) => {
-        if(joined){
-          console.log('Opponent joined:', data.battleId);
-          setMatch(true);
-          setTimeout(() => {
-            setLoading(false);
-            navigate("/battle", { state: { battleId: data.battleId } })
-            setJoined(false);
-            socket.emit('startMatch', data.battleId);
-          }, 2000);
-        }
+useEffect(() => {
+  if (searchingOpponent) {
+    let socket = getSocket();
+
+    const handleOpponentJoined = (data) => {
+      if (joined) {
+        console.log('Opponent joined:', data.battleId);
+        setMatch(true);
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/battle", { state: { battleId: data.battleId } });
+          setSearchingOpponent(false);
+          setJoined(false);
+          socket.emit('startMatch', data.battleId);
+        }, 2000);
+      } else {
         setJoined(true);
-      });
-    }
-  }, [getSocket, navigate, joined, setJoined, searchingOpponent]);
+      }
+    };
+
+    socket.on('opponentJoined', handleOpponentJoined);
+
+    return () => {
+      socket.off('opponentJoined', handleOpponentJoined);
+    };
+  }
+}, [getSocket, navigate, joined, setJoined, searchingOpponent]);
 
   async function findMatch() {
     setLoading(true);

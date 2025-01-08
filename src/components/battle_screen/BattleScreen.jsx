@@ -28,7 +28,7 @@ const BattleScreen = observer(() => {
 
       socket.on('codeUpdated', (data) => {
         console.log('Code updated:', data);
-        if (data.id != socket.id) {
+        if (data.id !== socket.id) {
           setCode2(data.code);
         }
         console.log("dataid" + data.id)
@@ -47,7 +47,7 @@ const BattleScreen = observer(() => {
   };
 
   const reverseCode = (target) => {
-    if(target == 1){
+    if(target === 1){
       setIsUpsideDown1(true);
       setTimeout(() => setIsUpsideDown1(false), 5000); 
     } else {
@@ -62,7 +62,7 @@ const BattleScreen = observer(() => {
   };
 
   const eraseCharacters = (target) => {
-    if(target == 1){
+    if(target === 1){
       setCode1(code1.slice(10));  
     } else {
       setCode2(code2.slice(10));
@@ -147,7 +147,7 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
   const dataSource = [
     {
       key: '1',
-      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 5); reverseCode(); }}>Перевернуть</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 5); reverseCode(2); }}>Перевернуть</Button>,
       cost: 5,
     },
     {
@@ -157,7 +157,7 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
     },
     {
       key: '3',
-      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 7); eraseCharacters(); }}>Стереть 10 символов</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 7); eraseCharacters(2); }}>Стереть 10 символов</Button>,
       cost: 7,
     },
   ];
@@ -238,6 +238,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            filter: "blur(5px)"
           }}
         />
         <div className="button-group">

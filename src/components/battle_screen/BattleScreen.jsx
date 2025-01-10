@@ -37,6 +37,15 @@ const BattleScreen = observer(() => {
       socket.on('error', (data) => {
         console.error('Error:', data.message);
       });
+
+      socket.on('useSkill', (data) => {
+        if (data.skill_name === "reverse") {
+          if (data.id !== socket.id) {
+            console.log(socket.id)
+            reverseCode(1);
+          }
+        }
+      });
     }
   }, [socket]);
 
@@ -53,6 +62,7 @@ const BattleScreen = observer(() => {
     } else {
       setIsUpsideDown2(true);
       setTimeout(() => setIsUpsideDown2(false), 5000);
+      socket.emit("useSkill", { battleId, skill_name: "reverse" })
     }
   };
 

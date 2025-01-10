@@ -8,6 +8,7 @@ import { languageStore } from "../../store/language/LanguageStore";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
 import VisualizingTestCase from "../../components/visualizing_test_case/VisualizingTestCase";
 import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
+// import ModalResult from "../../components/modal_result/ModalResult";
 
 const ProblemPage = observer(() => {
   const [searchParams] = useSearchParams();
@@ -196,6 +197,7 @@ const ProblemPage = observer(() => {
             <h2>{task.name}</h2>
           </span>
             <p>{task.description}</p>
+            {/*<ModalResult state={"Lose"} />*/}
           </div>
 
           <div className="test-case-visualizing">

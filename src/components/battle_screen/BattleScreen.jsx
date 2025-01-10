@@ -45,6 +45,13 @@ const BattleScreen = observer(() => {
             reverseCode(1);
           }
         }
+
+        if (data.skill_name === "erase") {
+          if (data.id !== socket.id) {
+            console.log(socket.id)
+            eraseCharacters(1);
+          }
+        }
       });
     }
   }, [socket]);
@@ -75,7 +82,7 @@ const BattleScreen = observer(() => {
     if (target === 1) {
       setCode1(code1.slice(10));
     } else {
-      setCode2(code2.slice(10));
+      socket.emit("useSkill", { battleId, skill_name: "erase" })
     }
   };
 

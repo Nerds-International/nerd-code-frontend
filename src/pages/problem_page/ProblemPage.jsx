@@ -7,6 +7,8 @@ import CodeEditor from "@uiw/react-textarea-code-editor";
 import { languageStore } from "../../store/language/LanguageStore";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
 import VisualizingTestCase from "../../components/visualizing_test_case/VisualizingTestCase";
+import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
+// import ModalResult from "../../components/modal_result/ModalResult";
 
 const ProblemPage = observer(() => {
   const [searchParams] = useSearchParams();
@@ -21,6 +23,13 @@ const ProblemPage = observer(() => {
   const [combinedCode, setCombinedCode] = useState("");
   const { result, error } = useCodeRunnerJS(combinedCode);
   const store = problemsStore;
+
+  // Пример того, как это выглядит
+  const attempt = [
+    { id: 1, taskId: 101, userName: 'romanNGG', language: 'JS', result: 'Pass', time: '2025-01-01 10:00:00' },
+    { id: 2, taskId: 102, userName: 'romanNGG', language: 'Python', result: 'Fail', time: '2025-01-02 11:00:00' },
+    { id: 3, taskId: 102, userName: 'romanNGG', language: 'Python', result: 'Fail', time: '2025-01-02 11:00:00' },
+  ];
 
   useEffect(() => {
     const fetchTaskById = async (taskId) => {
@@ -188,6 +197,7 @@ const ProblemPage = observer(() => {
             <h2>{task.name}</h2>
           </span>
             <p>{task.description}</p>
+            {/*<ModalResult state={"Lose"} />*/}
           </div>
 
           <div className="test-case-visualizing">
@@ -230,6 +240,8 @@ const ProblemPage = observer(() => {
               </button>
             </div>
           </div>
+
+          <ProblemAttemptTable data={attempt} />
         </div>
 
         <div className="code-block">

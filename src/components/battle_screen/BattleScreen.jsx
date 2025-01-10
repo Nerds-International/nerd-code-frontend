@@ -14,11 +14,11 @@ const BattleScreen = observer(() => {
   const [code2, setCode2] = useState("console.log(\"Enemy Nerd\");\nconsole.log(\"evil nerds attack!\")");
   const [isUpsideDown1, setIsUpsideDown1] = useState(false);
   const [isUpsideDown2, setIsUpsideDown2] = useState(false);
-  const [lagCount, setLagCount] = useState(0);
   const [pressCounter, setPressCounter] = useState(0);
   const location = useLocation();
   const battleId = location.state?.battleId || "defaultBattleId";
   const { socket } = webSocketStore;
+  const [blurValue, setBlurValue] = useState(3);
 
   useEffect(() => {
     if (socket) {
@@ -47,23 +47,23 @@ const BattleScreen = observer(() => {
   };
 
   const reverseCode = (target) => {
-    if(target === 1){
+    if (target === 1) {
       setIsUpsideDown1(true);
-      setTimeout(() => setIsUpsideDown1(false), 5000); 
+      setTimeout(() => setIsUpsideDown1(false), 5000);
     } else {
       setIsUpsideDown2(true);
       setTimeout(() => setIsUpsideDown2(false), 5000);
     }
   };
 
-  const applyLag = (target) => {
-    setLagCount(Math.floor(Math.random() * 3) + 3);
-    setPressCounter(0);
+  const seeThrough = () => {
+    setBlurValue(0);
+    setTimeout(() => setBlurValue(3), 5000);
   };
 
   const eraseCharacters = (target) => {
-    if(target === 1){
-      setCode1(code1.slice(10));  
+    if (target === 1) {
+      setCode1(code1.slice(10));
     } else {
       setCode2(code2.slice(10));
     }
@@ -79,7 +79,7 @@ const BattleScreen = observer(() => {
         <TaskDescription />
         <ButtonCostContainer
           reverseCode={reverseCode}
-          applyLag={applyLag}
+          seeThrough={seeThrough}
           eraseCharacters={eraseCharacters}
         />
         <EnergyBar />
@@ -92,7 +92,7 @@ const BattleScreen = observer(() => {
           setCode2={setCode2}
           isUpsideDown1={isUpsideDown1}
           isUpsideDown2={isUpsideDown2}
-          lagCount={lagCount}
+          blurValue={blurValue}
           pressCounter={pressCounter}
           setPressCounter={setPressCounter}
         />
@@ -141,7 +141,7 @@ const EnergyBar = observer(() => {
   );
 });
 
-const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }) => {
+const ButtonCostContainer = observer(({ reverseCode, seeThrough, eraseCharacters }) => {
   const { energy, setEnergy } = energyStore;
 
   const dataSource = [
@@ -152,7 +152,7 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
     },
     {
       key: '2',
-      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 3); applyLag(); }}>Лаг</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 3); seeThrough(); }}>Подглядеть</Button>,
       cost: 3,
     },
     {
@@ -180,7 +180,7 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
   );
 });
 
-const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1,  isUpsideDown2, lagCount, pressCounter, setPressCounter }) => {
+const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue, pressCounter, setPressCounter }) => {
   const { getCurrentLanguage } = languageStore;
   const { closeWebSocket, initWebSocket } = webSocketStore;
   const navigate = useNavigate();
@@ -190,15 +190,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
     navigate("/search_battle");
   }
   const handleButtonPress = (action) => {
-    if (lagCount > 0) {
-      setPressCounter(pressCounter + 1);
-      if (pressCounter + 1 >= lagCount) {
-        setPressCounter(0);
-        action();
-      }
-    } else {
-      action();
-    }
+    action();
   };
 
   return (
@@ -238,7 +230,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-            filter: "blur(5px)"
+            filter: "blur(" + blurValue + "px)"
           }}
         />
         <div className="button-group">

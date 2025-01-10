@@ -1,9 +1,10 @@
-import {observer} from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
+import './ProblemAttemptTable.css';
 
-const ProblemAttemptTable = observer( ({ data }) => {
+const ProblemAttemptTable = observer(({ data }) => {
     return (
-        <table border="1" cellPadding="5" cellSpacing="0">
-            <thead>
+        <table className="problem-attempt-table">
+            <thead className="table-header">
             <tr>
                 <th>ID</th>
                 <th>Task ID</th>
@@ -13,9 +14,9 @@ const ProblemAttemptTable = observer( ({ data }) => {
                 <th>Time</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody className="table-body">
             {data.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.id} className="table-row">
                     <td>{item.id}</td>
                     <td>{item.taskId}</td>
                     <td>{item.userName}</td>

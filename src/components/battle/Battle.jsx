@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { languageStore } from "../../store/language/LanguageStore";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
+import Cookies from 'js-cookie';
 
 const Battle = observer(() => {
   return (
@@ -56,7 +57,20 @@ const MatchFinder = observer(() => {
     setLoading(true);
     try {
       setSocket(initWebSocket());
-      const response = await fetch("http://localhost:3000/battles/getKeys");
+
+      const idFromCookie = Cookies.get('id');
+      const accessTokenFromCookie = Cookies.get('accessToken');
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          '_id': idFromCookie,
+          'accessToken': accessTokenFromCookie,
+        },
+      };
+
+      const response = await fetch("http://localhost:3000/battles/getKeys", requestOptions);
       const data = await response.text();
       const battleId = data;
       setTimeout(joinBattle(battleId), 2000)

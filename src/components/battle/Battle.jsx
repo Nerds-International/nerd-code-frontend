@@ -21,36 +21,36 @@ const MatchFinder = observer(() => {
   const { getSocket, setSocket, initWebSocket, closeWebSocket } = webSocketStore;
   const [joined, setJoined] = useState(false);
   const [searchingOpponent, setSearchingOpponent] = useState(false);
-;
+  ;
 
 
-useEffect(() => {
-  if (searchingOpponent) {
-    let socket = getSocket();
+  useEffect(() => {
+    if (searchingOpponent) {
+      let socket = getSocket();
 
-    const handleOpponentJoined = (data) => {
-      if (joined) {
-        console.log('Opponent joined:', data.battleId);
-        setMatch(true);
-        setTimeout(() => {
-          setLoading(false);
-          navigate("/battle", { state: { battleId: data.battleId } });
-          setSearchingOpponent(false);
-          setJoined(false);
-          socket.emit('startMatch', data.battleId);
-        }, 2000);
-      } else {
-        setJoined(true);
-      }
-    };
+      const handleOpponentJoined = (data) => {
+        if (joined) {
+          console.log('Opponent joined:', data.battleId);
+          setMatch(true);
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/battle", { state: { battleId: data.battleId } });
+            setSearchingOpponent(false);
+            setJoined(false);
+            socket.emit('startMatch', data.battleId);
+          }, 2000);
+        } else {
+          setJoined(true);
+        }
+      };
 
-    socket.on('opponentJoined', handleOpponentJoined);
+      socket.on('opponentJoined', handleOpponentJoined);
 
-    return () => {
-      socket.off('opponentJoined', handleOpponentJoined);
-    };
-  }
-}, [getSocket, navigate, joined, setJoined, searchingOpponent]);
+      return () => {
+        socket.off('opponentJoined', handleOpponentJoined);
+      };
+    }
+  }, [getSocket, navigate, joined, setJoined, searchingOpponent]);
 
   async function findMatch() {
     setLoading(true);
@@ -59,7 +59,7 @@ useEffect(() => {
       const response = await fetch("http://localhost:3000/battles/getKeys");
       const data = await response.text();
       const battleId = data;
-      setTimeout(joinBattle(battleId),2000)
+      setTimeout(joinBattle(battleId), 2000)
     } catch (error) {
       console.error("Error fetching match data:", error);
       setTimeout(() => {

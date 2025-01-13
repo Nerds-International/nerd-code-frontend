@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
-  const [code2, setCode2] = useState("console.log(\"Enemy Nerd\");\nconsole.log(\"evil nerds attack!\")");
+  const [code2, setCode2] = useState("");
   const [isUpsideDown1, setIsUpsideDown1] = useState(false);
   const [isUpsideDown2, setIsUpsideDown2] = useState(false);
   const [pressCounter, setPressCounter] = useState(0);

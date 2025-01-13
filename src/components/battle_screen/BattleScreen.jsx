@@ -19,14 +19,15 @@ const BattleScreen = observer(() => {
   const { socket } = webSocketStore;
   const [blurValue, setBlurValue] = useState(3);
   const [task, setTask] = useState({})
+  const { Languages, getCurrentLanguage } = languageStore;
 
   const reverseCode = (target) => {
     if (target === 1) {
       setIsUpsideDown1(true);
-      setTimeout(() => setIsUpsideDown1(false), 5000);
+      setTimeout(() => setIsUpsideDown1(false), 10000);
     } else {
       setIsUpsideDown2(true);
-      setTimeout(() => setIsUpsideDown2(false), 5000);
+      setTimeout(() => setIsUpsideDown2(false), 10000);
       socket.emit("useSkill", { battleId, skill_name: "reverse" })
     }
   };
@@ -51,12 +52,12 @@ const BattleScreen = observer(() => {
       });
 
       socket.on('task', (data) => {
-
         setTask({
           title: data.task.title,
           description: data.task.description
         });
-        console.log(task)
+        setTemplateCode(data.task.title);
+        console.log(task);
       });
 
       socket.on('codeUpdated', (data) => {
@@ -95,7 +96,23 @@ const BattleScreen = observer(() => {
     }
   };
 
+  const generateFunctionName = (name) => {
+    const words = name.split(/\s+/);
+    const firstWord = words[0].charAt(0).toLowerCase() + words[0].slice(1);
+    const functionName = firstWord + words.slice(1).join("");
+    return functionName;
+  };
 
+  const setTemplateCode = (name) => {
+    const functionName = generateFunctionName(name);
+    let functionTemplate;
+    if (getCurrentLanguage() === Languages.JAVASCRIPT) {
+      functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+    } else {
+      functionTemplate = `def ${functionName}() :\n   return 0 \n`;
+    }
+    setCode1(functionTemplate);
+  };
 
   useEffect(() => {
     syncCode();

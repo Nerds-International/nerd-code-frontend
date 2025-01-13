@@ -8,6 +8,7 @@ import { languageStore } from "../../store/language/LanguageStore";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
 import VisualizingTestCase from "../../components/visualizing_test_case/VisualizingTestCase";
 import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
+import Cookies from "js-cookie";
 // import ModalResult from "../../components/modal_result/ModalResult";
 
 const ProblemPage = observer(() => {
@@ -16,6 +17,7 @@ const ProblemPage = observer(() => {
   const task = problemsStore.tasks.find((task) => task.id === id);
   const [code2, setCode2] = useState("");
   const [code3, setCode3] = useState("");
+  const [runType, setRunType] = useState("");
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
   const [likeCount, setLikeCount] = useState(task ? task.likes : 0);
   const [dislikeCount, setDislikeCount] = useState(task ? task.dislikes : 0);
@@ -137,10 +139,9 @@ const ProblemPage = observer(() => {
           },
           body: JSON.stringify({
             code: code2,
-            tests: [
-              { input: '[3, 1, 2]', expected: '[1, 2, 3]' },
-              { input: '[5, 4, 6]', expected: '[4, 5, 6]' },
-            ],
+            tests: task.testCases,
+            language: "Python",
+            type: "Test",
           }),
         });
 
@@ -156,9 +157,88 @@ const ProblemPage = observer(() => {
       }
     } else {
       const combined = `${code2}\n${code3}`;
+      setRunType("Test");
       setCombinedCode(combined);
     }
   };
+
+  const handleRun = async () => {
+    if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
+      try {
+        const response = await fetch('http://localhost:3000/tasks/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            code: code2,
+            tests: task.testCases,
+            language: "Python",
+            type: "Run",
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.log(errorData);
+        }
+
+        const result = await response.json();
+        console.log('Execution Result:', result);
+      } catch (error) {
+        console.error('Error executing Python code:', error.message);
+      }
+    } else {
+      const functionName = generateFunctionName(task.name);
+      let tpart1 = ``;
+      let tpart2 = ``;
+      tpart2 = `[`;
+      for (let i = 0; i < task.testCases.length; i++) {
+        tpart1 =
+            tpart1 +
+            `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+        tpart2 = tpart2 + `result${i}, `;
+      }
+      tpart2 = tpart2.slice(0, -2) + `];`;
+      setRunType("Run");
+      const combined = `${code2}\n${tpart1 + tpart2}`;
+      setCombinedCode(combined);
+      console.log(result);
+    }
+  };
+
+  const processingResultJs = async() => {
+    if (result && runType === "Run") {
+      console.log(result);
+      try {
+        const response = await fetch('http://localhost:3000/tasks/attempts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+          body: JSON.stringify({
+            task_id: task.id,
+            user_id: Cookies.get('id'),
+            language: "JS",
+            time: "12",
+            result: "Pass",
+          }),
+        });
+        const result = await response.json();
+        console.log('Execution Result:', result);
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (runType === "Run"){
+      processingResultJs();
+    }
+  }, [runType, result]);
 
   const handleResult = () => {
     if (!result) return "";
@@ -224,7 +304,6 @@ const ProblemPage = observer(() => {
           </div>
 
           <div className="additional-info">
-            <h3>Total Solutions: 267</h3>
             <div className="like-dislike-buttons">
               <button
                   onClick={handleLike}
@@ -294,7 +373,7 @@ const ProblemPage = observer(() => {
           </div>
           <div className="button-group">
             <button onClick={handleTest}>Test</button>
-            <button>Run</button>
+            <button onClick={handleRun}>Run</button>
           </div>
         </div>
       </div>

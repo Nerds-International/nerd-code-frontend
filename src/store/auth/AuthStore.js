@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { notification } from 'antd';
+import Cookies from 'js-cookie';
 
 class AuthStore {
   isLoading = false;
@@ -33,9 +34,14 @@ class AuthStore {
         description: 'You have successfully logged in!',
       });
 
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('uuid', data.uuid);
+      console.log(data.id)
+      Cookies.set('id', data.id, { expires: 52 });
+      Cookies.set('accessToken', data.accessToken, { expires: 52 });
+      Cookies.set('refreshToken', data.refreshToken, { expires: 52 });
+
+      // localStorage.setItem('accessToken', data.accessToken);
+      // localStorage.setItem('refreshToken', data.refreshToken);
+      // localStorage.setItem('uuid', data.uuid);
 
       runInAction(() => {
         this.isAuthenticated = true;
@@ -85,8 +91,12 @@ class AuthStore {
         description: 'You have successfully signed up!',
       });
 
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('uuid', data.uuid);
+      console.log(data.id);
+      Cookies.set('id', data.id, { expires: 52 });
+      Cookies.set('accessToken', data.accessToken, { expires: 52 });
+
+      // localStorage.setItem('accessToken', data.accessToken);
+      // localStorage.setItem('uuid', data.uuid);
 
       runInAction(() => {
         this.isAuthenticated = true;

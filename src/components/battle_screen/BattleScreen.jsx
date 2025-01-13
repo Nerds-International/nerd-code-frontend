@@ -14,12 +14,11 @@ const BattleScreen = observer(() => {
   const [code2, setCode2] = useState("");
   const [isUpsideDown1, setIsUpsideDown1] = useState(false);
   const [isUpsideDown2, setIsUpsideDown2] = useState(false);
-  const [pressCounter, setPressCounter] = useState(0);
   const location = useLocation();
   const battleId = location.state?.battleId || "defaultBattleId";
   const { socket } = webSocketStore;
   const [blurValue, setBlurValue] = useState(3);
-
+  const [task, setTask] = useState({})
 
   const reverseCode = (target) => {
     if (target === 1) {
@@ -49,6 +48,15 @@ const BattleScreen = observer(() => {
     if (socket) {
       socket.on('opponentJoined', (data) => {
         console.log('Opponent joined:', data);
+      });
+
+      socket.on('task', (data) => {
+
+        setTask({
+          title: data.task.title,
+          description: data.task.description
+        });
+        console.log(task)
       });
 
       socket.on('codeUpdated', (data) => {
@@ -96,7 +104,9 @@ const BattleScreen = observer(() => {
   return (
     <div className="BattleScreen">
       <div className="left-column">
-        <TaskDescription />
+        <TaskDescription
+          task={task}
+        />
         <ButtonCostContainer
           reverseCode={reverseCode}
           seeThrough={seeThrough}
@@ -113,19 +123,17 @@ const BattleScreen = observer(() => {
           isUpsideDown1={isUpsideDown1}
           isUpsideDown2={isUpsideDown2}
           blurValue={blurValue}
-          pressCounter={pressCounter}
-          setPressCounter={setPressCounter}
         />
       </div>
     </div>
   );
 });
 
-const TaskDescription = observer(() => {
+const TaskDescription = observer(({ task }) => {
   return (
     <div className="task-container">
-      <h2>Описание задачи</h2>
-      <p>Здесь будет описание вашей задачи...</p>
+      <h2>{task.title}</h2>
+      <p>{task.description}</p>
     </div>
   );
 });
@@ -200,7 +208,7 @@ const ButtonCostContainer = observer(({ reverseCode, seeThrough, eraseCharacters
   );
 });
 
-const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue, pressCounter, setPressCounter }) => {
+const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue }) => {
   const { getCurrentLanguage } = languageStore;
   const { closeWebSocket, initWebSocket } = webSocketStore;
   const navigate = useNavigate();

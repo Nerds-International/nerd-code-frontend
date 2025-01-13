@@ -41,7 +41,7 @@ const ProblemsListPage = observer(() => {
                 getTask.push({
                     id: data.tasks[i]._id,
                     name: data.tasks[i].title,
-                    description: data.tasks[i].description,
+                    description: data.tasks[i].text,
                     difficulty: data.tasks[i].difficulty,
                     likes: data.tasks[i].likes,
                     dislikes: data.tasks[i].dislikes,

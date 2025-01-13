@@ -11,13 +11,39 @@ import { useNavigate } from "react-router-dom";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
-  const [code2, setCode2] = useState("console.log(\"Enemy Nerd\");\nconsole.log(\"evil nerds attack!\")");
-  const [isUpsideDown, setIsUpsideDown] = useState(false);
-  const [lagCount, setLagCount] = useState(0);
+  const [code2, setCode2] = useState("");
+  const [isUpsideDown1, setIsUpsideDown1] = useState(false);
+  const [isUpsideDown2, setIsUpsideDown2] = useState(false);
   const [pressCounter, setPressCounter] = useState(0);
   const location = useLocation();
   const battleId = location.state?.battleId || "defaultBattleId";
   const { socket } = webSocketStore;
+  const [blurValue, setBlurValue] = useState(3);
+
+
+  const reverseCode = (target) => {
+    if (target === 1) {
+      setIsUpsideDown1(true);
+      setTimeout(() => setIsUpsideDown1(false), 5000);
+    } else {
+      setIsUpsideDown2(true);
+      setTimeout(() => setIsUpsideDown2(false), 5000);
+      socket.emit("useSkill", { battleId, skill_name: "reverse" })
+    }
+  };
+
+  const seeThrough = () => {
+    setBlurValue(0);
+    setTimeout(() => setBlurValue(3), 5000);
+  };
+
+  const eraseCharacters = (target) => {
+    if (target === 1) {
+      setCode1(code1.slice(10));
+    } else {
+      socket.emit("useSkill", { battleId, skill_name: "erase" })
+    }
+  };
 
   useEffect(() => {
     if (socket) {
@@ -27,7 +53,7 @@ const BattleScreen = observer(() => {
 
       socket.on('codeUpdated', (data) => {
         console.log('Code updated:', data);
-        if (data.id != socket.id) {
+        if (data.id !== socket.id) {
           setCode2(data.code);
         }
         console.log("dataid" + data.id)
@@ -36,8 +62,24 @@ const BattleScreen = observer(() => {
       socket.on('error', (data) => {
         console.error('Error:', data.message);
       });
+
+      socket.on('useSkill', (data) => {
+        if (data.skill_name === "reverse") {
+          if (data.id !== socket.id) {
+            console.log(socket.id)
+            reverseCode(1);
+          }
+        }
+
+        if (data.skill_name === "erase") {
+          if (data.id !== socket.id) {
+            console.log(socket.id)
+            eraseCharacters(1);
+          }
+        }
+      });
     }
-  }, [socket]);
+  });
 
   const syncCode = () => {
     if (socket) {
@@ -45,23 +87,11 @@ const BattleScreen = observer(() => {
     }
   };
 
-  const reverseCode = () => {
-    setIsUpsideDown(true);
-    setTimeout(() => setIsUpsideDown(false), 5000);
-  };
 
-  const applyLag = () => {
-    setLagCount(Math.floor(Math.random() * 3) + 3);
-    setPressCounter(0);
-  };
-
-  const eraseCharacters = () => {
-    setCode2(code2.slice(10));
-  };
 
   useEffect(() => {
     syncCode();
-  }, [code1, socket, battleId]);
+  });
 
   return (
     <div className="BattleScreen">
@@ -69,7 +99,7 @@ const BattleScreen = observer(() => {
         <TaskDescription />
         <ButtonCostContainer
           reverseCode={reverseCode}
-          applyLag={applyLag}
+          seeThrough={seeThrough}
           eraseCharacters={eraseCharacters}
         />
         <EnergyBar />
@@ -80,8 +110,9 @@ const BattleScreen = observer(() => {
           setCode1={setCode1}
           code2={code2}
           setCode2={setCode2}
-          isUpsideDown={isUpsideDown}
-          lagCount={lagCount}
+          isUpsideDown1={isUpsideDown1}
+          isUpsideDown2={isUpsideDown2}
+          blurValue={blurValue}
           pressCounter={pressCounter}
           setPressCounter={setPressCounter}
         />
@@ -130,23 +161,23 @@ const EnergyBar = observer(() => {
   );
 });
 
-const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }) => {
+const ButtonCostContainer = observer(({ reverseCode, seeThrough, eraseCharacters }) => {
   const { energy, setEnergy } = energyStore;
 
   const dataSource = [
     {
       key: '1',
-      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 5); reverseCode(); }}>Перевернуть</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 5); reverseCode(2); }}>Перевернуть</Button>,
       cost: 5,
     },
     {
       key: '2',
-      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 3); applyLag(); }}>Лаг</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 3); seeThrough(); }}>Подглядеть</Button>,
       cost: 3,
     },
     {
       key: '3',
-      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 7); eraseCharacters(); }}>Стереть 10 символов</Button>,
+      action: <Button className="points-button" type="primary" onClick={() => { setEnergy(energy - 7); eraseCharacters(2); }}>Стереть 10 символов</Button>,
       cost: 7,
     },
   ];
@@ -169,7 +200,7 @@ const ButtonCostContainer = observer(({ reverseCode, applyLag, eraseCharacters }
   );
 });
 
-const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown, lagCount, pressCounter, setPressCounter }) => {
+const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue, pressCounter, setPressCounter }) => {
   const { getCurrentLanguage } = languageStore;
   const { closeWebSocket, initWebSocket } = webSocketStore;
   const navigate = useNavigate();
@@ -179,20 +210,12 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
     navigate("/search_battle");
   }
   const handleButtonPress = (action) => {
-    if (lagCount > 0) {
-      setPressCounter(pressCounter + 1);
-      if (pressCounter + 1 >= lagCount) {
-        setPressCounter(0);
-        action();
-      }
-    } else {
-      action();
-    }
+    action();
   };
 
   return (
     <div className="code-blocks">
-      <div className="code-block">
+      <div className="code-block" style={{ transform: isUpsideDown1 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
         <CodeEditor
           className="w-tc-editor-var"
           minHeight={500}
@@ -213,7 +236,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           <button onClick={() => handleButtonPress(() => console.log('Run'))}>Run</button>
         </div>
       </div>
-      <div className="code-block" style={{ transform: isUpsideDown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+      <div className="code-block" style={{ transform: isUpsideDown2 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
         <CodeEditor
           className="w-tc-editor-var"
           minHeight={500}
@@ -227,6 +250,8 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            filter: "blur(" + blurValue + "px)",
+            userSelect: "none"
           }}
         />
         <div className="button-group">

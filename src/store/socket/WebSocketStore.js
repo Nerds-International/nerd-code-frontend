@@ -6,7 +6,7 @@ class WebSocketStore {
 
     constructor() {
         makeAutoObservable(this);
-        this.initWebSocket();
+        // this.initWebSocket();
     }
 
     initWebSocket = () => {
@@ -21,6 +21,16 @@ class WebSocketStore {
         this.socket.on('disconnect', () => {
             console.log('WebSocket disconnected');
         });
+
+        return this.socket;
+    };
+
+    setSocket = (newSocket) => {
+        this.socket = newSocket;
+    };
+
+    getSocket = () => {
+        return this.socket;
     };
 
     closeWebSocket = () => {

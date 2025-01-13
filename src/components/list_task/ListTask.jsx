@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import './ListTask.css';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ListTask = observer(({ tasks }) => {
     return (

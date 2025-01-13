@@ -20,6 +20,31 @@ const BattleScreen = observer(() => {
   const { socket } = webSocketStore;
   const [blurValue, setBlurValue] = useState(3);
 
+
+  const reverseCode = (target) => {
+    if (target === 1) {
+      setIsUpsideDown1(true);
+      setTimeout(() => setIsUpsideDown1(false), 5000);
+    } else {
+      setIsUpsideDown2(true);
+      setTimeout(() => setIsUpsideDown2(false), 5000);
+      socket.emit("useSkill", { battleId, skill_name: "reverse" })
+    }
+  };
+
+  const seeThrough = () => {
+    setBlurValue(0);
+    setTimeout(() => setBlurValue(3), 5000);
+  };
+
+  const eraseCharacters = (target) => {
+    if (target === 1) {
+      setCode1(code1.slice(10));
+    } else {
+      socket.emit("useSkill", { battleId, skill_name: "erase" })
+    }
+  };
+
   useEffect(() => {
     if (socket) {
       socket.on('opponentJoined', (data) => {
@@ -54,7 +79,7 @@ const BattleScreen = observer(() => {
         }
       });
     }
-  }, [socket]);
+  });
 
   const syncCode = () => {
     if (socket) {
@@ -62,33 +87,11 @@ const BattleScreen = observer(() => {
     }
   };
 
-  const reverseCode = (target) => {
-    if (target === 1) {
-      setIsUpsideDown1(true);
-      setTimeout(() => setIsUpsideDown1(false), 5000);
-    } else {
-      setIsUpsideDown2(true);
-      setTimeout(() => setIsUpsideDown2(false), 5000);
-      socket.emit("useSkill", { battleId, skill_name: "reverse" })
-    }
-  };
 
-  const seeThrough = () => {
-    setBlurValue(0);
-    setTimeout(() => setBlurValue(3), 5000);
-  };
-
-  const eraseCharacters = (target) => {
-    if (target === 1) {
-      setCode1(code1.slice(10));
-    } else {
-      socket.emit("useSkill", { battleId, skill_name: "erase" })
-    }
-  };
 
   useEffect(() => {
     syncCode();
-  }, [code1, socket, battleId]);
+  });
 
   return (
     <div className="BattleScreen">
@@ -247,7 +250,8 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
             backgroundColor: "#f5f5f5",
             fontFamily:
               "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-            filter: "blur(" + blurValue + "px)"
+            filter: "blur(" + blurValue + "px)",
+            userSelect: "none"
           }}
         />
         <div className="button-group">

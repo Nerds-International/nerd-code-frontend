@@ -72,7 +72,6 @@ const BattleScreen = observer(() => {
       });
 
       socket.on('skillUsed', (data) => {
-        console.log("asdasjdklaskld: " + data)
         if (data.skill_name === "reverse") {
           if (data.id !== socket.id) {
             console.log(socket.id)

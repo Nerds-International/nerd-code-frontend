@@ -1,10 +1,12 @@
 import {observer} from "mobx-react-lite";
 import {Avatar, Card, Col, Flex, List, Row, Typography} from "antd";
+import { useSearchParams } from "react-router-dom";
 import {mainStore} from "../../store/main/MainStore";
 import {forumStore} from "../../store/forum/ForumStore";
 import Meta from "antd/lib/card/Meta";
 import TopicCard from "../../components/topic_card/TopicCard";
 import {useEffect} from "react";
+import Cookies from 'js-cookie';
 
 const { Title } = Typography;
 
@@ -12,16 +14,25 @@ const MainPage = observer(() => {
     const { getNews } = mainStore;
     const { getTopics } = forumStore;
     const store = forumStore;
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get("id");
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
     const fetchTopics = async (page = 1, limit = 10) => {
         try {
             const url = new URL('http://localhost:3000/forums');
             url.searchParams.append('page', page);
             url.searchParams.append('limit', limit);
+            const idFromCookie = Cookies.get('id');
+            const accessTokenFromCookie = Cookies.get('accessToken');
 
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'id': idFromCookie,
+                    'accessToken': accessTokenFromCookie,
+                    'refreshToken': refreshToken,
                 },
             });
 
@@ -58,6 +69,17 @@ const MainPage = observer(() => {
     };
 
     useEffect(() => {
+        if (id) {
+          Cookies.set('id', id, { expires: 52 });
+        }
+        if (accessToken) {
+          Cookies.set('accessToken', accessToken, { expires: 52 });
+        }
+        if (refreshToken) {
+          Cookies.set('refreshToken', refreshToken, { expires: 52 });
+        }
+
+        console.log(Cookies.get('accessToken'))
         fetchTopics(1, 10);
     }, []);
 

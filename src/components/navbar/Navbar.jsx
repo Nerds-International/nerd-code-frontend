@@ -17,8 +17,9 @@ const Navbar = observer(() => {
     setCurrentPage(e.key);
   };
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
     authStore.signOut();
+    window.location.assign("http://nerdcode.fun");
   };
 
   const navbarItems = [
@@ -57,7 +58,7 @@ const Navbar = observer(() => {
 
   const authorizedItems = [
     {
-      label: <div></div>, // Здесь будет ваша реклама (аватарка)
+      label: <div className='avatar'></div>,
       key: 'avatar'
     },
     {
@@ -65,16 +66,15 @@ const Navbar = observer(() => {
       key: 'separator',
     },
     {
-      label: <div className="" to="#" onClick={() => { setIsFormVisible(true); setIsLogin(true); }}>
+      label: <div className="welcome" to="#" onClick={() => { setIsFormVisible(true); setIsLogin(true); }}>
         Welcome, {authStore.userInfo ? authStore.userInfo.username : "Рома"}</div>,
       key: 'welcome',
     },
     {
-      label: <Link className="tab" to="#" onClick={() => {handleLogout()}}>Logout</Link>,
-      key: 'logout',
+      label: <Link className="tab" to="#" onClick={handleLogout}>Logout</Link>,
+      key: Pages.MAIN,
     },
   ];
-
 
   return (
     <div className="header">

@@ -19,6 +19,7 @@ const TopicCard = observer(({topic, showMessages}) => {
       avatar={<Avatar src={''} alt={'ava'} size={'large'} style={{ background: '#FFCC00'}}/>}
     />
     <Like count={topic.likes} clickable={false}/>
+    <Like/>
 
     {showMessages && showMessages > 0 && topic.messages.length > 0 && (
       <>

@@ -64,6 +64,14 @@
   border-radius: 35px;
 }
 
+.find-match-button:disabled {
+  background-color: #FFCC0080 !important;
+  outline: 1px solid #00000080;
+  color: #00000080 ;
+  border-radius: 35px;
+  cursor: not-allowed;
+}
+
 .loading-container {
   display: flex;
   align-items: center;

@@ -26,11 +26,68 @@ const ProblemPage = observer(() => {
   const [combinedCode, setCombinedCode] = useState("");
   const { result, error } = useCodeRunnerJS(combinedCode);
   const store = problemsStore;
-
-  const [attempt, setAttempt] = useState([
-  ]);
+  const [uname, setUname] = useState("");
+  const [attempt, setAttempt] = useState([]);
+  const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/auth/getUser', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUname(data.username);
+        setIsUsernameLoaded(true);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchAttempts = async () => {
+      try {
+        console.log("here");
+        const response = await fetch(`http://localhost:3000/res/attemptsByUser`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'taskId': id,
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+        });
+        if (!response.ok) {
+          throw new Error('failed to get attempts');
+        }
+        const result = await response.json();
+        const newAttempts = result.map(item => ({
+          id: item._id,
+          taskId: item.task_id,
+          userName: uname,
+          language: item.language,
+          result: item.result,
+          time: item.time
+        }));
+        setAttempt(newAttempts);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
     const fetchTaskById = async (taskId) => {
       try {
         const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
@@ -65,10 +122,13 @@ const ProblemPage = observer(() => {
       }
     };
 
-    if (!task && id) {
-      fetchTaskById(id);
+    if (isUsernameLoaded && id) {
+      fetchAttempts();
+      if (!task) {
+        fetchTaskById(id);
+      }
     }
-  }, []);
+  }, [isUsernameLoaded, id, task, store]);
 
   useEffect(() => {
     if (task) {
@@ -204,34 +264,17 @@ const ProblemPage = observer(() => {
     }
   };
 
-  const processingResultJs = async() => {
+  const processingResultJs = async () => {
     if (result && runType === "Run") {
       let summary = "Pass";
-      let name = "";
       console.log(result);
-      for (const el of result){
-        if (el === false){
+      for (const el of result) {
+        if (el === false) {
           summary = "Fail";
         }
       }
       try {
-        const response = await fetch('http://localhost:3000/auth/getUser', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'id': Cookies.get('id'),
-            'accessToken': Cookies.get('accessToken'),
-          },
-        });
-
-        const data = await response.json();
-        name = data.username;
-
-      } catch (error) {
-        console.log(error);
-      }
-      try {
-        const response = await fetch('http://localhost:3000/tasks/attempts', {
+        const response = await fetch('http://localhost:3000/res/attempts', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -240,14 +283,14 @@ const ProblemPage = observer(() => {
           },
           body: JSON.stringify({
             task_id: task.id,
-            user_id: name,
+            user_id: Cookies.get("id"),
             language: "JS",
             time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             result: summary,
           }),
         });
         const result_attempt = await response.json();
-        setAttempt([...attempt, { id: result_attempt._id, taskId: result_attempt.task_id, userName: result_attempt.user_id, language: result_attempt.language, result: result_attempt.result, time: result_attempt.time }]);
+        setAttempt([...attempt, { id: result_attempt._id, taskId: result_attempt.task_id, userName: uname, language: result_attempt.language, result: result_attempt.result, time: result_attempt.time }]);
         console.log('Execution Result:', result_attempt);
       } catch (error) {
         console.error('Error:', error.message);
@@ -256,7 +299,7 @@ const ProblemPage = observer(() => {
   }
 
   useEffect(() => {
-    if (runType === "Run"){
+    if (runType === "Run") {
       processingResultJs();
     }
   }, [runType, result]);
@@ -266,7 +309,6 @@ const ProblemPage = observer(() => {
 
     const resultArray = JSON.stringify(result).slice(1, -1).split(",");
     const errorArray = error ? [error] : [];
-
     const combinedResults = resultArray.map((element, index) => {
       let expectedValue = null;
       try {
@@ -402,4 +444,5 @@ const ProblemPage = observer(() => {
 });
 
 export default ProblemPage;
+
 

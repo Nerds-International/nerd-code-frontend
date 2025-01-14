@@ -10,6 +10,28 @@ class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.initializeAuth(); // Вызываем метод инициализации при создании экземпляра
+  }
+
+  async initializeAuth() {
+    const accessToken =
+      Cookies.get("accessToken") || localStorage.getItem("accessToken");
+    const id = Cookies.get("id") || localStorage.getItem("id");
+
+    if (accessToken && id) {
+      try {
+        await this.getUser(id, accessToken);
+        runInAction(() => {
+          this.isAuthenticated = true;
+        });
+      } catch (error) {
+        notification.error({
+          message: "Failed to initialize authentication",
+          description: error.message || "Error during initialization",
+        });
+        this.signOut(); // Выход из системы в случае ошибки
+      }
+    }
   }
 
   async signIn(email, password) {

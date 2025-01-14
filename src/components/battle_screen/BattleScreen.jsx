@@ -234,8 +234,26 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
     initWebSocket();
     navigate("/search_battle");
   }
+
   const handleButtonPress = (action) => {
     action();
+  };
+
+  const generateRandomString = (n) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let randomString = '';
+
+    for (let i = 0; i < n.length; i++) {
+      const char = n[i];
+      if (char === ' ' || char === '\t' || char === '\n') {
+        randomString += char;
+      } else {
+        randomString += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+    }
+
+    return randomString;
   };
 
   return (
@@ -264,7 +282,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
         <CodeEditor
           className="w-tc-editor-var"
           minHeight={500}
-          value={code2}
+          value={blurValue ? generateRandomString(code2) : code2}
           language={getCurrentLanguage()}
           onChange={(evn) => setCode2(evn.target.value)}
           padding={15}

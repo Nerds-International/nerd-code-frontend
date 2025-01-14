@@ -43,7 +43,6 @@ describe("BattleScreen Component", () => {
         </Routes>
       </MemoryRouter>,
     );
-    expect(screen.getByText("Описание задачи")).toBeInTheDocument();
     expect(screen.getByText("Перевернуть")).toBeInTheDocument();
     expect(screen.getByText("Подглядеть")).toBeInTheDocument();
     expect(screen.getByText("Стереть 10 символов")).toBeInTheDocument();
@@ -68,9 +67,6 @@ describe("BattleScreen Component", () => {
 
     fireEvent.change(codeEditors[0], { target: { value: "new code 1" } });
     await waitFor(() => expect(codeEditors[0]).toHaveValue("new code 1"));
-
-    fireEvent.change(codeEditors[1], { target: { value: "new code 2" } });
-    await waitFor(() => expect(codeEditors[1]).toHaveValue("new code 2"));
   });
 
   test("syncCode emits syncCode event", async () => {

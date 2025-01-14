@@ -64,7 +64,7 @@ const DiscussPage = observer(() => {
         } catch (error) {
             console.error('Error fetching topics:', error.message || 'Error fetching topics');
         } finally {
-            console.log("nice");
+
         }
     };
 

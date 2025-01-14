@@ -22,6 +22,9 @@ const Navbar = observer(() => {
     window.location.assign("http://nerdcode.fun");
   };
 
+  // Получаем номер аватара из authStore или из куки/локального хранилища
+  const avatarNumber = authStore.userInfo ? authStore.userInfo.avatar_number : 1;
+
   const navbarItems = [
     {
       label: (<Link to="/"><NerdFaceImage /></Link>),
@@ -58,17 +61,17 @@ const Navbar = observer(() => {
 
   const authorizedItems = [
     {
-      label: <div className='avatar'></div>,
-      key: 'avatar'
-    },
-    {
       label: <div className="separator-vertical"></div>,
       key: 'separator',
     },
     {
-      label: <div className="welcome" to="#" onClick={() => { setIsFormVisible(true); setIsLogin(true); }}>
-        Welcome, {authStore.userInfo ? authStore.userInfo.username : "Рома"}</div>,
-      key: 'welcome',
+      label: <div className='user-info'>
+        <img src={`/img/avatar${avatarNumber}.png`} alt="Avatar" className="avatar-img" />
+        <div className="username">
+          {authStore.userInfo ? authStore.userInfo.username : "Рома"}
+        </div>
+      </div>,
+      key: 'user-info'
     },
     {
       label: <Link className="tab" to="#" onClick={handleLogout}>Logout</Link>,

@@ -6,8 +6,6 @@ const ProblemAttemptTable = observer(({ data }) => {
         <table className="problem-attempt-table">
             <thead className="table-header">
             <tr>
-                <th>ID</th>
-                <th>Task ID</th>
                 <th>User Name</th>
                 <th>Language</th>
                 <th>Result</th>
@@ -16,9 +14,7 @@ const ProblemAttemptTable = observer(({ data }) => {
             </thead>
             <tbody className="table-body">
             {data.map((item) => (
-                <tr key={item.id} className="table-row">
-                    <td>{item.id}</td>
-                    <td>{item.taskId}</td>
+                <tr key={item.userName} className="table-row">
                     <td>{item.userName}</td>
                     <td>{item.language}</td>
                     <td>{item.result}</td>

@@ -9,6 +9,7 @@ import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
 import VisualizingTestCase from "../../components/visualizing_test_case/VisualizingTestCase";
 import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
 import Cookies from "js-cookie";
+import { format } from 'date-fns';
 // import ModalResult from "../../components/modal_result/ModalResult";
 
 const ProblemPage = observer(() => {
@@ -26,12 +27,8 @@ const ProblemPage = observer(() => {
   const { result, error } = useCodeRunnerJS(combinedCode);
   const store = problemsStore;
 
-  // Пример того, как это выглядит
-  const attempt = [
-    { id: 1, taskId: 101, userName: 'romanNGG', language: 'JS', result: 'Pass', time: '2025-01-01 10:00:00' },
-    { id: 2, taskId: 102, userName: 'romanNGG', language: 'Python', result: 'Fail', time: '2025-01-02 11:00:00' },
-    { id: 3, taskId: 102, userName: 'romanNGG', language: 'Python', result: 'Fail', time: '2025-01-02 11:00:00' },
-  ];
+  const [attempt, setAttempt] = useState([
+  ]);
 
   useEffect(() => {
     const fetchTaskById = async (taskId) => {
@@ -209,7 +206,29 @@ const ProblemPage = observer(() => {
 
   const processingResultJs = async() => {
     if (result && runType === "Run") {
+      let summary = "Pass";
       console.log(result);
+      for (const el of result){
+        if (el === false){
+          summary = "Fail";
+        }
+      }
+      try {
+        const response = await fetch('http://localhost:3000/auth/getUser', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+        });
+
+        const data = await response.json();
+        console.log(data)
+
+      } catch (error) {
+        console.log(error);
+      }
       try {
         const response = await fetch('http://localhost:3000/tasks/attempts', {
           method: 'POST',
@@ -222,12 +241,13 @@ const ProblemPage = observer(() => {
             task_id: task.id,
             user_id: Cookies.get('id'),
             language: "JS",
-            time: "12",
-            result: "Pass",
+            time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            result: summary,
           }),
         });
-        const result = await response.json();
-        console.log('Execution Result:', result);
+        const result_attempt = await response.json();
+        setAttempt([...attempt, { id: result_attempt._id, taskId: result_attempt.task_id, userName: result_attempt.user_id, language: result_attempt.language, result: result_attempt.result, time: result_attempt.time }]);
+        console.log('Execution Result:', result_attempt);
       } catch (error) {
         console.error('Error:', error.message);
       }

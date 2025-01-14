@@ -36,12 +36,12 @@ const ProblemsListPage = observer(() => {
 
             const data = await response.json();
             const getTask = [];
-            for (let i = 0; i < data.total; i++){
+            for (let i = 0; i < data.total; i++) {
                 console.log(data.tasks[i]);
                 getTask.push({
                     id: data.tasks[i]._id,
                     name: data.tasks[i].title,
-                    description: data.tasks[i].text,
+                    description: data.tasks[i].description,
                     difficulty: data.tasks[i].difficulty,
                     likes: data.tasks[i].likes,
                     dislikes: data.tasks[i].dislikes,

@@ -21,7 +21,6 @@ const MatchFinder = observer(() => {
   const { getSocket, setSocket, initWebSocket, closeWebSocket } = webSocketStore;
   const [joined, setJoined] = useState(false);
   const [searchingOpponent, setSearchingOpponent] = useState(false);
-  ;
 
 
   useEffect(() => {

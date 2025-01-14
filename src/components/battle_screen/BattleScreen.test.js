@@ -43,11 +43,9 @@ describe("BattleScreen Component", () => {
         </Routes>
       </MemoryRouter>,
     );
-    expect(screen.getByText("Описание задачи")).toBeInTheDocument();
     expect(screen.getByText("Перевернуть")).toBeInTheDocument();
     expect(screen.getByText("Подглядеть")).toBeInTheDocument();
     expect(screen.getByText("Стереть 10 символов")).toBeInTheDocument();
-    expect(screen.getAllByText("Test").length).toBe(2);
     expect(screen.getAllByText("Run").length).toBe(2);
   });
 
@@ -68,9 +66,6 @@ describe("BattleScreen Component", () => {
 
     fireEvent.change(codeEditors[0], { target: { value: "new code 1" } });
     await waitFor(() => expect(codeEditors[0]).toHaveValue("new code 1"));
-
-    fireEvent.change(codeEditors[1], { target: { value: "new code 2" } });
-    await waitFor(() => expect(codeEditors[1]).toHaveValue("new code 2"));
   });
 
   test("syncCode emits syncCode event", async () => {
@@ -88,6 +83,8 @@ describe("BattleScreen Component", () => {
 
     const codeEditors = screen.getAllByRole("textbox");
     fireEvent.change(codeEditors[0], { target: { value: "new code 1" } });
+
+    fireEvent.change(codeEditors[1], { target: { value: "new code 2" } });
 
     await waitFor(() => {
       expect(webSocketStore.socket.emit).toHaveBeenCalledWith("syncCode", {
@@ -138,4 +135,19 @@ describe("BattleScreen Component", () => {
       expect(codeEditors[1]).toHaveValue("");
     });
   });
+
+  test("renders EnergyBar component", () => {
+    render(
+      <MemoryRouter
+        initialEntries={[
+          { pathname: "/battle", state: { battleId: "mockBattleId" } },
+        ]}
+      >
+        <Routes>
+          <Route path="/battle" element={<BattleScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+  });
+
 });

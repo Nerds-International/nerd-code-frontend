@@ -14,20 +14,20 @@ const BattleScreen = observer(() => {
   const [code2, setCode2] = useState("");
   const [isUpsideDown1, setIsUpsideDown1] = useState(false);
   const [isUpsideDown2, setIsUpsideDown2] = useState(false);
-  const [pressCounter, setPressCounter] = useState(0);
   const location = useLocation();
   const battleId = location.state?.battleId || "defaultBattleId";
   const { socket } = webSocketStore;
   const [blurValue, setBlurValue] = useState(3);
-
+  const [task, setTask] = useState({})
+  const { Languages, getCurrentLanguage } = languageStore;
 
   const reverseCode = (target) => {
     if (target === 1) {
       setIsUpsideDown1(true);
-      setTimeout(() => setIsUpsideDown1(false), 5000);
+      setTimeout(() => setIsUpsideDown1(false), 10000);
     } else {
       setIsUpsideDown2(true);
-      setTimeout(() => setIsUpsideDown2(false), 5000);
+      setTimeout(() => setIsUpsideDown2(false), 10000);
       socket.emit("useSkill", { battleId, skill_name: "reverse" })
     }
   };
@@ -51,29 +51,34 @@ const BattleScreen = observer(() => {
         console.log('Opponent joined:', data);
       });
 
+      socket.on('task', (data) => {
+        setTask({
+          title: data.task.title,
+          description: data.task.description
+        });
+        setTemplateCode(data.task.title);
+      });
+
       socket.on('codeUpdated', (data) => {
         console.log('Code updated:', data);
         if (data.id !== socket.id) {
           setCode2(data.code);
         }
-        console.log("dataid" + data.id)
       });
 
       socket.on('error', (data) => {
         console.error('Error:', data.message);
       });
 
-      socket.on('useSkill', (data) => {
+      socket.on('skillUsed', (data) => {
         if (data.skill_name === "reverse") {
           if (data.id !== socket.id) {
-            console.log(socket.id)
             reverseCode(1);
           }
         }
 
         if (data.skill_name === "erase") {
           if (data.id !== socket.id) {
-            console.log(socket.id)
             eraseCharacters(1);
           }
         }
@@ -87,7 +92,23 @@ const BattleScreen = observer(() => {
     }
   };
 
+  const generateFunctionName = (name) => {
+    const words = name.split(/\s+/);
+    const firstWord = words[0].charAt(0).toLowerCase() + words[0].slice(1);
+    const functionName = firstWord + words.slice(1).join("");
+    return functionName;
+  };
 
+  const setTemplateCode = (name) => {
+    const functionName = generateFunctionName(name);
+    let functionTemplate;
+    if (getCurrentLanguage() === Languages.JAVASCRIPT) {
+      functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+    } else {
+      functionTemplate = `def ${functionName}() :\n   return 0 \n`;
+    }
+    setCode1(functionTemplate);
+  };
 
   useEffect(() => {
     syncCode();
@@ -96,7 +117,9 @@ const BattleScreen = observer(() => {
   return (
     <div className="BattleScreen">
       <div className="left-column">
-        <TaskDescription />
+        <TaskDescription
+          task={task}
+        />
         <ButtonCostContainer
           reverseCode={reverseCode}
           seeThrough={seeThrough}
@@ -113,19 +136,17 @@ const BattleScreen = observer(() => {
           isUpsideDown1={isUpsideDown1}
           isUpsideDown2={isUpsideDown2}
           blurValue={blurValue}
-          pressCounter={pressCounter}
-          setPressCounter={setPressCounter}
         />
       </div>
     </div>
   );
 });
 
-const TaskDescription = observer(() => {
+const TaskDescription = observer(({ task }) => {
   return (
     <div className="task-container">
-      <h2>Описание задачи</h2>
-      <p>Здесь будет описание вашей задачи...</p>
+      <h2>{task.title}</h2>
+      <p>{task.description}</p>
     </div>
   );
 });
@@ -200,7 +221,7 @@ const ButtonCostContainer = observer(({ reverseCode, seeThrough, eraseCharacters
   );
 });
 
-const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue, pressCounter, setPressCounter }) => {
+const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue }) => {
   const { getCurrentLanguage } = languageStore;
   const { closeWebSocket, initWebSocket } = webSocketStore;
   const navigate = useNavigate();
@@ -209,8 +230,26 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
     initWebSocket();
     navigate("/search_battle");
   }
+
   const handleButtonPress = (action) => {
     action();
+  };
+
+  const generateRandomString = (n) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let randomString = '';
+
+    for (let i = 0; i < n.length; i++) {
+      const char = n[i];
+      if (char === ' ' || char === '\t' || char === '\n') {
+        randomString += char;
+      } else {
+        randomString += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+    }
+
+    return randomString;
   };
 
   return (
@@ -232,15 +271,14 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           }}
         />
         <div className="button-group">
-          <button onClick={() => handleButtonPress(() => console.log('Test'))}>Test</button>
-          <button onClick={() => handleButtonPress(() => console.log('Run'))}>Run</button>
+          <Button type="primary" onClick={() => handleButtonPress(() => console.log('Run'))}>Run</Button>
         </div>
       </div>
       <div className="code-block" style={{ transform: isUpsideDown2 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
         <CodeEditor
           className="w-tc-editor-var"
           minHeight={500}
-          value={code2}
+          value={blurValue ? generateRandomString(code2) : code2}
           language={getCurrentLanguage()}
           onChange={(evn) => setCode2(evn.target.value)}
           padding={15}
@@ -255,7 +293,6 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           }}
         />
         <div className="button-group">
-          <Button type="primary" onClick={() => handleButtonPress(() => console.log('Test'))}>Test</Button>
           <Button type="primary" onClick={() => handleButtonPress(() => console.log('Run'))}>Run</Button>
         </div>
       </div>

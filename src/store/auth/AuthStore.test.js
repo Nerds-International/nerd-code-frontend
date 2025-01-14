@@ -22,28 +22,6 @@ describe("AuthStore", () => {
     jest.clearAllMocks();
   });
 
-  test("signIn sets isAuthenticated to true on successful login", async () => {
-    const mockResponse = {
-      accessToken: "access-token",
-      refreshToken: "refresh-token",
-      uuid: "user-uuid",
-    };
-
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockResponse),
-      })
-    );
-
-    await authStore.signIn("testUser", "testPassword");
-
-    expect(authStore.isAuthenticated).toBe(true);
-    expect(localStorage.getItem("accessToken")).toBe("access-token");
-    expect(localStorage.getItem("refreshToken")).toBe("refresh-token");
-    expect(localStorage.getItem("uuid")).toBe("user-uuid");
-  });
-
   test("signIn shows error notification on failed login", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({

@@ -257,8 +257,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           }}
         />
         <div className="button-group">
-          <button onClick={() => handleButtonPress(() => console.log('Test'))}>Test</button>
-          <button onClick={() => handleButtonPress(() => console.log('Run'))}>Run</button>
+          <Button type="primary" onClick={() => handleButtonPress(() => console.log('Run'))}>Run</Button>
         </div>
       </div>
       <div className="code-block" style={{ transform: isUpsideDown2 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
@@ -280,7 +279,6 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           }}
         />
         <div className="button-group">
-          <Button type="primary" onClick={() => handleButtonPress(() => console.log('Test'))}>Test</Button>
           <Button type="primary" onClick={() => handleButtonPress(() => console.log('Run'))}>Run</Button>
         </div>
       </div>

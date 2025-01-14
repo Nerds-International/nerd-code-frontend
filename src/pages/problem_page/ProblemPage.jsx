@@ -207,6 +207,7 @@ const ProblemPage = observer(() => {
   const processingResultJs = async() => {
     if (result && runType === "Run") {
       let summary = "Pass";
+      let name = "";
       console.log(result);
       for (const el of result){
         if (el === false){
@@ -224,7 +225,7 @@ const ProblemPage = observer(() => {
         });
 
         const data = await response.json();
-        console.log(data)
+        name = data.username;
 
       } catch (error) {
         console.log(error);
@@ -239,7 +240,7 @@ const ProblemPage = observer(() => {
           },
           body: JSON.stringify({
             task_id: task.id,
-            user_id: Cookies.get('id'),
+            user_id: name,
             language: "JS",
             time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             result: summary,

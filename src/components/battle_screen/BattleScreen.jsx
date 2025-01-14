@@ -9,6 +9,7 @@ import CodeEditor from "@uiw/react-textarea-code-editor";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
 import { useNavigate } from "react-router-dom";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
+import ModalResult from "../../components/modal_result/ModalResult";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
@@ -23,6 +24,7 @@ const BattleScreen = observer(() => {
   const { Languages, getCurrentLanguage } = languageStore;
   const [combinedCode, setCombinedCode] = useState("");
   const { result } = useCodeRunnerJS(combinedCode);
+  const [outcome, setOutcome] = useState(false);
 
   const reverseCode = (target) => {
     if (target === 1) {
@@ -127,13 +129,16 @@ const BattleScreen = observer(() => {
       for (let i = 0; i < task.testCases.length; i++) {
         tpart1 =
           tpart1 +
-          `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+          `const result${i} = JSON.stringify(${functionName}([${task.testCases[i].input}])) === JSON.stringify([${task.testCases[i].expected_output}]);\n`;
         tpart2 = tpart2 + `result${i}, `;
       }
       tpart2 = tpart2.slice(0, -2) + `];`;
       const combined = `${code1}\n${tpart1 + tpart2}`;
       setCombinedCode(combined);
       console.log(result)
+      if (result.every(Boolean)) {
+        setOutcome(true)
+      }
     } else {
       console.log("NOT IMPLEMENTED")
     }
@@ -163,6 +168,7 @@ const BattleScreen = observer(() => {
           blurValue={blurValue}
           runCode={runCode}
         />
+        {outcome ? "" : <ModalResult state={"Win"} />}
       </div>
     </div>
   );
@@ -173,6 +179,8 @@ const TaskDescription = observer(({ task }) => {
     <div className="task-container">
       <h2>{task.title}</h2>
       <p>{task.description}</p>
+      {/* <p>Входные данные: {task.testCases[0].input}</p>
+      <p>Ожидаемые выходные данные: {task.testCases[0].input}</p> */}
     </div>
   );
 });

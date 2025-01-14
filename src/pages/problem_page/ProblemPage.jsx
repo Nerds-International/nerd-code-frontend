@@ -81,8 +81,8 @@ const ProblemPage = observer(() => {
         tests_output = `[`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
-              tests +
-              `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+            tests +
+            `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
           tests_output = tests_output + `result${i}, `;
         }
         tests_output = tests_output.slice(0, -2) + `];`;
@@ -90,8 +90,8 @@ const ProblemPage = observer(() => {
         functionTemplate = `def ${functionName}() :\n   return 0 \n`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
-              tests +
-              `${functionName}(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
+            tests +
+            `${functionName}(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
         }
       }
       setCode2(functionTemplate);
@@ -192,8 +192,8 @@ const ProblemPage = observer(() => {
       tpart2 = `[`;
       for (let i = 0; i < task.testCases.length; i++) {
         tpart1 =
-            tpart1 +
-            `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+          tpart1 +
+          `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
         tpart2 = tpart2 + `result${i}, `;
       }
       tpart2 = tpart2.slice(0, -2) + `];`;
@@ -204,13 +204,13 @@ const ProblemPage = observer(() => {
     }
   };
 
-  const processingResultJs = async() => {
+  const processingResultJs = async () => {
     if (result && runType === "Run") {
       let summary = "Pass";
       let name = "";
       console.log(result);
-      for (const el of result){
-        if (el === false){
+      for (const el of result) {
+        if (el === false) {
           summary = "Fail";
         }
       }
@@ -256,7 +256,7 @@ const ProblemPage = observer(() => {
   }
 
   useEffect(() => {
-    if (runType === "Run"){
+    if (runType === "Run") {
       processingResultJs();
     }
   }, [runType, result]);
@@ -276,8 +276,8 @@ const ProblemPage = observer(() => {
         expectedValue = true; //FIXME: При добавлении const result3, const result4, ... Срабатывает этот catch!
       }
       return element === 'true' ?
-          `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
-          `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
+        `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
+        `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
     }).concat(errorArray.map(err => `<span class="problem-result-error">\nError: ${err}!!!</span>\n`));
 
     return combinedResults.join('');
@@ -288,116 +288,116 @@ const ProblemPage = observer(() => {
   }
 
   return (
-      <div className="general">
-        <div className="problem-container">
-          <div className="problem-info">
+    <div className="general">
+      <div className="problem-container">
+        <div className="problem-info">
           <span className={"name"}>
             <div
-                className={`big-difficulty-circle ${task.difficulty.toLowerCase()}`}
+              className={`big-difficulty-circle ${task.difficulty.toLowerCase()}`}
             ></div>
             <h2>{task.name}</h2>
           </span>
-            <p>{task.description}</p>
-            {/*<ModalResult state={"Lose"} />*/}
-          </div>
-
-          <div className="test-case-visualizing">
-            <h2 style={{ marginTop: 0, paddingTop: 20 }}>Examples</h2>
-            {task.testCases.slice(0, 2).map(testCase => (
-                <VisualizingTestCase
-                    data={{
-                      input: testCase.input,
-                      output: testCase.expected_output,
-                    }}
-                    type={{
-                      input: parseInt(task.input_type),
-                      output: parseInt(task.output_type),
-                    }}
-                />
-            ))}
-          </div>
-
-          <div className="tests">
-            <h2>Results:</h2>
-            {(result || error) && (
-                <pre className="problem-results-text" dangerouslySetInnerHTML={{__html: handleResult()}}/>
-            )}
-          </div>
-
-          <div className="additional-info">
-            <div className="like-dislike-buttons">
-              <button
-                  onClick={handleLike}
-                  className={selectedButton === "like" ? "selected" : ""}
-              >
-                👍 {likeCount}
-              </button>
-              <button
-                  onClick={handleDislike}
-                  className={selectedButton === "dislike" ? "dislike-selected" : ""}
-              >
-                👎 {dislikeCount}
-              </button>
-            </div>
-          </div>
-
-          <ProblemAttemptTable data={attempt} />
+          <p>{task.description}</p>
+          {/*<ModalResult state={"Lose"} />*/}
         </div>
 
-        <div className="code-block">
-          <div className="language">
-            <label htmlFor="language-select">
-              Choose a programming language:
-            </label>
-            <select
-                id="language-select"
-                value={getCurrentLanguage()}
-                onChange={(e) => setCurrentLanguage(e.target.value)}
+        <div className="test-case-visualizing">
+          <h2 style={{ marginTop: 0, paddingTop: 20 }}>Examples</h2>
+          {task.testCases.slice(0, 2).map(testCase => (
+            <VisualizingTestCase
+              data={{
+                input: testCase.input,
+                output: testCase.expected_output,
+              }}
+              type={{
+                input: parseInt(task.input_type),
+                output: parseInt(task.output_type),
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="tests">
+          <h2>Results:</h2>
+          {(result || error) && (
+            <pre className="problem-results-text" dangerouslySetInnerHTML={{ __html: handleResult() }} />
+          )}
+        </div>
+
+        <div className="additional-info">
+          <div className="like-dislike-buttons">
+            <button
+              onClick={handleLike}
+              className={selectedButton === "like" ? "selected" : ""}
             >
-              <option value="">--Please choose an option--</option>
-              <option value={Languages.JAVASCRIPT}>JavaScript</option>
-              <option value={Languages.PYTHON}>Python</option>
-            </select>
+              👍 {likeCount}
+            </button>
+            <button
+              onClick={handleDislike}
+              className={selectedButton === "dislike" ? "dislike-selected" : ""}
+            >
+              👎 {dislikeCount}
+            </button>
           </div>
-          <CodeEditor
+        </div>
+
+        <ProblemAttemptTable data={attempt} />
+      </div>
+
+      <div className="code-block">
+        <div className="language">
+          <label htmlFor="language-select">
+            Choose a programming language:
+          </label>
+          <select
+            id="language-select"
+            value={getCurrentLanguage()}
+            onChange={(e) => setCurrentLanguage(e.target.value)}
+          >
+            <option value="">--Please choose an option--</option>
+            <option value={Languages.JAVASCRIPT}>JavaScript</option>
+            <option value={Languages.PYTHON}>Python</option>
+          </select>
+        </div>
+        <CodeEditor
+          className="w-tc-editor-var"
+          minHeight={500}
+          value={code2}
+          language={getCurrentLanguage()}
+          onChange={(evn) => setCode2(evn.target.value)}
+          padding={15}
+          data-color-mode="dark"
+          style={{
+            backgroundColor: "#f5f5f5",
+            fontFamily:
+              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+          }}
+        />
+        <div className="self-test">
+          <div className="input-test">
+            <p>Test input:</p>
+            <CodeEditor
               className="w-tc-editor-var"
-              minHeight={500}
-              value={code2}
+              minHeight={200}
+              value={code3}
               language={getCurrentLanguage()}
-              onChange={(evn) => setCode2(evn.target.value)}
+              onChange={(evn) => setCode3(evn.target.value)}
               padding={15}
               data-color-mode="dark"
               style={{
                 backgroundColor: "#f5f5f5",
                 fontFamily:
-                    "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                  "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
               }}
-          />
-          <div className="self-test">
-            <div className="input-test">
-              <p>Test input:</p>
-              <CodeEditor
-                  className="w-tc-editor-var"
-                  minHeight={200}
-                  value={code3}
-                  language={getCurrentLanguage()}
-                  onChange={(evn) => setCode3(evn.target.value)}
-                  padding={15}
-                  data-color-mode="dark"
-                  style={{
-                    backgroundColor: "#f5f5f5",
-                    fontFamily:
-                        "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                  }}
-              />
-            </div>
-          </div>
-          <div className="button-group">
-            <button onClick={handleTest}>Test</button>
-            <button onClick={handleRun}>Run</button>
+            />
           </div>
         </div>
+        <div className="button-group">
+          <button onClick={handleTest}>Test</button>
+          <button onClick={handleRun}>Run</button>
+        </div>
       </div>
+    </div>
   );
 });
 

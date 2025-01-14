@@ -39,9 +39,9 @@ class AuthStore {
       Cookies.set('accessToken', data.accessToken, { expires: 52 });
       Cookies.set('refreshToken', data.refreshToken, { expires: 52 });
 
-      // localStorage.setItem('accessToken', data.accessToken);
-      // localStorage.setItem('refreshToken', data.refreshToken);
-      // localStorage.setItem('uuid', data.uuid);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('uuid', data.uuid);
 
       runInAction(() => {
         this.isAuthenticated = true;
@@ -95,8 +95,8 @@ class AuthStore {
       Cookies.set('id', data.id, { expires: 52 });
       Cookies.set('accessToken', data.accessToken, { expires: 52 });
 
-      // localStorage.setItem('accessToken', data.accessToken);
-      // localStorage.setItem('uuid', data.uuid);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('uuid', data.uuid);
 
       runInAction(() => {
         this.isAuthenticated = true;

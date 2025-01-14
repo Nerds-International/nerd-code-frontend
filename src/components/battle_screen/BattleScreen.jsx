@@ -57,7 +57,6 @@ const BattleScreen = observer(() => {
           description: data.task.description
         });
         setTemplateCode(data.task.title);
-        console.log(task);
       });
 
       socket.on('codeUpdated', (data) => {
@@ -65,7 +64,6 @@ const BattleScreen = observer(() => {
         if (data.id !== socket.id) {
           setCode2(data.code);
         }
-        console.log("dataid" + data.id)
       });
 
       socket.on('error', (data) => {
@@ -75,14 +73,12 @@ const BattleScreen = observer(() => {
       socket.on('skillUsed', (data) => {
         if (data.skill_name === "reverse") {
           if (data.id !== socket.id) {
-            console.log(socket.id)
             reverseCode(1);
           }
         }
 
         if (data.skill_name === "erase") {
           if (data.id !== socket.id) {
-            console.log(socket.id)
             eraseCharacters(1);
           }
         }

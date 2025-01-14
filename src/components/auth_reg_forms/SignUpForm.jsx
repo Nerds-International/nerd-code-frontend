@@ -9,7 +9,6 @@ const SignUpForm = observer(({ toggleForm, onComplete }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    console.log(values.confirmPassword);
     onComplete(values.email, values.password, values.confirmPassword);
   };
 

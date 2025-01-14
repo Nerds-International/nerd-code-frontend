@@ -9,7 +9,7 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    authStore.signIn(values.email, values.password);
+    await authStore.signIn(values.email, values.password);
   };
 
   const handleLogin = (e) => {

@@ -8,6 +8,7 @@ import energyStore from '../../store/energy/EnergyStore';
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
 import { useNavigate } from "react-router-dom";
+import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
@@ -20,6 +21,8 @@ const BattleScreen = observer(() => {
   const [blurValue, setBlurValue] = useState(3);
   const [task, setTask] = useState({})
   const { Languages, getCurrentLanguage } = languageStore;
+  const [combinedCode, setCombinedCode] = useState("");
+  const { result } = useCodeRunnerJS(combinedCode);
 
   const reverseCode = (target) => {
     if (target === 1) {
@@ -54,7 +57,8 @@ const BattleScreen = observer(() => {
       socket.on('task', (data) => {
         setTask({
           title: data.task.title,
-          description: data.task.description
+          description: data.task.description,
+          testCases: data.task.test_cases
         });
         setTemplateCode(data.task.title);
       });
@@ -114,6 +118,27 @@ const BattleScreen = observer(() => {
     syncCode();
   });
 
+  const runCode = () => {
+    if (getCurrentLanguage() === Languages.JAVASCRIPT) {
+      const functionName = generateFunctionName(task.title);
+      let tpart1 = ``;
+      let tpart2 = ``;
+      tpart2 = `[`;
+      for (let i = 0; i < task.testCases.length; i++) {
+        tpart1 =
+          tpart1 +
+          `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+        tpart2 = tpart2 + `result${i}, `;
+      }
+      tpart2 = tpart2.slice(0, -2) + `];`;
+      const combined = `${code1}\n${tpart1 + tpart2}`;
+      setCombinedCode(combined);
+      console.log(result)
+    } else {
+      console.log("NOT IMPLEMENTED")
+    }
+  }
+
   return (
     <div className="BattleScreen">
       <div className="left-column">
@@ -136,6 +161,7 @@ const BattleScreen = observer(() => {
           isUpsideDown1={isUpsideDown1}
           isUpsideDown2={isUpsideDown2}
           blurValue={blurValue}
+          runCode={runCode}
         />
       </div>
     </div>
@@ -221,7 +247,7 @@ const ButtonCostContainer = observer(({ reverseCode, seeThrough, eraseCharacters
   );
 });
 
-const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue }) => {
+const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown1, isUpsideDown2, blurValue, runCode }) => {
   const { getCurrentLanguage } = languageStore;
   const { closeWebSocket, initWebSocket } = webSocketStore;
   const navigate = useNavigate();
@@ -252,6 +278,8 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
     return randomString;
   };
 
+
+
   return (
     <div className="code-blocks">
       <div className="code-block" style={{ transform: isUpsideDown1 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
@@ -271,7 +299,7 @@ const BattleWindows = observer(({ code1, setCode1, code2, setCode2, isUpsideDown
           }}
         />
         <div className="button-group">
-          <Button type="primary" onClick={() => handleButtonPress(() => console.log('Run'))}>Run</Button>
+          <Button type="primary" onClick={() => handleButtonPress(() => runCode())}>Run</Button>
         </div>
       </div>
       <div className="code-block" style={{ transform: isUpsideDown2 ? 'rotate(180deg)' : 'rotate(0deg)' }}>

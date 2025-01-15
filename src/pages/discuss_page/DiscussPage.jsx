@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { forumStore } from "../../store/forum/ForumStore";
 import { useEffect, useMemo, useState } from "react";
 import "./DiscussPage.css";
+import { authStore } from "../../store/auth/AuthStore";
 import { Button, Flex, Input, List } from "antd";
 import CreateTopicModal from "../../components/create_topic_modal/CreateTopicModal";
 import TopicCard from "../../components/topic_card/TopicCard";
@@ -63,7 +64,7 @@ const DiscussPage = observer(() => {
         } catch (error) {
             console.error('Error fetching topics:', error.message || 'Error fetching topics');
         } finally {
-            console.log("nice");
+
         }
     };
 
@@ -138,6 +139,7 @@ const DiscussPage = observer(() => {
                 onClick={() => setIsCreateTopicModalVisible(true)}
                 color="default"
                 variant="text"
+                disabled={!authStore.isAuthenticated} 
             >
                 Create topic
             </Button>

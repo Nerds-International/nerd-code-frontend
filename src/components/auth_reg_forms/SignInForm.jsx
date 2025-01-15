@@ -5,11 +5,12 @@ import './Form.css';
 
 const { Item } = Form;
 
-const SignInForm = observer(({ toggleToSignUp, onForgotPassword }) => {
+const SignInForm = observer(({ toggleToSignUp, onForgotPassword, onClose }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    authStore.signIn(values.email, values.password);
+    await authStore.signIn(values.email, values.password);
+    onClose(); 
   };
 
   const handleLogin = (e) => {

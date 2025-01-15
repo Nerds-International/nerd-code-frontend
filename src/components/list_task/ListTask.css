@@ -64,3 +64,15 @@
 .task-link:hover {
     background-color: #E6B800;
 }
+
+.auth-message {
+    font-size: 18px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #6F6F6F;
+    margin-top: 20px;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

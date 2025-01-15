@@ -28,6 +28,7 @@ const FormModalWindow = ({ onClose, isLogin }) => {
             <SignInForm
               toggleToSignUp={() => setFormType('signUp')}
               onForgotPassword={() => setFormType('forgotPassword')}
+              onClose={onClose} // Передаем функцию закрытия модального окна
             />
           )}
           {formType === 'signUp' && (

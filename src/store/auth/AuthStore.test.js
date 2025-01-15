@@ -213,22 +213,6 @@ describe("AuthStore", () => {
     expect(authStore.userData).toBeNull();
   });
 
-  test("initializeAuth sets isAuthenticated to true if tokens and user data are valid", async () => {
-    const mockGetUser = jest
-        .spyOn(authStore, "getUser")
-        .mockResolvedValueOnce();
-
-    Cookies.set("accessToken", "valid-access-token");
-    Cookies.set("id", "valid-user-id");
-
-    await authStore.initializeAuth();
-
-    expect(mockGetUser).toHaveBeenCalledWith("valid-user-id", "valid-access-token");
-    expect(authStore.isAuthenticated).toBe(true);
-
-    mockGetUser.mockRestore();
-  });
-
   test("initializeAuth shows error and calls signOut on failed user fetch", async () => {
     const mockGetUser = jest
         .spyOn(authStore, "getUser")
@@ -254,4 +238,60 @@ describe("AuthStore", () => {
     mockSignOut.mockRestore();
   });
 
+  test("initializeAuth sets user data, cookies, and localStorage on successful user fetch", async () => {
+    const mockUserData = {
+      username: "test-user",
+      fullname: "Test User",
+      avatar_number: 1,
+    };
+
+    jest.spyOn(authStore, "getUser").mockResolvedValueOnce(mockUserData);
+
+    Cookies.set("accessToken", "valid-access-token");
+    Cookies.set("id", "valid-user-id");
+
+    await authStore.initializeAuth();
+
+    expect(authStore.isAuthenticated).toBe(true);
+    expect(authStore.userInfo).toEqual(mockUserData);
+
+    expect(Cookies.get("username")).toBe(mockUserData.username);
+    expect(Cookies.get("fullname")).toBe(mockUserData.fullname);
+    expect(Cookies.get("avatar_number")).toBe(String(mockUserData.avatar_number));
+
+    expect(localStorage.getItem("username")).toBe(mockUserData.username);
+    expect(localStorage.getItem("fullname")).toBe(mockUserData.fullname);
+    expect(localStorage.getItem("avatar_number")).toBe(String(mockUserData.avatar_number));
+  });
+
+  test("getUser shows error notification and rethrows the error on failure", async () => {
+    const mockError = new Error("User not found");
+
+    global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: false,
+          json: () => Promise.resolve({ message: mockError.message }),
+        })
+    );
+
+    await expect(authStore.getUser("invalid-id", "invalid-access-token")).rejects.toThrow(
+        "User not found"
+    );
+
+    expect(notification.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: "Attempting to get a user failed",
+          description: "User not found",
+        })
+    );
+
+    expect(global.fetch).toHaveBeenCalledWith("http://localhost:3000/auth/getUser", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        id: "invalid-id",
+        accessToken: "invalid-access-token",
+      },
+    });
+  });
 });

@@ -139,13 +139,14 @@ const DiscussPage = observer(() => {
                 onClick={() => setIsCreateTopicModalVisible(true)}
                 color="default"
                 variant="text"
-                disabled={!authStore.isAuthenticated} 
+                disabled={!authStore.isAuthenticated}
             >
                 Create topic
             </Button>
             <CreateTopicModal
                 visible={isCreateTopicModalVisible}
                 setVisible={setIsCreateTopicModalVisible}
+                fetchTopics={fetchTopics} // Передаем функцию fetchTopics в модальное окно
             />
         </>
     );

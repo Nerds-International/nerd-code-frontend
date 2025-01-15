@@ -20,9 +20,18 @@ class AuthStore {
 
     if (accessToken && id) {
       try {
-        await this.getUser(id, accessToken);
+        const userData = await this.getUser(id, accessToken);
         runInAction(() => {
           this.isAuthenticated = true;
+          this.userInfo = userData;
+
+          Cookies.set("username", userData.username, { expires: 52 });
+          Cookies.set("fullname", userData.fullname, { expires: 52 });
+          Cookies.set("avatar_number", userData.avatar_number, { expires: 52 });
+
+          localStorage.setItem("username", userData.username);
+          localStorage.setItem("fullname", userData.fullname);
+          localStorage.setItem("avatar_number", userData.avatar_number);
         });
       } catch (error) {
         notification.error({
@@ -52,7 +61,7 @@ class AuthStore {
       }
 
       const data = await response.json();
-      this.getUser(data.id, data.accessToken);
+      const userData = await this.getUser(data.id, data.accessToken);
 
       notification.success({
         message: "Login Successful",
@@ -70,6 +79,7 @@ class AuthStore {
       runInAction(() => {
         this.isAuthenticated = true;
         this.userData = data; // Сохраняем данные пользователя
+        this.userInfo = userData;
       });
     } catch (error) {
       notification.error({
@@ -123,6 +133,7 @@ class AuthStore {
       }
 
       const data = await response.json();
+      const userData = await this.getUser(data.id, data.accessToken);
 
       notification.success({
         message: "Registration Successful",
@@ -138,6 +149,7 @@ class AuthStore {
       runInAction(() => {
         this.isAuthenticated = true;
         this.userData = data; // Сохраняем данные пользователя
+        this.userInfo = userData;
       });
     } catch (error) {
       notification.error({
@@ -206,21 +218,13 @@ class AuthStore {
       }
 
       const data = await response.json();
-
-      Cookies.set("username", data.username, { expires: 52 });
-      Cookies.set("fullname", data.fullname, { expires: 52 });
-      Cookies.set("avatar_number", data.avatar_number, { expires: 52 });
-
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("fullname", data.fullname);
-      localStorage.setItem("avatar_number", data.avatar_number);
-
-      this.userInfo = data;
+      return data;
     } catch (error) {
       notification.error({
         message: "Attempting to get a user failed",
         description: error.message.trim(),
       });
+      throw error;
     } finally {
       runInAction(() => {
         this.isLoading = false;

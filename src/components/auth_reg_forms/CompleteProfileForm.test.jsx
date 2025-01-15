@@ -38,4 +38,36 @@ describe('CompleteProfileForm', () => {
         expect(getByText('I have read and agree with the Terms of Service and Code of Conduct')).toBeInTheDocument();
         expect(getByText('Create account')).toBeInTheDocument();
     });
+
+    it('calls authStore.signUp and backToSignIn on form submission', async () => {
+        authStore.signUp.mockResolvedValueOnce();
+
+        const { getByPlaceholderText, getByText, getByRole } = render(
+            <CompleteProfileForm userData={userData} backToSignIn={backToSignIn} />
+        );
+
+        fireEvent.change(getByPlaceholderText('Username'), { target: { value: 'testuser' } });
+        fireEvent.change(getByPlaceholderText('Full name'), { target: { value: 'Test User' } });
+
+        fireEvent.mouseDown(getByText('Choose an avatar'));
+        const avatarOption = getByText('Avatar 1');
+        fireEvent.click(avatarOption);
+
+        const submitButton = getByRole('button', { name: 'Create account' });
+        await act(async () => {
+            fireEvent.click(submitButton);
+        });
+
+        expect(authStore.signUp).toHaveBeenCalledWith(
+            userData.email,
+            userData.password,
+            'testuser',
+            'Test User',
+            1,
+            userData.confirmPassword
+        );
+
+        expect(backToSignIn).toHaveBeenCalled();
+    });
+
 });

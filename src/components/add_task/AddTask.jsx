@@ -49,7 +49,6 @@ const Task = () => {
         }
         for (let i = 0; i < maxTime.length; i++) {
             if (!isValidFloat(maxTime[i])) {
-                setError("The maximum execution time should be float");
                 return false;
             }
         }

@@ -22,7 +22,6 @@ const Navbar = observer(() => {
     window.location.assign("http://nerdcode.fun");
   };
 
-  // Получаем номер аватара из authStore или из куки/локального хранилища
   const avatarNumber = authStore.userInfo ? authStore.userInfo.avatar_number : 1;
 
   const navbarItems = [

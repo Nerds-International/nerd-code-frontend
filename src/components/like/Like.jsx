@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { Flex, Typography } from "antd";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useState } from "react";
-import { authStore } from "../../store/auth/AuthStore"; // Импортируем authStore
+import { authStore } from "../../store/auth/AuthStore"; 
 
 const { Title } = Typography;
 

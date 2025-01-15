@@ -10,7 +10,7 @@ const SignInForm = observer(({ toggleToSignUp, onForgotPassword, onClose }) => {
 
   const onFinish = async (values) => {
     await authStore.signIn(values.email, values.password);
-    onClose(); // Закрываем модальное окно после успешного входа
+    onClose(); 
   };
 
   const handleLogin = (e) => {

@@ -25,8 +25,8 @@ window.matchMedia =
   function () {
     return {
       matches: false,
-      addListener: function () { },
-      removeListener: function () { },
+      addListener: function () {},
+      removeListener: function () {},
     };
   };
 
@@ -41,7 +41,7 @@ describe("BattleScreen Component", () => {
         <Routes>
           <Route path="/battle" element={<BattleScreen />} />
         </Routes>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
     expect(screen.getByText("Перевернуть")).toBeInTheDocument();
     expect(screen.getByText("Подглядеть")).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("BattleScreen Component", () => {
         <Routes>
           <Route path="/battle" element={<BattleScreen />} />
         </Routes>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     const codeEditors = screen.getAllByRole("textbox");
@@ -78,7 +78,7 @@ describe("BattleScreen Component", () => {
         <Routes>
           <Route path="/battle" element={<BattleScreen />} />
         </Routes>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     const codeEditors = screen.getAllByRole("textbox");
@@ -103,7 +103,7 @@ describe("BattleScreen Component", () => {
         <Routes>
           <Route path="/battle" element={<BattleScreen />} />
         </Routes>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     const lagButton = screen.getByText("Подглядеть");
@@ -124,7 +124,7 @@ describe("BattleScreen Component", () => {
         <Routes>
           <Route path="/battle" element={<BattleScreen />} />
         </Routes>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     const eraseButton = screen.getByText("Стереть 10 символов");
@@ -146,8 +146,7 @@ describe("BattleScreen Component", () => {
         <Routes>
           <Route path="/battle" element={<BattleScreen />} />
         </Routes>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
   });
-
 });

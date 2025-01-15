@@ -18,13 +18,16 @@ const BattleScreen = observer(() => {
   const [isUpsideDown2, setIsUpsideDown2] = useState(false);
   const location = useLocation();
   const battleId = location.state?.battleId || "defaultBattleId";
-  const { socket } = webSocketStore;
+  const { socket, closeWebSocket } = webSocketStore;
   const [blurValue, setBlurValue] = useState(3);
   const [task, setTask] = useState({})
   const { Languages, getCurrentLanguage } = languageStore;
   const [combinedCode, setCombinedCode] = useState("");
   const { result } = useCodeRunnerJS(combinedCode);
-  const [outcome, setOutcome] = useState(false);
+  // const [outcome, setOutcome] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalState, setModalState] = useState("")
+  const navigate = useNavigate();
 
   const reverseCode = (target) => {
     if (target === 1) {
@@ -129,20 +132,29 @@ const BattleScreen = observer(() => {
       for (let i = 0; i < task.testCases.length; i++) {
         tpart1 =
           tpart1 +
-          `const result${i} = JSON.stringify(${functionName}([${task.testCases[i].input}])) === JSON.stringify([${task.testCases[i].expected_output}]);\n`;
+          `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
         tpart2 = tpart2 + `result${i}, `;
       }
       tpart2 = tpart2.slice(0, -2) + `];`;
       const combined = `${code1}\n${tpart1 + tpart2}`;
       setCombinedCode(combined);
+      console.log(combined)
       console.log(result)
-      if (result.every(Boolean)) {
-        setOutcome(true)
-      }
     } else {
       console.log("NOT IMPLEMENTED")
     }
   }
+
+  useEffect(() => {
+    if (result && result.every(Boolean)) {
+      setModalState("Win")
+      setShowModal(true);
+      setTimeout(() => {
+        navigate("/search_battle");
+      }, 5000);
+      closeWebSocket();
+    }
+  }, [result, navigate, closeWebSocket]);
 
   return (
     <div className="BattleScreen">
@@ -168,8 +180,8 @@ const BattleScreen = observer(() => {
           blurValue={blurValue}
           runCode={runCode}
         />
-        {outcome ? "" : <ModalResult state={"Win"} />}
       </div>
+      {showModal && <ModalResult state={modalState} />}
     </div>
   );
 });

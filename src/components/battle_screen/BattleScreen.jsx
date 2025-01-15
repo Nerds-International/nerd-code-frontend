@@ -92,6 +92,17 @@ const BattleScreen = observer(() => {
           }
         }
       });
+
+      socket.on('outcome', (data) => {
+        if (data.id !== socket.id) {
+          setModalState("Lose")
+          setShowModal(true);
+          setTimeout(() => {
+            navigate("/search_battle");
+          }, 5000);
+          closeWebSocket();
+        }
+      })
     }
   });
 
@@ -149,12 +160,13 @@ const BattleScreen = observer(() => {
     if (result && result.every(Boolean)) {
       setModalState("Win")
       setShowModal(true);
+      socket.emit('endMatch', battleId)
       setTimeout(() => {
         navigate("/search_battle");
+        closeWebSocket();
       }, 5000);
-      closeWebSocket();
     }
-  }, [result, navigate, closeWebSocket]);
+  }, [result, navigate, closeWebSocket, battleId, socket]);
 
   return (
     <div className="BattleScreen">

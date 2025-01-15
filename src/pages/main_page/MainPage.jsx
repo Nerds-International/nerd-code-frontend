@@ -1,17 +1,89 @@
 import {observer} from "mobx-react-lite";
 import {Avatar, Card, Col, Flex, List, Row, Typography} from "antd";
+import { useSearchParams } from "react-router-dom";
 import {mainStore} from "../../store/main/MainStore";
 import {forumStore} from "../../store/forum/ForumStore";
 import Meta from "antd/lib/card/Meta";
 import TopicCard from "../../components/topic_card/TopicCard";
+import {useEffect} from "react";
+import Cookies from 'js-cookie';
 
 const { Title } = Typography;
 
 const MainPage = observer(() => {
-  const { getNews } = mainStore;
-  const { getTopics } = forumStore;
+    const { getNews } = mainStore;
+    const { getTopics } = forumStore;
+    const store = forumStore;
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get("id");
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
+    const fetchTopics = async (page = 1, limit = 10) => {
+        try {
+            const url = new URL('http://localhost:3000/forums');
+            url.searchParams.append('page', page);
+            url.searchParams.append('limit', limit);
+            const idFromCookie = Cookies.get('id');
+            const accessTokenFromCookie = Cookies.get('accessToken');
 
-  return (
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'id': idFromCookie,
+                    'accessToken': accessTokenFromCookie,
+                    'refreshToken': refreshToken,
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error fetching topics');
+            }
+
+            const data = await response.json();
+            const getTopic = data.map(item => {
+                const messages = item.comments.map(comment => ({
+                    id: comment._id,
+                    author: comment.user_id,
+                    time: comment.created_at,
+                    text: comment.comment
+                }));
+                return {
+                    id: item._id,
+                    author: item.author_id,
+                    time: item.created_at,
+                    title: item.title,
+                    text: item.description,
+                    likes: item.likes,
+                    messages: messages
+                };
+            });
+            store.setTopics(getTopic);
+            console.log(store.getTopics());
+        } catch (error) {
+            console.error('Error fetching topics:', error.message || 'Error fetching topics');
+        } finally {
+            console.log("nice");
+        }
+    };
+
+    useEffect(() => {
+        if (id) {
+          Cookies.set('id', id, { expires: 52 });
+        }
+        if (accessToken) {
+          Cookies.set('accessToken', accessToken, { expires: 52 });
+        }
+        if (refreshToken) {
+          Cookies.set('refreshToken', refreshToken, { expires: 52 });
+        }
+
+        console.log(Cookies.get('accessToken'))
+        fetchTopics(1, 10);
+    }, []);
+
+    return (
     <Flex
       vertical={false}
       style={{

@@ -36,11 +36,22 @@ const ProblemsListPage = observer(() => {
 
             const data = await response.json();
             const getTask = [];
-            for (let i = 0; i < data.total; i++){
-                getTask.push({ id: data.tasks[i]._id, name: data.tasks[i].title, description: data.tasks[i].description, difficulty: data.tasks[i].difficulty, likes: data.tasks[i].likes, dislikes: data.tasks[i].dislikes,  createdAt: data.tasks[i].created_at, testCases: data.tasks[i].test_cases});
+            for (let i = 0; i < data.total; i++) {
+                console.log(data.tasks[i]);
+                getTask.push({
+                    id: data.tasks[i]._id,
+                    name: data.tasks[i].title,
+                    description: data.tasks[i].description,
+                    difficulty: data.tasks[i].difficulty,
+                    likes: data.tasks[i].likes,
+                    dislikes: data.tasks[i].dislikes,
+                    createdAt: data.tasks[i].created_at,
+                    testCases: data.tasks[i].test_cases,
+                    input_type: data.tasks[i].input_type,
+                    output_type: data.tasks[i].output_type,
+                });
             }
             store.setTask(getTask);
-            console.log(getTask)
         } catch (error) {
             console.error('Error fetching tasks:', error.message || 'Error fetching tasks');
         } finally {

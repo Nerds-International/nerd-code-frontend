@@ -2,8 +2,10 @@ import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authStore } from "../../store/auth/AuthStore";
 import { languageStore } from "../../store/language/LanguageStore";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
+import Cookies from 'js-cookie';
 
 const Battle = observer(() => {
   return (
@@ -18,48 +20,76 @@ const MatchFinder = observer(() => {
   const [loading, setLoading] = useState(false);
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
   const navigate = useNavigate();
-  const { socket } = webSocketStore;
+  const { getSocket, setSocket, initWebSocket, closeWebSocket } = webSocketStore;
   const [joined, setJoined] = useState(false);
+  const [searchingOpponent, setSearchingOpponent] = useState(false);
 
 
   useEffect(() => {
-    if (socket) {
-      socket.on('opponentJoined', (data) => {
-        if(joined){
+    if (searchingOpponent) {
+      let socket = getSocket();
+
+      const handleOpponentJoined = (data) => {
+        if (joined) {
           console.log('Opponent joined:', data.battleId);
           setMatch(true);
           setTimeout(() => {
             setLoading(false);
-            navigate("/battle", { state: { battleId: data.battleId } })
+            navigate("/battle", { state: { battleId: data.battleId } });
+            setSearchingOpponent(false);
             setJoined(false);
             socket.emit('startMatch', data.battleId);
           }, 2000);
+        } else {
+          setJoined(true);
         }
-        setJoined(true);
-      });
+      };
+
+      socket.on('opponentJoined', handleOpponentJoined);
+
+      return () => {
+        socket.off('opponentJoined', handleOpponentJoined);
+      };
     }
-  }, [socket, navigate, joined, setJoined]);
+  }, [getSocket, navigate, joined, setJoined, searchingOpponent]);
 
   async function findMatch() {
     setLoading(true);
     try {
-      // openNewWebSocket();
-      const response = await fetch("http://localhost:3000/battles/getKeys");
+      setSocket(initWebSocket());
+
+      const idFromCookie = Cookies.get('id');
+      const accessTokenFromCookie = Cookies.get('accessToken');
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          '_id': idFromCookie,
+          'accessToken': accessTokenFromCookie,
+        },
+      };
+
+      const response = await fetch("http://localhost:3000/battles/getKeys", requestOptions);
       const data = await response.text();
       const battleId = data;
-      joinBattle(battleId);
+      setTimeout(joinBattle(battleId), 2000)
     } catch (error) {
       console.error("Error fetching match data:", error);
       setTimeout(() => {
         setLoading(false);
       }, 2000);
       setMatch(false);
+      closeWebSocket();
     }
   }
 
   function joinBattle(battleId) {
-    if (socket) {
-      socket.emit('joinBattle', battleId);
+    if (getSocket()) {
+      getSocket().emit('joinBattle', battleId);
+      setSearchingOpponent(true);
+    } else {
+      console.log("NO SOCKET")
     }
   }
 
@@ -78,7 +108,7 @@ const MatchFinder = observer(() => {
         </select>
         <div className="find-match">
           {!match && !loading && (
-            <button className="find-match-button" onClick={findMatch}>
+            <button className="find-match-button" onClick={findMatch} disabled={!authStore.isAuthenticated} >
               Find Match
             </button>
           )}

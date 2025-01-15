@@ -9,6 +9,13 @@
     width: 100%;
 }
 
+:where(.css-dev-only-do-not-override-ni1kz0).ant-menu-light.ant-menu-horizontal > .ant-menu-item::after,
+:where(.css-dev-only-do-not-override-ni1kz0).ant-menu-light > .ant-menu.ant-menu-horizontal > .ant-menu-item::after,
+:where(.css-dev-only-do-not-override-ni1kz0).ant-menu-light.ant-menu-horizontal > .ant-menu-submenu::after,
+:where(.css-dev-only-do-not-override-ni1kz0).ant-menu-light > .ant-menu.ant-menu-horizontal > .ant-menu-submenu::after {
+    border-bottom: none;
+}
+
 .tabs {
     display: flex;
     align-items: center;
@@ -73,6 +80,25 @@
     align-items: center;
     justify-content: center;
     height: 40px;
+    margin: 0 8px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.username {
+    margin-left: 8px;
+    white-space: nowrap;
 }
 
 .form-modal {
@@ -87,15 +113,6 @@
     align-items: center;
     z-index: 1000;
 }
-
-/* .form-container {
-    height: 554px;
-    width: 440px;
-    background: transparent;
-    padding: 20px;
-    border-radius: 8px; 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-} */
 
 .form-switch {
     margin-top: 10px;

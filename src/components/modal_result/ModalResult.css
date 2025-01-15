@@ -1,0 +1,43 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(61, 60, 0, 0.69);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 100px;
+    border-color: #ffc012;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-emoji {
+    font-size: 90px;
+    margin-bottom: 10px;
+}
+
+.modal-message {
+    font-size: 35px;
+    margin-bottom: 20px;
+}
+
+.modal-close-button {
+    background-color: #ffc012;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-close-button:hover {
+    background-color: #e8e4de;
+}

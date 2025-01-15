@@ -6,6 +6,11 @@ import "./ProblemPage.css";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { languageStore } from "../../store/language/LanguageStore";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
+import VisualizingTestCase from "../../components/visualizing_test_case/VisualizingTestCase";
+import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
+import Cookies from "js-cookie";
+import { format } from 'date-fns';
+// import ModalResult from "../../components/modal_result/ModalResult";
 
 const ProblemPage = observer(() => {
   const [searchParams] = useSearchParams();
@@ -13,12 +18,119 @@ const ProblemPage = observer(() => {
   const task = problemsStore.tasks.find((task) => task.id === id);
   const [code2, setCode2] = useState("");
   const [code3, setCode3] = useState("");
+  const [runType, setRunType] = useState("");
   const { Languages, getCurrentLanguage, setCurrentLanguage } = languageStore;
   const [likeCount, setLikeCount] = useState(task ? task.likes : 0);
   const [dislikeCount, setDislikeCount] = useState(task ? task.dislikes : 0);
   const [selectedButton, setSelectedButton] = useState(null);
   const [combinedCode, setCombinedCode] = useState("");
   const { result, error } = useCodeRunnerJS(combinedCode);
+  const [pythonResult, setPythonResult] = useState(null);
+  const [pythonMessage, setPythonMessage] = useState("");
+  const store = problemsStore;
+  const [uname, setUname] = useState("");
+  const [attempt, setAttempt] = useState([]);
+  const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/auth/getUser', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUname(data.username);
+        setIsUsernameLoaded(true);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchAttempts = async () => {
+      try {
+        console.log("here");
+        const response = await fetch(`http://localhost:3000/res/attemptsByUser`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'taskId': id,
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+        });
+        if (!response.ok) {
+          throw new Error('failed to get attempts');
+        }
+        const result = await response.json();
+        const newAttempts = result.map(item => ({
+          id: item._id,
+          taskId: item.task_id,
+          userName: uname,
+          language: item.language,
+          result: item.result,
+          time: item.time
+        }));
+        setAttempt(newAttempts);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    const fetchTaskById = async (taskId) => {
+      try {
+        const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Error fetching task');
+        }
+
+        const data = await response.json();
+        console.log("Fetched task data:", data);
+        const getTask = {
+          id: data._id,
+          name: data.title,
+          description: data.description,
+          difficulty: data.difficulty,
+          likes: data.likes,
+          dislikes: data.dislikes,
+          createdAt: data.created_at,
+          testCases: data.test_cases,
+          input_type: data.input_type,
+          output_type: data.output_type,
+        };
+        store.setTask([getTask]);
+      } catch (error) {
+        console.error('Error fetching task:', error.message || 'Error fetching task');
+      }
+    };
+
+    if (isUsernameLoaded && id) {
+      fetchAttempts();
+      if (!task) {
+        fetchTaskById(id);
+      }
+    }
+  }, [isUsernameLoaded, id, task, store]);
 
   useEffect(() => {
     if (task) {
@@ -37,11 +149,11 @@ const ProblemPage = observer(() => {
         }
         tests_output = tests_output.slice(0, -2) + `];`;
       } else {
-        functionTemplate = `def ${functionName}() :\n   return 0 \n`;
+        functionTemplate = `def f() :\n   return 0 \n`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
             tests +
-            `${functionName}(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
+            `f(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
         }
       }
       setCode2(functionTemplate);
@@ -79,60 +191,210 @@ const ProblemPage = observer(() => {
   const handleTest = async () => {
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
       try {
+        console.log(JSON.stringify(task.testCases))
+        console.log(code2)
         const response = await fetch('http://localhost:3000/tasks/execute', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
           },
           body: JSON.stringify({
             code: code2,
-            tests: [
-              { input: '[3, 1, 2]', expected: '[1, 2, 3]' },
-              { input: '[5, 4, 6]', expected: '[4, 5, 6]' },
-            ],
+            tests: task.testCases,
+            language: "Python",
+            type: "Test",
           }),
         });
-  
+
         if (!response.ok) {
           const errorData = await response.json();
-          console.log(errorData)
+          console.log(errorData);
         }
-  
-        const result = await response.json();
-        console.log('Execution Result:', result);
+
+        const python_result = await response.json();
+        if (python_result.success === true) {
+          setPythonResult(true);
+          setPythonMessage(python_result.result);
+        } else {
+          setPythonResult(false);
+          setPythonMessage(python_result);
+        }
+        console.log('Execution Result:', python_result);
       } catch (error) {
         console.error('Error executing Python code:', error.message);
       }
     } else {
       const combined = `${code2}\n${code3}`;
+      setRunType("Test");
       setCombinedCode(combined);
     }
   };
-  
+
+  const handleRun = async () => {
+    if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
+      try {
+        console.log(JSON.stringify(task.testCases));
+        console.log(code2);
+        const response = await fetch('http://localhost:3000/tasks/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+          body: JSON.stringify({
+            code: code2,
+            tests: task.testCases,
+            language: "Python",
+            type: "Run",
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.log(errorData);
+        }
+
+        const python_result = await response.json();
+        let trash = "";
+        if (python_result.success === true) {
+          setPythonResult(true);
+          trash = "Pass";
+          setPythonMessage(python_result.result);
+        } else {
+          setPythonResult(false);
+          trash = "Fail";
+          setPythonMessage(python_result);
+          console.log(pythonMessage)
+          console.log(pythonResult)
+        }
+
+        try {
+          const response = await fetch('http://localhost:3000/res/attempts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'id': Cookies.get('id'),
+              'accessToken': Cookies.get('accessToken'),
+            },
+            body: JSON.stringify({
+              task_id: task.id,
+              user_id: Cookies.get("id"),
+              language: "Python",
+              time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+              result: trash,
+            }),
+          });
+          const result_attempt = await response.json();
+          setAttempt([...attempt, {
+            id: result_attempt._id,
+            taskId: result_attempt.task_id,
+            userName: uname,
+            language: result_attempt.language,
+            result: result_attempt.result,
+            time: result_attempt.time
+          }]);
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+
+        console.log('Execution Result:', python_result);
+      } catch (error) {
+        console.error('Error executing Python code:', error.message);
+      }
+    } else {
+      const functionName = generateFunctionName(task.name);
+      let tpart1 = ``;
+      let tpart2 = ``;
+      tpart2 = `[`;
+      for (let i = 0; i < task.testCases.length; i++) {
+        tpart1 =
+          tpart1 +
+          `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+        tpart2 = tpart2 + `result${i}, `;
+      }
+      tpart2 = tpart2.slice(0, -2) + `];`;
+      setRunType("Run");
+      const combined = `${code2}\n${tpart1 + tpart2}`;
+      setCombinedCode(combined);
+      console.log(result);
+    }
+  };
+
+  const processingResultJs = async () => {
+    if (result && runType === "Run") {
+      let summary = "Pass";
+      console.log(result);
+      for (const el of result) {
+        if (el === false) {
+          summary = "Fail";
+        }
+      }
+      try {
+        const response = await fetch('http://localhost:3000/res/attempts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+          body: JSON.stringify({
+            task_id: task.id,
+            user_id: Cookies.get("id"),
+            language: "JS",
+            time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            result: summary,
+          }),
+        });
+        const result_attempt = await response.json();
+        setAttempt([...attempt, { id: result_attempt._id, taskId: result_attempt.task_id, userName: uname, language: result_attempt.language, result: result_attempt.result, time: result_attempt.time }]);
+        console.log('Execution Result:', result_attempt);
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (runType === "Run") {
+      processingResultJs();
+    }
+  }, [runType, result]);
 
   const handleResult = () => {
-    if (!result) return "";
-  
-    const resultArray = JSON.stringify(result).slice(1, -1).split(",");
-    const errorArray = error ? [error] : [];
-  
-    const combinedResults = resultArray.map((element, index) => {
-      let expectedValue = null;
-      try {
-        expectedValue = task.testCases[index].expected_output;
-      } catch (error) {
-        console.log("Expected value detected, but no test case found");
-        expectedValue = true; //FIXME: При добавлении const result3, const result4, ... Срабатывает этот catch!
+    console.log(pythonResult)
+    if (!result && pythonResult === null) return "";
+
+    if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
+      if (pythonResult === true){
+        return `<span class="problem-result-green">All tests passed!</span>\n`
+      }else{
+        const combinedResults = pythonMessage.map((element, index) => {
+          return `<span class="problem-result-red">${element}</span>\n`;
+        }).join('');
+        return combinedResults;
       }
-      return element === 'true' ?
-        `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
-        `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
-    }).concat(errorArray.map(err => `<span class="problem-result-error">\nError: ${err}!!!</span>\n`));
-  
-    return combinedResults.join('');
+    }else{
+      const resultArray = JSON.stringify(result).slice(1, -1).split(",");
+      const errorArray = error ? [error] : [];
+      const combinedResults = resultArray.map((element, index) => {
+        let expectedValue = null;
+        try {
+          expectedValue = task.testCases[index].expected_output;
+        } catch (error) {
+          console.log("Expected value detected, but no test case found");
+          expectedValue = true;
+        }
+        return element === 'true' ?
+            `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
+            `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
+      }).concat(errorArray.map(err => `<span class="problem-result-error">\nError: ${err}!!!</span>\n`));
+
+      return combinedResults.join('');
+    }
   };
-  
-  
 
   if (!task) {
     return <div>Task not found</div>;
@@ -149,17 +411,33 @@ const ProblemPage = observer(() => {
             <h2>{task.name}</h2>
           </span>
           <p>{task.description}</p>
+          {/*<ModalResult state={"Lose"} />*/}
         </div>
-  
+
+        <div className="test-case-visualizing">
+          <h2 style={{ marginTop: 0, paddingTop: 20 }}>Examples</h2>
+          {task.testCases.slice(0, 2).map(testCase => (
+            <VisualizingTestCase
+              data={{
+                input: testCase.input,
+                output: testCase.expected_output,
+              }}
+              type={{
+                input: parseInt(task.input_type),
+                output: parseInt(task.output_type),
+              }}
+            />
+          ))}
+        </div>
+
         <div className="tests">
           <h2>Results:</h2>
-          {(result || error) && (
+          {(result || error || pythonResult || pythonMessage) && (
             <pre className="problem-results-text" dangerouslySetInnerHTML={{ __html: handleResult() }} />
           )}
         </div>
-  
+
         <div className="additional-info">
-          <h3>Total Solutions: 267</h3>
           <div className="like-dislike-buttons">
             <button
               onClick={handleLike}
@@ -175,8 +453,10 @@ const ProblemPage = observer(() => {
             </button>
           </div>
         </div>
+
+        <ProblemAttemptTable data={attempt} />
       </div>
-  
+
       <div className="code-block">
         <div className="language">
           <label htmlFor="language-select">
@@ -227,11 +507,13 @@ const ProblemPage = observer(() => {
         </div>
         <div className="button-group">
           <button onClick={handleTest}>Test</button>
-          <button>Run</button>
+          <button onClick={handleRun}>Run</button>
         </div>
       </div>
     </div>
-  );  
+  );
 });
 
 export default ProblemPage;
+
+

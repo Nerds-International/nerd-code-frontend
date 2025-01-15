@@ -3,8 +3,9 @@ import { forumStore } from "../../store/forum/ForumStore";
 import { Form, Input, Modal, Button, Flex } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateTopicModal.css";
+import Cookies from 'js-cookie';
 
-const CreateTopicModal = observer(({ visible, setVisible }) => {
+const CreateTopicModal = observer(({ visible, setVisible, fetchTopics }) => {
   const { addTopic } = forumStore;
   const [form] = Form.useForm();
 
@@ -12,17 +13,34 @@ const CreateTopicModal = observer(({ visible, setVisible }) => {
     try {
       const values = await form.validateFields();
 
-      /* ============================================ mock ========================================= */
       const topicData = {
-        author: "RomaZZZ",
         title: values.title,
-        text: values.text,
+        description: values.text,
+        author_id: Cookies.get('id'),
+        likes: 0,
+        created_at: new Date(),
+        comments: []
       };
+
+      // Отправка запроса на бэкенд
+      const response = await fetch("http://localhost:3000/forums", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(topicData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
       addTopic(topicData);
 
       setVisible(false);
       form.resetFields();
+
+      fetchTopics();
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }

@@ -45,11 +45,12 @@ const TypedCanvas = observer(({ type, data }) => {
   const [stringifiedData, setStringifiedData] = useState('');
 
   useEffect(() => {
-    let s = ""
+    let s = '['
     for (let i = 0; i < arrayedData.length; i++) {
       s += arrayedData[i].toString()
       if (i !== arrayedData.length - 1) s += ', '
     }
+    s += ']'
     setStringifiedData(s);
   }, [arrayedData]);
 

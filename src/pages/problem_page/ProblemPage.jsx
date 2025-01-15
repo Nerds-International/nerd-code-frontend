@@ -25,8 +25,8 @@ const ProblemPage = observer(() => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [combinedCode, setCombinedCode] = useState("");
   const { result, error } = useCodeRunnerJS(combinedCode);
-  const [setPythonResult] = useState(true);
-  const [setPythonMessage] = useState("");
+  const [pythonResult, setPythonResult] = useState(true);
+  const [pythonMessage, setPythonMessage] = useState("");
   const store = problemsStore;
   const [uname, setUname] = useState("");
   const [attempt, setAttempt] = useState([]);
@@ -267,6 +267,8 @@ const ProblemPage = observer(() => {
           setPythonResult(false);
           trash = "Fail";
           setPythonMessage(python_result);
+          console.log(pythonMessage)
+          console.log(pythonResult)
         }
 
         try {

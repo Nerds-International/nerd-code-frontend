@@ -10,6 +10,7 @@ import { webSocketStore } from "../../store/socket/WebSocketStore";
 import { useNavigate } from "react-router-dom";
 import useCodeRunnerJS from "../../hooks/UseCodeRunnerJS";
 import ModalResult from "../../components/modal_result/ModalResult";
+import Cookies from "js-cookie";
 
 const BattleScreen = observer(() => {
   const [code1, setCode1] = useState("");
@@ -24,6 +25,7 @@ const BattleScreen = observer(() => {
   const { Languages, getCurrentLanguage } = languageStore;
   const [combinedCode, setCombinedCode] = useState("");
   const { result } = useCodeRunnerJS(combinedCode);
+  const [presult, setPresult] = useState(false)
   // const [outcome, setOutcome] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState("")
@@ -125,7 +127,7 @@ const BattleScreen = observer(() => {
     if (getCurrentLanguage() === Languages.JAVASCRIPT) {
       functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
     } else {
-      functionTemplate = `def ${functionName}() :\n   return 0 \n`;
+      functionTemplate = `def f() :\n   return 0 \n`;
     }
     setCode1(functionTemplate);
   };
@@ -134,7 +136,7 @@ const BattleScreen = observer(() => {
     syncCode();
   });
 
-  const runCode = () => {
+  const runCode = async () => {
     if (getCurrentLanguage() === Languages.JAVASCRIPT) {
       const functionName = generateFunctionName(task.title);
       let tpart1 = ``;
@@ -149,12 +151,38 @@ const BattleScreen = observer(() => {
       tpart2 = tpart2.slice(0, -2) + `];`;
       const combined = `${code1}\n${tpart1 + tpart2}`;
       setCombinedCode(combined);
-      console.log(combined)
-      console.log(result)
+      console.log(combined);
+      console.log(result);
     } else {
-      console.log("NOT IMPLEMENTED")
+      try {
+        const response = await fetch('http://localhost:3000/tasks/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'id': Cookies.get('id'),
+            'accessToken': Cookies.get('accessToken'),
+          },
+          body: JSON.stringify({
+            code: code1,
+            tests: task.testCases,
+            language: "Python",
+            type: "Run",
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.log(errorData);
+        } else {
+          const res = await response.json();
+          setPresult(res.success);
+          console.log(presult)
+        }
+      } catch (error) {
+        console.error('Error executing code:', error);
+      }
     }
-  }
+  };
 
   useEffect(() => {
     if (result && result.every(Boolean)) {
@@ -166,7 +194,17 @@ const BattleScreen = observer(() => {
         closeWebSocket();
       }, 5000);
     }
-  }, [result, navigate, closeWebSocket, battleId, socket]);
+
+    if (presult) {
+      setModalState("Win")
+      setShowModal(true);
+      socket.emit('endMatch', battleId)
+      setTimeout(() => {
+        navigate("/search_battle");
+        closeWebSocket();
+      }, 5000);
+    }
+  }, [result, navigate, closeWebSocket, battleId, socket, presult]);
 
   return (
     <div className="BattleScreen">

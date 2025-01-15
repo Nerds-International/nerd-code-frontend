@@ -272,7 +272,6 @@ const ProblemPage = observer(() => {
         }
 
         try {
-          console.log("bebea");
           const response = await fetch('http://localhost:3000/res/attempts', {
             method: 'POST',
             headers: {

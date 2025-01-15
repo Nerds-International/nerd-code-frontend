@@ -19,7 +19,7 @@ const Navbar = observer(() => {
 
   const handleLogout = (e) => {
     authStore.signOut();
-    window.location.assign("http://nerdcode.fun");
+    window.location.assign("localhost:3001/");
   };
 
   const avatarNumber = authStore.userInfo ? authStore.userInfo.avatar_number : 1;
@@ -90,10 +90,10 @@ const Navbar = observer(() => {
       <div className="auth-buttons">
         {authStore.isAuthenticated ? (
           authorizedItems.map(item => (
-              <div key={item.key} className="auth-tab-wrapper">
-                {item.label}
-              </div>
-            ))
+            <div key={item.key} className="auth-tab-wrapper">
+              {item.label}
+            </div>
+          ))
         ) : (
           unauthorizedItems.map(item => (
             <div key={item.key} className="auth-tab-wrapper">

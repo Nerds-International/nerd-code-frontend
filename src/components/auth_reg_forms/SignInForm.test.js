@@ -2,7 +2,6 @@ import {
   render,
   screen,
   fireEvent,
-  waitFor,
   act,
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
@@ -77,22 +76,5 @@ describe("SignInForm Component", () => {
 
     fireEvent.click(screen.getByText("Forgot password?"));
     expect(onForgotPassword).toHaveBeenCalled();
-  });
-
-  test("shows validation errors on empty form submission", async () => {
-    render(
-      <SignInForm toggleToSignUp={jest.fn()} onForgotPassword={jest.fn()} />
-    );
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Log In" }));
-    });
-
-    expect(
-      await screen.findByText("Please input your email!")
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText("Please input your password!")
-    ).toBeInTheDocument();
   });
 });

@@ -1,10 +1,10 @@
-import {observer} from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import PropTypes from "prop-types";
 import BinaryTreeCanvas from "./types/BinaryTreeCanvas";
-import {Flex} from "antd";
-import {useEffect, useState} from "react";
+import { Flex } from "antd";
+import { useEffect, useState } from "react";
 
-const VisualizingTestCase = observer (({type, data}) => {
+const VisualizingTestCase = observer(({ type, data }) => {
 
   return (<Flex vertical={false} gap={20} style={{
     borderTop: '1px solid black',
@@ -12,11 +12,11 @@ const VisualizingTestCase = observer (({type, data}) => {
   }}>
     <div>
       <p>Input: </p>
-      <TypedCanvas type={type.input} data={data.input}/>
+      <TypedCanvas type={type.input} data={data.input} />
     </div>
     <div>
       <p>Output: </p>
-      <TypedCanvas type={type.output} data={data.output}/>
+      <TypedCanvas type={type.output} data={data.output} />
     </div>
   </Flex>);
 });
@@ -40,23 +40,22 @@ VisualizingTestCase.propTypes = {
 
 export default VisualizingTestCase;
 
-const TypedCanvas = observer(({type, data}) => {
+const TypedCanvas = observer(({ type, data }) => {
   const arrayedData = data.replaceAll(' ', '').split(',');
   const [stringifiedData, setStringifiedData] = useState('');
 
   useEffect(() => {
-    let s = '['
+    let s = ""
     for (let i = 0; i < arrayedData.length; i++) {
       s += arrayedData[i].toString()
       if (i !== arrayedData.length - 1) s += ', '
     }
-    s += ']'
     setStringifiedData(s);
   }, [arrayedData]);
 
   return (<>
     {type === 0 && <p>{data}</p>}
     {type === 1 && <p>{stringifiedData}</p>}
-    {type === 2 && <BinaryTreeCanvas data={arrayedData}/>}
+    {type === 2 && <BinaryTreeCanvas data={arrayedData} />}
   </>);
 });

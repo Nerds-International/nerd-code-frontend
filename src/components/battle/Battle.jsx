@@ -2,6 +2,7 @@ import "./Battle.css";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authStore } from "../../store/auth/AuthStore";
 import { languageStore } from "../../store/language/LanguageStore";
 import { webSocketStore } from "../../store/socket/WebSocketStore";
 import Cookies from 'js-cookie';
@@ -107,7 +108,7 @@ const MatchFinder = observer(() => {
         </select>
         <div className="find-match">
           {!match && !loading && (
-            <button className="find-match-button" onClick={findMatch}>
+            <button className="find-match-button" onClick={findMatch} disabled={!authStore.isAuthenticated} >
               Find Match
             </button>
           )}

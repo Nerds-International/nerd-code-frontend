@@ -1,6 +1,6 @@
 .sort-button {
   background-color: white;
-  color: black !important;
+  color: black ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +38,7 @@
 }
 
 .create-topic-button {
-  color: black !important;
+  color: black ;
   position: fixed;
   left: 50%;
   bottom: 20px; 
@@ -64,5 +64,12 @@
 .create-topic-button:active {
   background-color: #E6E6E6 !important;
   outline: 1px solid black;
+  border-radius: 35px;
+}
+
+.create-topic-button:disabled {
+  background-color: #FFCC0080 !important;
+  outline: 1px solid #00000080;
+  color: #00000080 ;
   border-radius: 35px;
 }

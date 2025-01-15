@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import useCodeRunnerJS from './useCodeRunnerJS';
+import useCodeRunnerJS from './useCodeRunnerJS.js';
 
 describe('useCodeRunnerJS', () => {
     test('should return the result of valid code execution', () => {

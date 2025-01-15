@@ -25,8 +25,8 @@ const ProblemPage = observer(() => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [combinedCode, setCombinedCode] = useState("");
   const { result, error } = useCodeRunnerJS(combinedCode);
-  const [pythonResult, setPythonResult] = useState(true);
-  const [pythonMessage, setPythonMessage] = useState("");
+  const [setPythonResult] = useState(true);
+  const [setPythonMessage] = useState("");
   const store = problemsStore;
   const [uname, setUname] = useState("");
   const [attempt, setAttempt] = useState([]);
@@ -152,8 +152,8 @@ const ProblemPage = observer(() => {
         functionTemplate = `def f() :\n   return 0 \n`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
-              tests +
-              `f(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
+            tests +
+            `f(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
         }
       }
       setCode2(functionTemplate);
@@ -214,10 +214,10 @@ const ProblemPage = observer(() => {
         }
 
         const python_result = await response.json();
-        if (python_result.success === true){
+        if (python_result.success === true) {
           setPythonResult(true);
           setPythonMessage(python_result.result);
-        }else{
+        } else {
           setPythonResult(false);
           setPythonMessage(python_result);
         }

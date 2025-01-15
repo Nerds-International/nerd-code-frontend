@@ -25,7 +25,7 @@ const ProblemPage = observer(() => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [combinedCode, setCombinedCode] = useState("");
   const { result, error } = useCodeRunnerJS(combinedCode);
-  const [pythonResult, setPythonResult] = useState(true);
+  const [pythonResult, setPythonResult] = useState(null);
   const [pythonMessage, setPythonMessage] = useState("");
   const store = problemsStore;
   const [uname, setUname] = useState("");
@@ -364,24 +364,36 @@ const ProblemPage = observer(() => {
   }, [runType, result]);
 
   const handleResult = () => {
-    if (!result) return "";
+    console.log(pythonResult)
+    if (!result && pythonResult === null) return "";
 
-    const resultArray = JSON.stringify(result).slice(1, -1).split(",");
-    const errorArray = error ? [error] : [];
-    const combinedResults = resultArray.map((element, index) => {
-      let expectedValue = null;
-      try {
-        expectedValue = task.testCases[index].expected_output;
-      } catch (error) {
-        console.log("Expected value detected, but no test case found");
-        expectedValue = true; //FIXME: При добавлении const result3, const result4, ... Срабатывает этот catch!
+    if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
+      if (pythonResult === true){
+        return `<span class="problem-result-green">All tests passed!</span>\n`
+      }else{
+        const combinedResults = pythonMessage.map((element, index) => {
+          return `<span class="problem-result-red">${element}</span>\n`;
+        }).join('');
+        return combinedResults;
       }
-      return element === 'true' ?
-        `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
-        `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
-    }).concat(errorArray.map(err => `<span class="problem-result-error">\nError: ${err}!!!</span>\n`));
+    }else{
+      const resultArray = JSON.stringify(result).slice(1, -1).split(",");
+      const errorArray = error ? [error] : [];
+      const combinedResults = resultArray.map((element, index) => {
+        let expectedValue = null;
+        try {
+          expectedValue = task.testCases[index].expected_output;
+        } catch (error) {
+          console.log("Expected value detected, but no test case found");
+          expectedValue = true;
+        }
+        return element === 'true' ?
+            `<span class="problem-result-green">Test${index + 1}: [✓]</span>\n` :
+            `<span class="problem-result-red">Test${index + 1}: [✗] expected ${expectedValue}</span>\n`;
+      }).concat(errorArray.map(err => `<span class="problem-result-error">\nError: ${err}!!!</span>\n`));
 
-    return combinedResults.join('');
+      return combinedResults.join('');
+    }
   };
 
   if (!task) {
@@ -420,7 +432,7 @@ const ProblemPage = observer(() => {
 
         <div className="tests">
           <h2>Results:</h2>
-          {(result || error) && (
+          {(result || error || pythonResult || pythonMessage) && (
             <pre className="problem-results-text" dangerouslySetInnerHTML={{ __html: handleResult() }} />
           )}
         </div>

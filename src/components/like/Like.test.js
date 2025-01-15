@@ -25,14 +25,10 @@ describe("Like Component", () => {
     render(<Like count={10} clickable={true} editCount={editCountMock} />);
 
     const heartIcon = screen.getByRole("img");
-    act(() => {
-      fireEvent.click(heartIcon);
-    });
+    fireEvent.click(heartIcon);
     expect(editCountMock).toHaveBeenCalledWith(1);
 
-    act(() => {
-      fireEvent.click(heartIcon);
-    });
+    fireEvent.click(heartIcon);
     expect(editCountMock).toHaveBeenCalledWith(1);
     expect(editCountMock).toHaveBeenCalledTimes(1);
   });

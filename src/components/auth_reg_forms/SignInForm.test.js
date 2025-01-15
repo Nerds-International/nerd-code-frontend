@@ -52,11 +52,9 @@ describe("SignInForm Component", () => {
     const passwordInput = screen.getByLabelText("Password");
     const submitButton = screen.getByRole("button", { name: "Log In" });
 
-    // Заполняем форму
     fireEvent.change(emailInput, { target: { value: "test@example.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
-    // Отправляем форму
     await act(async () => {
       fireEvent.click(submitButton);
     });

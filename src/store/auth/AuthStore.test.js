@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import { authStore } from "./AuthStore";
 import { notification } from "antd";
+import Cookies from "js-cookie";
 
 global.console = {
   log: jest.fn(),
@@ -176,4 +177,81 @@ describe("AuthStore", () => {
       })
     );
   });
+
+  test("signOut clears cookies, localStorage, and resets authentication state", () => {
+    Cookies.set("id", "user-id");
+    Cookies.set("accessToken", "access-token");
+    Cookies.set("refreshToken", "refresh-token");
+    Cookies.set("username", "test-user");
+    Cookies.set("fullname", "Test User");
+    Cookies.set("avatar_number", "1");
+
+    localStorage.setItem("accessToken", "access-token");
+    localStorage.setItem("refreshToken", "refresh-token");
+    localStorage.setItem("uuid", "user-uuid");
+    localStorage.setItem("username", "test-user");
+    localStorage.setItem("fullname", "Test User");
+    localStorage.setItem("avatar_number", "1");
+
+    authStore.signOut();
+
+    expect(Cookies.get("id")).toBeUndefined();
+    expect(Cookies.get("accessToken")).toBeUndefined();
+    expect(Cookies.get("refreshToken")).toBeUndefined();
+    expect(Cookies.get("username")).toBeUndefined();
+    expect(Cookies.get("fullname")).toBeUndefined();
+    expect(Cookies.get("avatar_number")).toBeUndefined();
+
+    expect(localStorage.getItem("accessToken")).toBeNull();
+    expect(localStorage.getItem("refreshToken")).toBeNull();
+    expect(localStorage.getItem("uuid")).toBeNull();
+    expect(localStorage.getItem("username")).toBeNull();
+    expect(localStorage.getItem("fullname")).toBeNull();
+    expect(localStorage.getItem("avatar_number")).toBeNull();
+
+    expect(authStore.isAuthenticated).toBe(false);
+    expect(authStore.userData).toBeNull();
+  });
+
+  test("initializeAuth sets isAuthenticated to true if tokens and user data are valid", async () => {
+    const mockGetUser = jest
+        .spyOn(authStore, "getUser")
+        .mockResolvedValueOnce();
+
+    Cookies.set("accessToken", "valid-access-token");
+    Cookies.set("id", "valid-user-id");
+
+    await authStore.initializeAuth();
+
+    expect(mockGetUser).toHaveBeenCalledWith("valid-user-id", "valid-access-token");
+    expect(authStore.isAuthenticated).toBe(true);
+
+    mockGetUser.mockRestore();
+  });
+
+  test("initializeAuth shows error and calls signOut on failed user fetch", async () => {
+    const mockGetUser = jest
+        .spyOn(authStore, "getUser")
+        .mockRejectedValueOnce(new Error("Failed to fetch user"));
+
+    const mockSignOut = jest.spyOn(authStore, "signOut");
+
+    Cookies.set("accessToken", "invalid-access-token");
+    Cookies.set("id", "invalid-user-id");
+
+    await authStore.initializeAuth();
+
+    expect(mockGetUser).toHaveBeenCalledWith("invalid-user-id", "invalid-access-token");
+    expect(notification.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: "Failed to initialize authentication",
+          description: "Failed to fetch user",
+        })
+    );
+    expect(mockSignOut).toHaveBeenCalled();
+
+    mockGetUser.mockRestore();
+    mockSignOut.mockRestore();
+  });
+
 });

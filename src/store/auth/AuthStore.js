@@ -10,7 +10,7 @@ class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.initializeAuth(); // Вызываем метод инициализации при создании экземпляра
+    this.initializeAuth();
   }
 
   async initializeAuth() {
@@ -29,7 +29,7 @@ class AuthStore {
           message: "Failed to initialize authentication",
           description: error.message || "Error during initialization",
         });
-        this.signOut(); // Выход из системы в случае ошибки
+        this.signOut();
       }
     }
   }

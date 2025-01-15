@@ -91,4 +91,17 @@ describe("SignUpForm Component", () => {
       await screen.findByText("Please confirm your password!")
     ).toBeInTheDocument();
   });
+
+  test("redirects to GitHub login when 'Sign in with GitHub' is clicked", () => {
+    delete window.location;
+    window.location = { assign: jest.fn() };
+
+    render(<SignUpForm toggleForm={jest.fn()} onComplete={jest.fn()} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign in with GitHub" }));
+
+    expect(window.location.assign).toHaveBeenCalledWith(
+        "http://localhost:3000/auth/github"
+    );
+  });
 });

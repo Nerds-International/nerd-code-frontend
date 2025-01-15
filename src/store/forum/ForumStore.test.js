@@ -1,4 +1,4 @@
-import {forumStore} from './ForumStore'; // Убедитесь, что путь к вашему классу правильный
+import {forumStore} from './ForumStore';
 
 describe('ForumStore', () => {
   let store;
@@ -118,5 +118,49 @@ describe('ForumStore', () => {
     store.addMessageToTopic(topic.id, messageData);
 
     expect(topic.messages.length).toBe(messagesLength + 1);
+  });
+
+  test('getTopics should sort topics by time when filter.time is applied', () => {
+    const fixedTopics = [
+      {
+        id: '1',
+        author: 'Author1',
+        time: '01.01.2023',
+        title: 'Topic 1',
+        text: 'Text 1',
+        likes: 0,
+        messages: [],
+      },
+      {
+        id: '2',
+        author: 'Author2',
+        time: '01.01.2021',
+        title: 'Topic 2',
+        text: 'Text 2',
+        likes: 0,
+        messages: [],
+      },
+      {
+        id: '3',
+        author: 'Author3',
+        time: '01.01.2022',
+        title: 'Topic 3',
+        text: 'Text 3',
+        likes: 0,
+        messages: [],
+      },
+    ];
+
+    store.setTopics(fixedTopics);
+
+    let sortedTopics = store.getTopics({ time: 1 });
+    expect(sortedTopics[0].time).toBe('01.01.2021');
+    expect(sortedTopics[1].time).toBe('01.01.2022');
+    expect(sortedTopics[2].time).toBe('01.01.2023');
+
+    sortedTopics = store.getTopics({ time: -1 });
+    expect(sortedTopics[0].time).toBe('01.01.2023');
+    expect(sortedTopics[1].time).toBe('01.01.2022');
+    expect(sortedTopics[2].time).toBe('01.01.2021');
   });
 });

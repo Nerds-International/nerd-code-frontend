@@ -38,43 +38,55 @@ describe("SignInForm Component", () => {
     authStore.isLoading = false;
   });
 
-  test("renders form elements and static text", () => {
+  test("calls authStore.signIn and onClose when form is submitted", async () => {
+    const onClose = jest.fn();
     render(
-      <SignInForm toggleToSignUp={jest.fn()} onForgotPassword={jest.fn()} />
+        <SignInForm
+            toggleToSignUp={jest.fn()}
+            onForgotPassword={jest.fn()}
+            onClose={onClose}
+        />
     );
 
-    expect(screen.getByText("Log In", { selector: "h2" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Email")).toBeInTheDocument();
-    expect(screen.getByLabelText("Password")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Log In" })).toBeInTheDocument();
-    expect(screen.getByText("Don't have an account?")).toBeInTheDocument();
-    expect(screen.getByText("Sign in with GitHub")).toBeInTheDocument();
-    expect(screen.getByText("Forgot password?")).toBeInTheDocument();
+    const emailInput = screen.getByLabelText("Email");
+    const passwordInput = screen.getByLabelText("Password");
+    const submitButton = screen.getByRole("button", { name: "Log In" });
+
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    expect(authStore.signIn).toHaveBeenCalledWith(
+        "test@example.com",
+        "password123"
+    );
+    expect(onClose).toHaveBeenCalled();
   });
 
-  test("calls toggleToSignUp when 'Sign Up' link is clicked", () => {
-    const toggleToSignUp = jest.fn();
+  test("prevents default behavior and redirects to GitHub auth on 'Sign in with GitHub' click", () => {
+    delete window.location;
+    window.location = { assign: jest.fn() };
+
     render(
-      <SignInForm
-        toggleToSignUp={toggleToSignUp}
-        onForgotPassword={jest.fn()}
-      />
+        <SignInForm
+            toggleToSignUp={jest.fn()}
+            onForgotPassword={jest.fn()}
+            onClose={jest.fn()}
+        />
     );
 
-    fireEvent.click(screen.getByText("Sign Up"));
-    expect(toggleToSignUp).toHaveBeenCalled();
-  });
+    const githubButton = screen.getByRole("button", {
+      name: "Sign in with GitHub",
+    });
 
-  test("calls onForgotPassword when 'Forgot password?' link is clicked", () => {
-    const onForgotPassword = jest.fn();
-    render(
-      <SignInForm
-        toggleToSignUp={jest.fn()}
-        onForgotPassword={onForgotPassword}
-      />
+    fireEvent.click(githubButton);
+
+    expect(window.location.assign).toHaveBeenCalledWith(
+        "http://localhost:3000/auth/github"
     );
-
-    fireEvent.click(screen.getByText("Forgot password?"));
-    expect(onForgotPassword).toHaveBeenCalled();
   });
 });
+

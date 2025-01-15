@@ -40,7 +40,6 @@ const CreateTopicModal = observer(({ visible, setVisible, fetchTopics }) => {
       setVisible(false);
       form.resetFields();
 
-      // Обновляем список топиков после успешного добавления
       fetchTopics();
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);

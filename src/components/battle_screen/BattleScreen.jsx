@@ -151,8 +151,6 @@ const BattleScreen = observer(() => {
       tpart2 = tpart2.slice(0, -2) + `];`;
       const combined = `${code1}\n${tpart1 + tpart2}`;
       setCombinedCode(combined);
-      console.log(combined);
-      console.log(result);
     } else {
       try {
         const response = await fetch('http://localhost:3000/tasks/execute', {

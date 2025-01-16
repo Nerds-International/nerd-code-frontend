@@ -19,29 +19,31 @@ const MainPage = observer(() => {
     const accessToken = searchParams.get("accessToken");
     const refreshToken = searchParams.get("refreshToken");
     const fetchTopics = async (page = 1, limit = 10) => {
-        try {
-            const url = new URL('http://localhost:3000/forums');
-            url.searchParams.append('page', page);
-            url.searchParams.append('limit', limit);
-            const idFromCookie = Cookies.get('id');
-            const accessTokenFromCookie = Cookies.get('accessToken');
-
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'id': idFromCookie,
-                    'accessToken': accessTokenFromCookie,
-                    'refreshToken': refreshToken,
-                },
-            });
-
+        try {       
+          
+          const url = new URL('http://localhost:3000/forums');
+          url.searchParams.append('page', page);
+          url.searchParams.append('limit', limit);
+          const idFromCookie = Cookies.get('id');
+          const accessTokenFromCookie = Cookies.get('accessToken');
+          fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'id': idFromCookie,
+                'accessToken': accessTokenFromCookie,
+                'refreshToken': refreshToken,
+            },
+          })
+          .then(response => {
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error fetching topics');
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Error fetching topics');
+                });
             }
-
-            const data = await response.json();
+            return response.json();
+          })
+          .then(data => {
             const getTopic = data.map(item => {
                 const messages = item.comments.map(comment => ({
                     id: comment._id,
@@ -61,11 +63,15 @@ const MainPage = observer(() => {
             });
             store.setTopics(getTopic);
             console.log(store.getTopics());
-        } catch (error) {
-            console.error('Error fetching topics:', error.message || 'Error fetching topics');
-        } finally {
-            console.log("nice");
-        }
+          })
+          .catch(error => {
+            console.error(error.message);
+          });
+          } catch (error) {
+              console.error('Error fetching topics:', error.message || 'Error fetching topics');
+          } finally {
+              console.log("nice");
+          }
     };
 
     useEffect(() => {

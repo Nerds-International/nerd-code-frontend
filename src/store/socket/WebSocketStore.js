@@ -6,12 +6,13 @@ class WebSocketStore {
 
     constructor() {
         makeAutoObservable(this);
-        // this.initWebSocket();
     }
 
     initWebSocket = () => {
         this.socket = io('http://localhost:3000', {
             transports: ['websocket'],
+            pingInterval: 10000,
+            pingTimeout: 5000,
         });
 
         this.socket.on('connect', () => {

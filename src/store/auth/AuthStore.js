@@ -29,9 +29,6 @@ class AuthStore {
             Cookies.set("fullname", userData.fullname, { expires: 52 });
             Cookies.set("avatar_number", userData.avatar_number, { expires: 52 });
 
-            localStorage.setItem("username", userData.username);
-            localStorage.setItem("fullname", userData.fullname);
-            localStorage.setItem("avatar_number", userData.avatar_number);
           });
         })
         .catch((error) => {
@@ -44,7 +41,7 @@ class AuthStore {
     }
   }
 
-  signIn(email, password) {
+  async signIn(email, password) {
     this.isLoading = true;
 
     fetch("http://localhost:3000/auth/signin", {
@@ -96,7 +93,7 @@ class AuthStore {
       });
   }
 
-  signUp(
+  async signUp(
     email,
     password,
     username,
@@ -128,7 +125,7 @@ class AuthStore {
         avatar_number,
       }),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
             throw new Error(errorData.message || "Error during registration");
@@ -178,7 +175,7 @@ class AuthStore {
       },
       body: JSON.stringify({ email, password }),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
             throw new Error(errorData.message || "Error resetting password");
@@ -241,12 +238,12 @@ class AuthStore {
 
 
   signOut() {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("uuid");
-    localStorage.removeItem("username");
-    localStorage.removeItem("fullname");
-    localStorage.removeItem("avatar_number");
+    Cookies.remove("id");
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+    Cookies.remove("username");
+    Cookies.remove("fullname");
+    Cookies.remove("avatar_number");
     this.isAuthenticated = false;
     this.userData = null;
   }

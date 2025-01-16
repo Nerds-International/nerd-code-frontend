@@ -39,4 +39,16 @@ describe('WebSocketStore', () => {
         webSocketStore.closeWebSocket();
         expect(mockSocket.close).toHaveBeenCalled();
     });
+
+    test('setSocket sets a new socket', () => {
+        const newSocket = { connected: true };
+        webSocketStore.setSocket(newSocket);
+        expect(webSocketStore.getSocket()).toStrictEqual(newSocket);
+    });
+
+    test('getSocket returns the current socket', () => {
+        const newSocket = { connected: true };
+        webSocketStore.setSocket(newSocket);
+        expect(webSocketStore.getSocket()).toStrictEqual(newSocket);
+    });
 });

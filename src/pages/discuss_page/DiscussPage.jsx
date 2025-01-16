@@ -29,38 +29,44 @@ const DiscussPage = observer(() => {
             url.searchParams.append('page', page);
             url.searchParams.append('limit', limit);
 
-            const response = await fetch(url, {
+            fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Error fetching topics');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                const getTopic = data.map(item => {
+                    const messages = item.comments.map(comment => ({
+                        id: comment._id,
+                        author: comment.user_id,
+                        time: comment.created_at,
+                        text: comment.comment
+                    }));
+                    return {
+                        id: item._id,
+                        author: item.author_id,
+                        time: item.created_at,
+                        title: item.title,
+                        text: item.description,
+                        likes: item.likes,
+                        messages: messages
+                    };
+                });
+                store.setTopics(getTopic);
+                console.log(store.getTopics());
+            })
+            .catch(error => {
+                console.error(error.message);
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error fetching topics');
-            }
-
-            const data = await response.json();
-            const getTopic = data.map(item => {
-                const messages = item.comments.map(comment => ({
-                    id: comment._id,
-                    author: comment.user_id,
-                    time: comment.created_at,
-                    text: comment.comment
-                }));
-                return {
-                    id: item._id,
-                    author: item.author_id,
-                    time: item.created_at,
-                    title: item.title,
-                    text: item.description,
-                    likes: item.likes,
-                    messages: messages
-                };
-            });
-            store.setTopics(getTopic);
-            console.log(store.getTopics());
         } catch (error) {
             console.error('Error fetching topics:', error.message || 'Error fetching topics');
         } finally {

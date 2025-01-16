@@ -28,7 +28,7 @@ describe('CreateTopicModal', () => {
 
   test('renders CreateTopicModal when visible is true', () => {
     render(<CreateTopicModal visible={true} setVisible={setVisible} />);
-    
+
     expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Text of topic')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /OK/i })).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('CreateTopicModal', () => {
 
   test('calls addTopic and resets form on OK button click with valid input', () => {
     render(<CreateTopicModal visible={true} setVisible={setVisible} />);
-    
+
     fireEvent.change(screen.getByPlaceholderText('Title'), { target: { value: 'Test Topic' } });
     fireEvent.change(screen.getByPlaceholderText('Text of topic'), { target: { value: 'This is the content of the test topic.' } });
 
@@ -46,9 +46,9 @@ describe('CreateTopicModal', () => {
 
   test('resets form and closes modal on Cancel button click', () => {
     render(<CreateTopicModal visible={true} setVisible={setVisible} />);
-    
+
     fireEvent.click(screen.getByRole('button', { name: /Cancel/i }));
-    
+
     expect(setVisible).toHaveBeenCalledWith(false);
   });
 });

@@ -130,4 +130,5 @@ describe('AuthStore', () => {
     expect(authStore.isAuthenticated).toBe(false);
     expect(authStore.userData).toBeNull();
   });
+
 });

@@ -42,3 +42,4 @@ class WebSocketStore {
 }
 
 export const webSocketStore = new WebSocketStore();
+export { WebSocketStore };

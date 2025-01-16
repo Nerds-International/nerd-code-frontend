@@ -1,4 +1,5 @@
 import {makeAutoObservable} from "mobx";
+import { faker } from '@faker-js/faker';
 
 class MainStore {
 
@@ -14,13 +15,12 @@ class MainStore {
     news_src: "none"
   }))
 
-  nerds = Array.from({length: 20}, (_, index) => ({
+  nerds = Array.from({ length: 10 }, (_, index)  => ({
     id: index,
-    nickname: "RomanTheNerd52NG",
-    img_src: "public/img/nerd.png",
-    rating: 1499
-  }))
-
+    nickname: faker.internet.userName(),
+    img_src: faker.image.avatar(),
+    rating: (10-index)*parseInt(Math.random()*100)
+  }));
   constructor() {
     makeAutoObservable(this)
   }
@@ -32,17 +32,6 @@ class MainStore {
   getNerds = () => {
     return this.nerds
   }
-
-/*
-  addMessageToTopic = (topicId, message) => {
-    const topicIndex = this.topics.findIndex(topic => topic.id === topicId)
-    if (topicIndex === -1) {
-      console.error(`Cannot add message: Topic with id ${topicId} not found`)
-      return
-    }
-    this.topics[topicIndex].messages.push(message)
-  }
-*/
 
 }
 

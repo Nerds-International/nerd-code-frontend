@@ -11,37 +11,41 @@ const CreateTopicModal = observer(({ visible, setVisible, fetchTopics }) => {
 
   const handleOk = async () => {
     try {
-      const values = await form.validateFields();
+      form.validateFields()
+        .then(values => {
+            const topicData = {
+                title: values.title,
+                description: values.text,
+                author_id: Cookies.get('id'),
+                likes: 0,
+                created_at: new Date(),
+                comments: []
+            };
 
-      const topicData = {
-        title: values.title,
-        description: values.text,
-        author_id: Cookies.get('id'),
-        likes: 0,
-        created_at: new Date(),
-        comments: []
-      };
-
-      // Отправка запроса на бэкенд
-      const response = await fetch("http://localhost:3000/forums", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(topicData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      addTopic(topicData);
-
-      setVisible(false);
-      form.resetFields();
-
-      fetchTopics();
-    } catch (errorInfo) {
+            return fetch("http://localhost:3000/forums", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(topicData)
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            addTopic(responseData);
+            setVisible(false);
+            form.resetFields();
+            fetchTopics();
+        })
+        .catch(error => {
+            console.error(error.message);
+        });
+      } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }
   };

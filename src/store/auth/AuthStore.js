@@ -54,7 +54,7 @@ class AuthStore {
       },
       body: JSON.stringify({ email, password }),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
             throw new Error(errorData.message || "Login failed");
@@ -241,13 +241,6 @@ class AuthStore {
 
 
   signOut() {
-    Cookies.remove("id");
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-    Cookies.remove("username");
-    Cookies.remove("fullname");
-    Cookies.remove("avatar_number");
-
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("uuid");

@@ -66,17 +66,14 @@ class AuthStore {
           description: "You have successfully logged in!",
         });
 
-        Cookies.set("id", data.id, { expires: 52 });
-        Cookies.set("accessToken", data.accessToken, { expires: 52 });
-        Cookies.set("refreshToken", data.refreshToken, { expires: 52 });
+        Cookies.set("id", userData.id, { expires: 52 });
+        Cookies.set("accessToken", userData.accessToken, { expires: 52 });
+        Cookies.set("refreshToken", userData.refreshToken, { expires: 52 });
 
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        localStorage.setItem("uuid", data.uuid);
 
         runInAction(() => {
           this.isAuthenticated = true;
-          this.userData = data;
+          this.userData = userData;
           this.userInfo = userData;
         });
       })
@@ -140,15 +137,12 @@ class AuthStore {
           description: "You have successfully signed up!",
         });
 
-        Cookies.set("id", data.id, { expires: 52 });
-        Cookies.set("accessToken", data.accessToken, { expires: 52 });
-
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("uuid", data.uuid);
+        Cookies.set("id", userData.id, { expires: 52 });
+        Cookies.set("accessToken", userData.accessToken, { expires: 52 });
 
         runInAction(() => {
           this.isAuthenticated = true;
-          this.userData = data;
+          this.userData = userData;
           this.userInfo = userData;
         });
       })

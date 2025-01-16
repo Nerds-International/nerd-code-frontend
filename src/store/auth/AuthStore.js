@@ -168,39 +168,37 @@ class AuthStore {
       });
   }
 
-  async resetPassword(email, password) {
+  resetPassword(email, password) {
     this.isLoading = true;
 
-    try {
-      const response = await fetch(
-        "http://localhost:3000/auth/reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
+    fetch("http://localhost:3000/auth/reset-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            throw new Error(errorData.message || "Error resetting password");
+          });
         }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error resetting password");
-      }
-
-      notification.success({
-        message: "Password Reset",
+        notification.success({
+          message: "Password Reset",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: "Password Reset Failed",
+          description: error.message.trim(),
+        });
+      })
+      .finally(() => {
+        runInAction(() => {
+          this.isLoading = false;
+        });
       });
-    } catch (error) {
-      notification.error({
-        message: "Password Reset Failed",
-        description: error.message.trim(),
-      });
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
-    }
   }
 
   async getUser(id, accessToken) {

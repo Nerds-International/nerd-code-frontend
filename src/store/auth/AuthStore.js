@@ -203,41 +203,42 @@ class AuthStore {
 
   async getUser(id, accessToken) {
     this.isLoading = true;
-    try {
-      const response = await fetch("http://localhost:3000/auth/getUser", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          id: id,
-          accessToken: accessToken,
-        },
+    return await fetch("http://localhost:3000/auth/getUser", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        id: id,
+        accessToken: accessToken,
+      },
+    })
+      .then( async (response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            throw new Error(
+              errorData.message || "Error during attempt to get a user"
+            );
+          });
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        notification.error({
+          message: "Attempting to get a user failed",
+          description: error.message.trim(),
+        });
+        throw error;
+      })
+      .finally(() => {
+        runInAction(() => {
+          this.isLoading = false;
+        });
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.message || "Error during attempt to get a user"
-        );
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      notification.error({
-        message: "Attempting to get a user failed",
-        description: error.message.trim(),
-      });
-      throw error;
-    } finally {
-      runInAction(() => {
-        this.isLoading = false;
-      });
-    }
   }
 
   setAuthenticated(value) {
     this.isAuthenticated = value;
   }
+
 
   signOut() {
     Cookies.remove("id");

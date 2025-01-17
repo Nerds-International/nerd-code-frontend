@@ -8,33 +8,39 @@ const SendMessageModal = observer(({ visible, setVisible, addToMessageList, topi
 
   const handleOk = async () => {
     try {
-      const values = await form.validateFields();
-      const topicId = window.location.href.split('/')[4]
-      const messageData = {
-        authorId: Cookies.get('id'), 
-        time: new Date().toISOString(),
-        text: values.text
-      };
-
-      const response = await fetch(`http://localhost:3000/forums/${topicId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': Cookies.get('accessToken'),
-          'id': Cookies.get('id')
-        },
-        body: JSON.stringify(messageData)
+      form.validateFields()
+      .then(values => {
+          const topicId = window.location.href.split('/')[4];
+          const messageData = {
+              authorId: Cookies.get('id'),
+              time: new Date().toISOString(),
+              text: values.text
+          };
+  
+          return fetch(`http://localhost:3000/forums/${topicId}/comments`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'accessToken': Cookies.get('accessToken'),
+                  'id': Cookies.get('id')
+              },
+              body: JSON.stringify(messageData)
+          });
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Ошибка при отправке сообщения');
+          }
+          return response.json();
+      })
+      .then(responseData => {
+          addToMessageList(responseData);
+          form.resetFields();
+          setVisible(false);
+      })
+      .catch(error => {
+          console.error(error.message);
       });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке сообщения');
-      }
-
-      const responseData = await response.json();
-      addToMessageList(responseData);
-
-      form.resetFields();
-      setVisible(false);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }

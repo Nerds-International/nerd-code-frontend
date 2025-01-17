@@ -35,22 +35,28 @@ const ProblemPage = observer(() => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/auth/getUser', {
+        fetch('http://localhost:3000/auth/getUser', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-            'id': Cookies.get('id'),
-            'accessToken': Cookies.get('accessToken'),
+              'Content-Type': 'application/json',
+              'id': Cookies.get('id'),
+              'accessToken': Cookies.get('accessToken'),
           },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setUname(data.username);
+            setIsUsernameLoaded(true);
+        })
+        .catch(error => {
+            console.error(error.message);
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-        setUname(data.username);
-        setIsUsernameLoaded(true);
+      
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -62,29 +68,35 @@ const ProblemPage = observer(() => {
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
-        console.log("here");
-        const response = await fetch(`http://localhost:3000/res/attemptsByUser`, {
+        fetch(`http://localhost:3000/res/attemptsByUser`, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-            'taskId': id,
-            'id': Cookies.get('id'),
-            'accessToken': Cookies.get('accessToken'),
+              'Content-Type': 'application/json',
+              'taskId': id,
+              'id': Cookies.get('id'),
+              'accessToken': Cookies.get('accessToken'),
           },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('failed to get attempts');
+            }
+            return response.json();
+        })
+        .then(result => {
+            const newAttempts = result.map(item => ({
+                id: item._id,
+                taskId: item.task_id,
+                userName: uname,
+                language: item.language,
+                result: item.result,
+                time: item.time
+            }));
+            setAttempt(newAttempts);
+        })
+        .catch(error => {
+            console.error(error.message);
         });
-        if (!response.ok) {
-          throw new Error('failed to get attempts');
-        }
-        const result = await response.json();
-        const newAttempts = result.map(item => ({
-          id: item._id,
-          taskId: item.task_id,
-          userName: uname,
-          language: item.language,
-          result: item.result,
-          time: item.time
-        }));
-        setAttempt(newAttempts);
       } catch (error) {
         console.log(error.message);
       }
@@ -272,30 +284,42 @@ const ProblemPage = observer(() => {
         }
 
         try {
-          const response = await fetch('http://localhost:3000/res/attempts', {
+          fetch('http://localhost:3000/res/attempts', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'id': Cookies.get('id'),
-              'accessToken': Cookies.get('accessToken'),
+                'Content-Type': 'application/json',
+                'id': Cookies.get('id'),
+                'accessToken': Cookies.get('accessToken'),
             },
             body: JSON.stringify({
-              task_id: task.id,
-              user_id: Cookies.get("id"),
-              language: "Python",
-              time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-              result: trash,
+                task_id: task.id,
+                user_id: Cookies.get("id"),
+                language: "Python",
+                time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+                result: trash,
             }),
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Failed to post attempt');
+              }
+              return response.json();
+          })
+          .then(result_attempt => {
+              setAttempt([...attempt, {
+                  id: result_attempt._id,
+                  taskId: result_attempt.task_id,
+                  userName: uname,
+                  language: result_attempt.language,
+                  result: result_attempt.result,
+                  time: result_attempt.time
+              }]);
+              console.log('Execution Result:', python_result);
+          })
+          .catch(error => {
+              console.error('Error:', error.message);
           });
-          const result_attempt = await response.json();
-          setAttempt([...attempt, {
-            id: result_attempt._id,
-            taskId: result_attempt.task_id,
-            userName: uname,
-            language: result_attempt.language,
-            result: result_attempt.result,
-            time: result_attempt.time
-          }]);
+        
         } catch (error) {
           console.error('Error:', error.message);
         }
@@ -333,24 +357,41 @@ const ProblemPage = observer(() => {
         }
       }
       try {
-        const response = await fetch('http://localhost:3000/res/attempts', {
+        fetch('http://localhost:3000/res/attempts', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'id': Cookies.get('id'),
-            'accessToken': Cookies.get('accessToken'),
+              'Content-Type': 'application/json',
+              'id': Cookies.get('id'),
+              'accessToken': Cookies.get('accessToken'),
           },
           body: JSON.stringify({
-            task_id: task.id,
-            user_id: Cookies.get("id"),
-            language: "JS",
-            time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            result: summary,
+              task_id: task.id,
+              user_id: Cookies.get("id"),
+              language: "JS",
+              time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+              result: summary,
           }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to post attempt');
+            }
+            return response.json();
+        })
+        .then(result_attempt => {
+            setAttempt([...attempt, {
+                id: result_attempt._id,
+                taskId: result_attempt.task_id,
+                userName: uname,
+                language: result_attempt.language,
+                result: result_attempt.result,
+                time: result_attempt.time
+            }]);
+            console.log('Execution Result:', result_attempt);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
         });
-        const result_attempt = await response.json();
-        setAttempt([...attempt, { id: result_attempt._id, taskId: result_attempt.task_id, userName: uname, language: result_attempt.language, result: result_attempt.result, time: result_attempt.time }]);
-        console.log('Execution Result:', result_attempt);
       } catch (error) {
         console.error('Error:', error.message);
       }

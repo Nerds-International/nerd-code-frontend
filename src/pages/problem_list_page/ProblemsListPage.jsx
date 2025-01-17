@@ -22,36 +22,42 @@ const ProblemsListPage = observer(() => {
             url.searchParams.append('page', page);
             url.searchParams.append('limit', limit);
 
-            const response = await fetch(url, {
+            fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Error fetching tasks');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                const getTask = [];
+                for (let i = 0; i < data.total; i++) {
+                    console.log(data.tasks[i]);
+                    getTask.push({
+                        id: data.tasks[i]._id,
+                        name: data.tasks[i].title,
+                        description: data.tasks[i].description,
+                        difficulty: data.tasks[i].difficulty,
+                        likes: data.tasks[i].likes,
+                        dislikes: data.tasks[i].dislikes,
+                        createdAt: data.tasks[i].created_at,
+                        testCases: data.tasks[i].test_cases,
+                        input_type: data.tasks[i].input_type,
+                        output_type: data.tasks[i].output_type,
+                    });
+                }
+                store.setTask(getTask);
+            })
+            .catch(error => {
+                console.error(error.message);
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error fetching tasks');
-            }
-
-            const data = await response.json();
-            const getTask = [];
-            for (let i = 0; i < data.total; i++) {
-                console.log(data.tasks[i]);
-                getTask.push({
-                    id: data.tasks[i]._id,
-                    name: data.tasks[i].title,
-                    description: data.tasks[i].description,
-                    difficulty: data.tasks[i].difficulty,
-                    likes: data.tasks[i].likes,
-                    dislikes: data.tasks[i].dislikes,
-                    createdAt: data.tasks[i].created_at,
-                    testCases: data.tasks[i].test_cases,
-                    input_type: data.tasks[i].input_type,
-                    output_type: data.tasks[i].output_type,
-                });
-            }
-            store.setTask(getTask);
         } catch (error) {
             console.error('Error fetching tasks:', error.message || 'Error fetching tasks');
         } finally {

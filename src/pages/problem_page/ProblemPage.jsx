@@ -35,22 +35,28 @@ const ProblemPage = observer(() => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/auth/getUser', {
+        fetch('http://localhost:3000/auth/getUser', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-            'id': Cookies.get('id'),
-            'accessToken': Cookies.get('accessToken'),
+              'Content-Type': 'application/json',
+              'id': Cookies.get('id'),
+              'accessToken': Cookies.get('accessToken'),
           },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setUname(data.username);
+            setIsUsernameLoaded(true);
+        })
+        .catch(error => {
+            console.error(error.message);
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-        setUname(data.username);
-        setIsUsernameLoaded(true);
+      
       } catch (error) {
         console.error('Error fetching user data:', error);
       }

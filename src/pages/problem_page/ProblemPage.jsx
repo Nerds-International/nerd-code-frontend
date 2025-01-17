@@ -284,30 +284,42 @@ const ProblemPage = observer(() => {
         }
 
         try {
-          const response = await fetch('http://localhost:3000/res/attempts', {
+          fetch('http://localhost:3000/res/attempts', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'id': Cookies.get('id'),
-              'accessToken': Cookies.get('accessToken'),
+                'Content-Type': 'application/json',
+                'id': Cookies.get('id'),
+                'accessToken': Cookies.get('accessToken'),
             },
             body: JSON.stringify({
-              task_id: task.id,
-              user_id: Cookies.get("id"),
-              language: "Python",
-              time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-              result: trash,
+                task_id: task.id,
+                user_id: Cookies.get("id"),
+                language: "Python",
+                time: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+                result: trash,
             }),
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Failed to post attempt');
+              }
+              return response.json();
+          })
+          .then(result_attempt => {
+              setAttempt([...attempt, {
+                  id: result_attempt._id,
+                  taskId: result_attempt.task_id,
+                  userName: uname,
+                  language: result_attempt.language,
+                  result: result_attempt.result,
+                  time: result_attempt.time
+              }]);
+              console.log('Execution Result:', python_result);
+          })
+          .catch(error => {
+              console.error('Error:', error.message);
           });
-          const result_attempt = await response.json();
-          setAttempt([...attempt, {
-            id: result_attempt._id,
-            taskId: result_attempt.task_id,
-            userName: uname,
-            language: result_attempt.language,
-            result: result_attempt.result,
-            time: result_attempt.time
-          }]);
+        
         } catch (error) {
           console.error('Error:', error.message);
         }

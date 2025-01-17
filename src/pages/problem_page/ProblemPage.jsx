@@ -68,29 +68,35 @@ const ProblemPage = observer(() => {
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
-        console.log("here");
-        const response = await fetch(`http://localhost:3000/res/attemptsByUser`, {
+        fetch(`http://localhost:3000/res/attemptsByUser`, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-            'taskId': id,
-            'id': Cookies.get('id'),
-            'accessToken': Cookies.get('accessToken'),
+              'Content-Type': 'application/json',
+              'taskId': id,
+              'id': Cookies.get('id'),
+              'accessToken': Cookies.get('accessToken'),
           },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('failed to get attempts');
+            }
+            return response.json();
+        })
+        .then(result => {
+            const newAttempts = result.map(item => ({
+                id: item._id,
+                taskId: item.task_id,
+                userName: uname,
+                language: item.language,
+                result: item.result,
+                time: item.time
+            }));
+            setAttempt(newAttempts);
+        })
+        .catch(error => {
+            console.error(error.message);
         });
-        if (!response.ok) {
-          throw new Error('failed to get attempts');
-        }
-        const result = await response.json();
-        const newAttempts = result.map(item => ({
-          id: item._id,
-          taskId: item.task_id,
-          userName: uname,
-          language: item.language,
-          result: item.result,
-          time: item.time
-        }));
-        setAttempt(newAttempts);
       } catch (error) {
         console.log(error.message);
       }

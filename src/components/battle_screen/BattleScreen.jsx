@@ -71,7 +71,7 @@ const BattleScreen = observer(() => {
       });
 
       socket.on('codeUpdated', (data) => {
-        console.log('Code updated:', data);
+        // console.log('Code updated:', data);
         if (data.id !== socket.id) {
           setCode2(data.code);
         }

@@ -62,7 +62,7 @@ const DiscussPage = observer(() => {
                     };
                 });
                 store.setTopics(getTopic);
-                console.log(store.getTopics());
+                // console.log(store.getTopics());
             })
             .catch(error => {
                 console.error(error.message);

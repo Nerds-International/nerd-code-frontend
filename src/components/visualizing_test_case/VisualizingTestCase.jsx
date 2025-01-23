@@ -3,22 +3,21 @@ import PropTypes from "prop-types";
 import BinaryTreeCanvas from "./types/BinaryTreeCanvas";
 import { Flex } from "antd";
 import { useEffect, useState } from "react";
+import "./VisualizingTestCase.css"; // Импортируем CSS файл для стилей
 
 const VisualizingTestCase = observer(({ type, data }) => {
-
-  return (<Flex vertical={false} gap={20} style={{
-    borderTop: '1px solid black',
-    marginRight: 20
-  }}>
-    <div>
-      <p>Input: </p>
-      <TypedCanvas type={type.input} data={data.input} />
-    </div>
-    <div>
-      <p>Output: </p>
-      <TypedCanvas type={type.output} data={data.output} />
-    </div>
-  </Flex>);
+  return (
+    <Flex vertical={false} gap={20} style={{ borderTop: '1px solid black', marginRight: 20, flexWrap: 'wrap' }}>
+      <div className="visualizing-test-case-input">
+        <p>Input:</p>
+        <TypedCanvas type={type.input} data={data.input} />
+      </div>
+      <div className="visualizing-test-case-output">
+        <p>Output:</p>
+        <TypedCanvas type={type.output} data={data.output} />
+      </div>
+    </Flex>
+  );
 });
 
 VisualizingTestCase.propTypes = {
@@ -54,9 +53,11 @@ const TypedCanvas = observer(({ type, data }) => {
     setStringifiedData(s);
   }, [arrayedData]);
 
-  return (<>
-    {type === 0 && <p>{data}</p>}
-    {type === 1 && <p>{stringifiedData}</p>}
-    {type === 2 && <BinaryTreeCanvas data={arrayedData} />}
-  </>);
+  return (
+    <>
+      {type === 0 && <p>{data}</p>}
+      {type === 1 && <p>{stringifiedData}</p>}
+      {type === 2 && <BinaryTreeCanvas data={arrayedData} />}
+    </>
+  );
 });

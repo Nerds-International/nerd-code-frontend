@@ -1,0 +1,53 @@
+.visualizing-test-case-input,
+.visualizing-test-case-output {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 45%; /* Устанавливаем ширину для блоков */
+}
+
+.visualizing-test-case-input p,
+.visualizing-test-case-output p {
+  margin: 0;
+  font-weight: bold;
+  word-break: break-word; /* Добавляем перенос слов */
+}
+
+.visualizing-test-case-input p:first-child,
+.visualizing-test-case-output p:first-child {
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.visualizing-test-case-input p:last-child,
+.visualizing-test-case-output p:last-child {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+@media (max-width: 767px) {
+  .visualizing-test-case-input,
+  .visualizing-test-case-output {
+    width: 100%; /* На маленьких экранах блоки занимают всю ширину */
+  }
+
+  .visualizing-test-case-input p,
+  .visualizing-test-case-output p {
+    font-size: 14px; /* Уменьшаем размер текста на маленьких экранах */
+  }
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 767px) {
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+}

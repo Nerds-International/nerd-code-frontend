@@ -1,56 +1,77 @@
 .general {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .problem-container {
-    width: 35%;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .problem-info {
     border: 2px solid black;
-    padding-left: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .test-case-visualizing {
     border: 2px solid black;
     border-top: none;
     align-items: center;
-    padding-left: 20px;
+    padding: 20px;
+    box-sizing: border-box;
     font-family: 'RopaSans';
 }
 
 .name {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .tests {
     border: 2px solid black;
     border-top: none;
     display: flex;
-    align-items: center;
-    padding-left: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
     font-family: 'RopaSans';
+}
+
+.tests h2 {
+    margin: 0;
+}
+
+.tests pre {
+    width: 100%;
+    overflow-x: auto;
 }
 
 .additional-info {
     text-align: center;
-    padding-left: 20px;
+    padding: 20px;
+    box-sizing: border-box;
     margin-bottom: 20px;
 }
 
 .code-block {
+    width: 100%;
     margin-top: 20px;
-    margin-right: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .self-test {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
+    width: 100%;
 }
 
 .input-test {
@@ -58,7 +79,7 @@
 }
 
 .language {
-    padding-bottom: 5px;
+    padding-bottom: 15px;
 }
 
 select {
@@ -108,7 +129,6 @@ select {
     height: 20px;
     border-radius: 50%;
     margin-right: 5px;
-    margin-top: 25px;
 }
 
 .big-difficulty-circle.easy {
@@ -125,7 +145,6 @@ select {
 
 .problem-results-text {
     white-space: pre-wrap;
-    /* text-align: center; */
     margin: 10px;
     font-family: 'RopaSans';
 }
@@ -141,4 +160,32 @@ select {
 .problem-result-error {
     color: red;
     text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+    .general {
+        flex-direction: row;
+    }
+
+    .problem-container {
+        width: 35%;
+    }
+
+    .code-block {
+        width: 60%;
+    }
+}
+
+@media (max-width: 767px) {
+    .general {
+        flex-direction: column;
+    }
+
+    .problem-container {
+        width: 100%;
+    }
+
+    .code-block {
+        width: 100%;
+    }
 }

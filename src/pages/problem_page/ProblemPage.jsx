@@ -10,7 +10,23 @@ import VisualizingTestCase from "../../components/visualizing_test_case/Visualiz
 import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
 import Cookies from "js-cookie";
 import { format } from 'date-fns';
-// import ModalResult from "../../components/modal_result/ModalResult";
+
+const saveCodeToLocalStorage = (id, code) => {
+  const userID = Cookies.get('id');
+  if (userID) {
+    const storageKey = `code_${userID}_${id}`;
+    localStorage.setItem(storageKey, code);
+  }
+};
+
+const loadCodeFromLocalStorage = (id) => {
+  const userID = Cookies.get('id');
+  if (userID) {
+    const storageKey = `code_${userID}_${id}`;
+    return localStorage.getItem(storageKey) || "";
+  }
+  return "";
+};
 
 const ProblemPage = observer(() => {
   const [searchParams] = useSearchParams();
@@ -31,6 +47,11 @@ const ProblemPage = observer(() => {
   const [uname, setUname] = useState("");
   const [attempt, setAttempt] = useState([]);
   const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
+
+  useEffect(() => {
+    const initialCode = loadCodeFromLocalStorage(id);
+    setCode2(initialCode);
+  }, [id]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -56,7 +77,7 @@ const ProblemPage = observer(() => {
         .catch(error => {
             console.error(error.message);
         });
-      
+
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -168,7 +189,13 @@ const ProblemPage = observer(() => {
             `f(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
         }
       }
-      setCode2(functionTemplate);
+
+      const savedCode = loadCodeFromLocalStorage(id);
+      if (savedCode) {
+        setCode2(savedCode);
+      } else {
+        setCode2(functionTemplate);
+      }
       setCode3(tests + tests_output);
     }
   }, [task, getCurrentLanguage()]);
@@ -319,7 +346,7 @@ const ProblemPage = observer(() => {
           .catch(error => {
               console.error('Error:', error.message);
           });
-        
+
         } catch (error) {
           console.error('Error:', error.message);
         }
@@ -518,9 +545,12 @@ const ProblemPage = observer(() => {
           minHeight={500}
           value={code2}
           language={getCurrentLanguage()}
-          onChange={(evn) => setCode2(evn.target.value)}
+          onChange={(evn) => {
+            setCode2(evn.target.value);
+            saveCodeToLocalStorage(id, evn.target.value);
+          }}
           padding={15}
-          data-color-mode="dark"
+          data-color-mode="light"
           style={{
             backgroundColor: "#f5f5f5",
             fontFamily:
@@ -537,7 +567,7 @@ const ProblemPage = observer(() => {
               language={getCurrentLanguage()}
               onChange={(evn) => setCode3(evn.target.value)}
               padding={15}
-              data-color-mode="dark"
+              data-color-mode="light"
               style={{
                 backgroundColor: "#f5f5f5",
                 fontFamily:
@@ -556,5 +586,3 @@ const ProblemPage = observer(() => {
 });
 
 export default ProblemPage;
-
-

@@ -10,7 +10,23 @@ import VisualizingTestCase from "../../components/visualizing_test_case/Visualiz
 import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
 import Cookies from "js-cookie";
 import { format } from 'date-fns';
-// import ModalResult from "../../components/modal_result/ModalResult";
+
+const saveCodeToLocalStorage = (id, code) => {
+  const userID = Cookies.get('id');
+  if (userID) {
+    const storageKey = `code_${userID}_${id}`;
+    localStorage.setItem(storageKey, code);
+  }
+};
+
+const loadCodeFromLocalStorage = (id) => {
+  const userID = Cookies.get('id');
+  if (userID) {
+    const storageKey = `code_${userID}_${id}`;
+    return localStorage.getItem(storageKey) || "";
+  }
+  return "";
+};
 
 const ProblemPage = observer(() => {
   const [searchParams] = useSearchParams();
@@ -31,6 +47,11 @@ const ProblemPage = observer(() => {
   const [uname, setUname] = useState("");
   const [attempt, setAttempt] = useState([]);
   const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
+
+  useEffect(() => {
+    const initialCode = loadCodeFromLocalStorage(id);
+    setCode2(initialCode);
+  }, [id]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -56,7 +77,7 @@ const ProblemPage = observer(() => {
         .catch(error => {
             console.error(error.message);
         });
-      
+
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -117,7 +138,7 @@ const ProblemPage = observer(() => {
         }
 
         const data = await response.json();
-        console.log("Fetched task data:", data);
+        // console.log("Fetched task data:", data);
         const getTask = {
           id: data._id,
           name: data.title,
@@ -168,7 +189,13 @@ const ProblemPage = observer(() => {
             `f(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
         }
       }
-      setCode2(functionTemplate);
+
+      const savedCode = loadCodeFromLocalStorage(id);
+      if (savedCode) {
+        setCode2(savedCode);
+      } else {
+        setCode2(functionTemplate);
+      }
       setCode3(tests + tests_output);
     }
   }, [task, getCurrentLanguage()]);
@@ -203,8 +230,8 @@ const ProblemPage = observer(() => {
   const handleTest = async () => {
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
       try {
-        console.log(JSON.stringify(task.testCases))
-        console.log(code2)
+        // console.log(JSON.stringify(task.testCases))
+        // console.log(code2)
         const response = await fetch('http://localhost:3000/tasks/execute', {
           method: 'POST',
           headers: {
@@ -233,7 +260,7 @@ const ProblemPage = observer(() => {
           setPythonResult(false);
           setPythonMessage(python_result);
         }
-        console.log('Execution Result:', python_result);
+        // console.log('Execution Result:', python_result);
       } catch (error) {
         console.error('Error executing Python code:', error.message);
       }
@@ -247,8 +274,8 @@ const ProblemPage = observer(() => {
   const handleRun = async () => {
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
       try {
-        console.log(JSON.stringify(task.testCases));
-        console.log(code2);
+        // console.log(JSON.stringify(task.testCases));
+        // console.log(code2);
         const response = await fetch('http://localhost:3000/tasks/execute', {
           method: 'POST',
           headers: {
@@ -279,8 +306,8 @@ const ProblemPage = observer(() => {
           setPythonResult(false);
           trash = "Fail";
           setPythonMessage(python_result);
-          console.log(pythonMessage)
-          console.log(pythonResult)
+          // console.log(pythonMessage)
+          // console.log(pythonResult)
         }
 
         try {
@@ -314,17 +341,17 @@ const ProblemPage = observer(() => {
                   result: result_attempt.result,
                   time: result_attempt.time
               }]);
-              console.log('Execution Result:', python_result);
+              // console.log('Execution Result:', python_result);
           })
           .catch(error => {
               console.error('Error:', error.message);
           });
-        
+
         } catch (error) {
           console.error('Error:', error.message);
         }
 
-        console.log('Execution Result:', python_result);
+        // console.log('Execution Result:', python_result);
       } catch (error) {
         console.error('Error executing Python code:', error.message);
       }
@@ -343,14 +370,14 @@ const ProblemPage = observer(() => {
       setRunType("Run");
       const combined = `${code2}\n${tpart1 + tpart2}`;
       setCombinedCode(combined);
-      console.log(result);
+      // console.log(result);
     }
   };
 
   const processingResultJs = async () => {
     if (result && runType === "Run") {
       let summary = "Pass";
-      console.log(result);
+      // console.log(result);
       for (const el of result) {
         if (el === false) {
           summary = "Fail";
@@ -387,7 +414,7 @@ const ProblemPage = observer(() => {
                 result: result_attempt.result,
                 time: result_attempt.time
             }]);
-            console.log('Execution Result:', result_attempt);
+            // console.log('Execution Result:', result_attempt);
         })
         .catch(error => {
             console.error('Error:', error.message);
@@ -405,7 +432,7 @@ const ProblemPage = observer(() => {
   }, [runType, result]);
 
   const handleResult = () => {
-    console.log(pythonResult)
+    // console.log(pythonResult)
     if (!result && pythonResult === null) return "";
 
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
@@ -518,9 +545,12 @@ const ProblemPage = observer(() => {
           minHeight={500}
           value={code2}
           language={getCurrentLanguage()}
-          onChange={(evn) => setCode2(evn.target.value)}
+          onChange={(evn) => {
+            setCode2(evn.target.value);
+            saveCodeToLocalStorage(id, evn.target.value);
+          }}
           padding={15}
-          data-color-mode="dark"
+          data-color-mode="light"
           style={{
             backgroundColor: "#f5f5f5",
             fontFamily:
@@ -537,7 +567,7 @@ const ProblemPage = observer(() => {
               language={getCurrentLanguage()}
               onChange={(evn) => setCode3(evn.target.value)}
               padding={15}
-              data-color-mode="dark"
+              data-color-mode="light"
               style={{
                 backgroundColor: "#f5f5f5",
                 fontFamily:
@@ -556,5 +586,3 @@ const ProblemPage = observer(() => {
 });
 
 export default ProblemPage;
-
-

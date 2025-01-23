@@ -29,7 +29,7 @@ const TopicCard = observer(({ topic, showMessages }) => {
             renderItem={(message) => (
               <List.Item>
                 <Meta
-                  title={"GOIDA"}
+                  title={topic.title}
                   description={`Author: @${message.authorId} at ${new Date(message.time).toLocaleString()}`}
                 />
               </List.Item>

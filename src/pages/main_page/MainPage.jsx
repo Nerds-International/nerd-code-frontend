@@ -62,7 +62,7 @@ const MainPage = observer(() => {
                 };
             });
             store.setTopics(getTopic);
-            console.log(store.getTopics());
+            // console.log(store.getTopics());
           })
           .catch(error => {
             console.error(error.message);
@@ -70,7 +70,7 @@ const MainPage = observer(() => {
           } catch (error) {
               console.error('Error fetching topics:', error.message || 'Error fetching topics');
           } finally {
-              console.log("nice");
+              // console.log("nice");
           }
     };
 
@@ -85,7 +85,7 @@ const MainPage = observer(() => {
           Cookies.set('refreshToken', refreshToken, { expires: 52 });
         }
 
-        console.log(Cookies.get('accessToken'))
+        // console.log(Cookies.get('accessToken'))
         fetchTopics(1, 10);
     }, []);
 

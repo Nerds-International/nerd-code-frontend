@@ -39,7 +39,7 @@ const ProblemsListPage = observer(() => {
             .then(data => {
                 const getTask = [];
                 for (let i = 0; i < data.total; i++) {
-                    console.log(data.tasks[i]);
+                    // console.log(data.tasks[i]);
                     getTask.push({
                         id: data.tasks[i]._id,
                         name: data.tasks[i].title,
@@ -61,7 +61,7 @@ const ProblemsListPage = observer(() => {
         } catch (error) {
             console.error('Error fetching tasks:', error.message || 'Error fetching tasks');
         } finally {
-            console.log("nice");
+            // console.log("nice");
         }
     };
 

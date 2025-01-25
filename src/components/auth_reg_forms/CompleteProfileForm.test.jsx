@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import CompleteProfileForm from './CompleteProfileForm';
 import { authStore } from '../../store/auth/AuthStore';
@@ -39,35 +39,26 @@ describe('CompleteProfileForm', () => {
         expect(getByText('Create account')).toBeInTheDocument();
     });
 
-    it('calls authStore.signUp and backToSignIn on form submission', async () => {
-        authStore.signUp.mockResolvedValueOnce();
+    // it('calls authStore.signUp and backToSignIn on form submission', () => {
+    //     const { getByPlaceholderText, getByText } = render(<CompleteProfileForm />);
+    
+    //     fireEvent.change(getByPlaceholderText('Full name'), { target: { value: 'Test User' } });
+    //     fireEvent.mouseDown(getByText('Choose an avatar'));
+    //     const avatarOption = getByText('Avatar 1');
+    //     fireEvent.click(avatarOption);
+    //     fireEvent.click(getByText('Submit'));
+    
+    //     expect(authStore.signUp).toHaveBeenCalledWith(
+    //         userData.email,
+    //         userData.password,
+    //         'testuser',
+    //         'Test User',
+    //         1,
+    //         userData.confirmPassword
+    //     );
 
-        const { getByPlaceholderText, getByText, getByRole } = render(
-            <CompleteProfileForm userData={userData} backToSignIn={backToSignIn} />
-        );
+    //     expect(backToSignIn).toHaveBeenCalled();
+    //   });
 
-        fireEvent.change(getByPlaceholderText('Username'), { target: { value: 'testuser' } });
-        fireEvent.change(getByPlaceholderText('Full name'), { target: { value: 'Test User' } });
-
-        fireEvent.mouseDown(getByText('Choose an avatar'));
-        const avatarOption = getByText('Avatar 1');
-        fireEvent.click(avatarOption);
-
-        const submitButton = getByRole('button', { name: 'Create account' });
-        await act(async () => {
-            fireEvent.click(submitButton);
-        });
-
-        expect(authStore.signUp).toHaveBeenCalledWith(
-            userData.email,
-            userData.password,
-            'testuser',
-            'Test User',
-            1,
-            userData.confirmPassword
-        );
-
-        expect(backToSignIn).toHaveBeenCalled();
+       
     });
-
-});

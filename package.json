@@ -89,6 +89,7 @@
     "cypress": "^13.15.2",
     "eslint": "^8.57.1",
     "identity-obj-proxy": "^3.0.0",
+    "jest-localstorage-mock": "^2.4.26",
     "prettier": "^3.3.3",
     "web-vitals": "^2.1.4"
   }

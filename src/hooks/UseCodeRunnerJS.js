@@ -7,9 +7,17 @@ const useCodeRunnerJS = (code) => {
   useEffect(() => {
     if (code) {
       const workerCode = `
+        (function(global) {
+          if (!String.prototype.replaceAll) {
+            String.prototype.replaceAll = function(search, replacement) {
+              return this.split(search).join(replacement);
+            };
+          }
+        })(self);
+
         self.addEventListener('message', (event) => {
           try {
-            const result = ${code};
+            const result = eval(event.data);
             self.postMessage(result);
           } catch (error) {
             self.postMessage({ error: error.message });
@@ -29,7 +37,7 @@ const useCodeRunnerJS = (code) => {
         worker.terminate();
       };
 
-      worker.postMessage("execute");
+      worker.postMessage(code);
 
       return () => {
         worker.terminate();

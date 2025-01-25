@@ -10,6 +10,7 @@ import VisualizingTestCase from "../../components/visualizing_test_case/Visualiz
 import ProblemAttemptTable from "../../components/problem_attempt_table/ProblemAttemptTable";
 import Cookies from "js-cookie";
 import { format } from 'date-fns';
+import ModalResult from "../../components/modal_result/ModalResult"; 
 
 const saveCodeToLocalStorage = (id, code) => {
   const userID = Cookies.get('id');
@@ -47,6 +48,7 @@ const ProblemPage = observer(() => {
   const [uname, setUname] = useState("");
   const [attempt, setAttempt] = useState([]);
   const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); 
 
   useEffect(() => {
     const initialCode = loadCodeFromLocalStorage(id);
@@ -138,7 +140,6 @@ const ProblemPage = observer(() => {
         }
 
         const data = await response.json();
-        // console.log("Fetched task data:", data);
         const getTask = {
           id: data._id,
           name: data.title,
@@ -172,21 +173,21 @@ const ProblemPage = observer(() => {
       let tests = ``;
       let tests_output = ``;
       if (getCurrentLanguage() === Languages.JAVASCRIPT) {
-        functionTemplate = `function ${functionName}() {\n    // Your function code here\n    return 0; \n}`;
+        functionTemplate = `function ${functionName}(s) {\n    // Your function code here\n    return s;\n}`;
         tests_output = `[`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
             tests +
-            `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+            `const result${i} = JSON.stringify(${functionName}(${JSON.stringify(task.testCases[i].input)})) === JSON.stringify(${JSON.stringify(task.testCases[i].expected_output)});\n`;
           tests_output = tests_output + `result${i}, `;
         }
         tests_output = tests_output.slice(0, -2) + `];`;
       } else {
-        functionTemplate = `def f() :\n   return 0 \n`;
+        functionTemplate = `def f(s):\n   return s\n`;
         for (let i = 0; i < task.testCases.length; i++) {
           tests =
             tests +
-            `f(${task.testCases[i].input}) == ${task.testCases[i].expected_output}\n`;
+            `f(${JSON.stringify(task.testCases[i].input)}) == ${JSON.stringify(task.testCases[i].expected_output)}\n`;
         }
       }
 
@@ -230,8 +231,6 @@ const ProblemPage = observer(() => {
   const handleTest = async () => {
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
       try {
-        // console.log(JSON.stringify(task.testCases))
-        // console.log(code2)
         const response = await fetch('http://localhost:3000/tasks/execute', {
           method: 'POST',
           headers: {
@@ -260,7 +259,6 @@ const ProblemPage = observer(() => {
           setPythonResult(false);
           setPythonMessage(python_result);
         }
-        // console.log('Execution Result:', python_result);
       } catch (error) {
         console.error('Error executing Python code:', error.message);
       }
@@ -274,8 +272,6 @@ const ProblemPage = observer(() => {
   const handleRun = async () => {
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
       try {
-        // console.log(JSON.stringify(task.testCases));
-        // console.log(code2);
         const response = await fetch('http://localhost:3000/tasks/execute', {
           method: 'POST',
           headers: {
@@ -302,12 +298,11 @@ const ProblemPage = observer(() => {
           setPythonResult(true);
           trash = "Pass";
           setPythonMessage(python_result.result);
+          setModalOpen(true); 
         } else {
           setPythonResult(false);
           trash = "Fail";
           setPythonMessage(python_result);
-          // console.log(pythonMessage)
-          // console.log(pythonResult)
         }
 
         try {
@@ -341,7 +336,6 @@ const ProblemPage = observer(() => {
                   result: result_attempt.result,
                   time: result_attempt.time
               }]);
-              // console.log('Execution Result:', python_result);
           })
           .catch(error => {
               console.error('Error:', error.message);
@@ -350,8 +344,6 @@ const ProblemPage = observer(() => {
         } catch (error) {
           console.error('Error:', error.message);
         }
-
-        // console.log('Execution Result:', python_result);
       } catch (error) {
         console.error('Error executing Python code:', error.message);
       }
@@ -363,21 +355,19 @@ const ProblemPage = observer(() => {
       for (let i = 0; i < task.testCases.length; i++) {
         tpart1 =
           tpart1 +
-          `const result${i} = JSON.stringify(${functionName}(${task.testCases[i].input})) === JSON.stringify(${task.testCases[i].expected_output});\n`;
+          `const result${i} = JSON.stringify(${functionName}(${JSON.stringify(task.testCases[i].input)})) === JSON.stringify(${JSON.stringify(task.testCases[i].expected_output)});\n`;
         tpart2 = tpart2 + `result${i}, `;
       }
       tpart2 = tpart2.slice(0, -2) + `];`;
       setRunType("Run");
       const combined = `${code2}\n${tpart1 + tpart2}`;
       setCombinedCode(combined);
-      // console.log(result);
     }
   };
 
   const processingResultJs = async () => {
     if (result && runType === "Run") {
       let summary = "Pass";
-      // console.log(result);
       for (const el of result) {
         if (el === false) {
           summary = "Fail";
@@ -414,7 +404,9 @@ const ProblemPage = observer(() => {
                 result: result_attempt.result,
                 time: result_attempt.time
             }]);
-            // console.log('Execution Result:', result_attempt);
+            if (summary === "Pass") {
+              setModalOpen(true); 
+            }
         })
         .catch(error => {
             console.error('Error:', error.message);
@@ -432,7 +424,6 @@ const ProblemPage = observer(() => {
   }, [runType, result]);
 
   const handleResult = () => {
-    // console.log(pythonResult)
     if (!result && pythonResult === null) return "";
 
     if (getCurrentLanguage() === languageStore.Languages.PYTHON) {
@@ -479,7 +470,6 @@ const ProblemPage = observer(() => {
             <h2>{task.name}</h2>
           </span>
           <p>{task.description}</p>
-          {/*<ModalResult state={"Lose"} />*/}
         </div>
 
         <div className="test-case-visualizing">
@@ -581,6 +571,7 @@ const ProblemPage = observer(() => {
           <button onClick={handleRun}>Run</button>
         </div>
       </div>
+      {modalOpen && <ModalResult state={"Win"} onClose={() => setModalOpen(false)} />} {/* Отображение модального окна */}
     </div>
   );
 });

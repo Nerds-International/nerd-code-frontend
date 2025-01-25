@@ -18,7 +18,7 @@ const ModalResult =  observer( ({ state }) => {
     switch (state) {
         case 'Success':
             emoji = '✅';
-            message = 'Success';
+            message = 'Success!';
             break;
         case 'Lose':
             emoji = '😢';

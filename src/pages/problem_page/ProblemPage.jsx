@@ -571,7 +571,7 @@ const ProblemPage = observer(() => {
           <button onClick={handleRun}>Run</button>
         </div>
       </div>
-      {modalOpen && <ModalResult state={"Win"} onClose={() => setModalOpen(false)} />} {/* Отображение модального окна */}
+      {modalOpen && <ModalResult state={"Success"} onClose={() => setModalOpen(false)} />} 
     </div>
   );
 });
